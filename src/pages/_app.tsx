@@ -1,13 +1,12 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { ChakraProvider } from "@chakra-ui/react";
-import { DefaultSeo } from "next-seo";
-import type { AppProps } from "next/app";
-import Head from "next/head";
+import { ChakraProvider } from '@chakra-ui/react';
+import { DefaultSeo } from 'next-seo';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
 
-import defaultSEOConfig from "../../next-seo.config";
-import Layout from "lib/components/layout";
-import customTheme from "lib/styles/customTheme";
-import "lib/styles/globals.css";
+import defaultSEOConfig from '../../next-seo.config';
+import Layout from 'lib/components/layout';
+import customTheme from 'lib/styles/customTheme';
+import 'lib/styles/globals.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (

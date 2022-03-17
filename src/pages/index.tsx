@@ -1,3 +1,7 @@
-import Home from "lib/pages/home";
+import React from 'react';
+
+const Home = () => {
+  return <div>Sebure Home Page</div>;
+};
 
 export default Home;

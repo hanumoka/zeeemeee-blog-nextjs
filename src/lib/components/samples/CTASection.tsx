@@ -1,16 +1,12 @@
-import { Box, Button, Code, Flex, Image, Link } from "@chakra-ui/react";
-import { AiFillGithub } from "react-icons/ai";
+import { Box, Button, Code, Flex, Image, Link } from '@chakra-ui/react';
+import { AiFillGithub } from 'react-icons/ai';
 
-const repoLink = "https://github.com/sozonome/nextarter-chakra";
+const repoLink = 'https://github.com/sozonome/nextarter-chakra';
 
 const CTASection = () => {
   return (
-    <Box textAlign={{ base: "center", md: "left" }} marginTop={8}>
-      <Flex
-        marginY={4}
-        justifyContent={{ base: "center", md: "left" }}
-        gridGap={2}
-      >
+    <Box textAlign={{ base: 'center', md: 'left' }} marginTop={8}>
+      <Flex marginY={4} justifyContent={{ base: 'center', md: 'left' }} gridGap={2}>
         <Link
           aria-label="Deploy to Vercel"
           isExternal
@@ -26,15 +22,12 @@ const CTASection = () => {
           rel="noopener noreferrer"
           href="https://app.netlify.com/start/deploy?repository=https://github.com/sozonome/nextarter-chakra"
         >
-          <Image
-            src="https://www.netlify.com/img/deploy/button.svg"
-            alt="Netlify deploy button"
-          />
+          <Image src="https://www.netlify.com/img/deploy/button.svg" alt="Netlify deploy button" />
         </Link>
       </Flex>
 
       <Box marginY={2}>
-        <Code>npx degit sozonome/nextarter-chakra {"<YOUR_APP_NAME>"}</Code>
+        <Code>npx degit sozonome/nextarter-chakra {'<YOUR_APP_NAME>'}</Code>
         <br />
 
         <Button
@@ -48,18 +41,8 @@ const CTASection = () => {
         </Button>
       </Box>
 
-      <Flex
-        justifyContent={{ base: "center", md: "left" }}
-        alignItems="center"
-        gridGap={2}
-      >
-        <Button
-          as="a"
-          href={repoLink}
-          target="_blank"
-          leftIcon={<AiFillGithub />}
-          size="sm"
-        >
+      <Flex justifyContent={{ base: 'center', md: 'left' }} alignItems="center" gridGap={2}>
+        <Button as="a" href={repoLink} target="_blank" leftIcon={<AiFillGithub />} size="sm">
           Open in Github
         </Button>
         <Link href={repoLink} isExternal rel="noopener noreferrer">
