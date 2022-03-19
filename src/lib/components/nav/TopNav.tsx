@@ -16,12 +16,29 @@ import {
   useBreakpointValue,
   useDisclosure,
   Heading,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  Input,
+  FormLabel,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import ThemeToggle from '../layout/ThemeToggle';
 
 export default function TopNav() {
+  // 최소창 메뉴 토글
   const { isOpen, onToggle } = useDisclosure();
+
+  // 회원가입 모달
+  const { isOpen: signupIsOpen, onOpen: signupOnOpen, onClose: signupOnClose } = useDisclosure();
+
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
 
   return (
     <Box>
@@ -77,10 +94,10 @@ export default function TopNav() {
             fontWeight={600}
             color={'white'}
             bg={'pink.400'}
-            // href={'#'}
             _hover={{
               bg: 'pink.300',
             }}
+            onClick={signupOnOpen}
           >
             Sign Up
           </Button>
@@ -90,6 +107,38 @@ export default function TopNav() {
       <Collapse in={isOpen} animateOpacity>
         <MobileNav />
       </Collapse>
+      <div>
+        <Modal
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={signupIsOpen}
+          onClose={signupOnClose}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Create your account</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <FormControl>
+                <FormLabel>First name</FormLabel>
+                <Input ref={initialRef} placeholder="First name" />
+              </FormControl>
+
+              <FormControl mt={4}>
+                <FormLabel>Last name</FormLabel>
+                <Input placeholder="Last name" />
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3}>
+                Save
+              </Button>
+              <Button onClick={signupOnClose}>Cancel</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </div>
     </Box>
   );
 }
