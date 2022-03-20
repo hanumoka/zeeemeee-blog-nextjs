@@ -21,11 +21,15 @@ interface signupProps {
 }
 
 const SignupModal = ({ isOpen, onClose }: signupProps) => {
-  const [input, setInput] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value);
 
-  const isError = input === '';
+  const isEmailError = email === '';
+  const isPasswordError = password === '';
 
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
@@ -42,22 +46,41 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
           <ModalHeader>회원가입하기</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={isError}>
+            <FormControl isInvalid={isEmailError}>
               <FormLabel htmlFor="email">이메일</FormLabel>
               <Input
                 id="email"
                 type="email"
-                value={input}
-                onChange={handleInputChange}
+                value={email}
+                onChange={handleEmailChange}
                 ref={initialRef}
                 placeholder="Email"
               />
               <FormHelperText>We'll never share your email.</FormHelperText>
-              {!isError ? (
-                <FormHelperText>이메일을 입력하셔야 회원가입을 진행 할 수 있습니다.</FormHelperText>
-              ) : (
-                <FormErrorMessage>Email is required.</FormErrorMessage>
-              )}
+              {isEmailError && <FormErrorMessage>Email is required.</FormErrorMessage>}
+              {/*{!isEmailError ? (*/}
+              {/*  <FormHelperText>이메일을 입력하셔야 회원가입을 진행 할 수 있습니다.</FormHelperText>*/}
+              {/*) : (*/}
+              {/*  <FormErrorMessage>Email is required.</FormErrorMessage>*/}
+              {/*)}*/}
+            </FormControl>
+            <FormControl isInvalid={isPasswordError}>
+              <FormLabel htmlFor="password">비밀번호</FormLabel>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={handlePasswordChange}
+                placeholder="password"
+              />
+              {isPasswordError && <FormErrorMessage>password is required.</FormErrorMessage>}
+              {/*{!isEmailError ? (*/}
+              {/*  <FormHelperText>*/}
+              {/*    비밀번호를 입력하셔야 회원가입을 진행 할 수 있습니다.*/}
+              {/*  </FormHelperText>*/}
+              {/*) : (*/}
+              {/*  <FormErrorMessage>password is required.</FormErrorMessage>*/}
+              {/*)}*/}
             </FormControl>
           </ModalBody>
 
