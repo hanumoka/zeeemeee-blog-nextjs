@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   Button,
   FormControl,
@@ -20,7 +21,7 @@ interface signupProps {
   onClose: () => void;
 }
 
-const SignupModal = ({ isOpen, onClose }: signupProps) => {
+const LoginModal = ({ isOpen, onClose }: signupProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -43,7 +44,7 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>회원가입</ModalHeader>
+          <ModalHeader>로그인</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isInvalid={isEmailError}>
@@ -74,17 +75,13 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
                 placeholder="password"
               />
               {isPasswordError && <FormErrorMessage>password is required.</FormErrorMessage>}
-            </FormControl>
-            <FormControl isInvalid={isPasswordError}>
-              <FormLabel htmlFor="password">비밀번호 확인</FormLabel>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={handlePasswordChange}
-                placeholder="password"
-              />
-              {isPasswordError && <FormErrorMessage>password is required.</FormErrorMessage>}
+              {/*{!isEmailError ? (*/}
+              {/*  <FormHelperText>*/}
+              {/*    비밀번호를 입력하셔야 회원가입을 진행 할 수 있습니다.*/}
+              {/*  </FormHelperText>*/}
+              {/*) : (*/}
+              {/*  <FormErrorMessage>password is required.</FormErrorMessage>*/}
+              {/*)}*/}
             </FormControl>
           </ModalBody>
 
@@ -93,10 +90,10 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
               colorScheme="blue"
               mr={3}
               onClick={() => {
-                alert('회원가입');
+                alert('로그인');
               }}
             >
-              회원가입
+              로그인
             </Button>
             <Button onClick={onClose}>취소</Button>
           </ModalFooter>
@@ -106,4 +103,4 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
   );
 };
 
-export default SignupModal;
+export default LoginModal;

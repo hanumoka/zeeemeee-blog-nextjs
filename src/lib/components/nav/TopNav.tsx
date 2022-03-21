@@ -20,12 +20,14 @@ import {
 import { HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import ThemeToggle from '../layout/ThemeToggle';
 import SignupModal from '../modals/SignupModal';
+import LoginModal from '../modals/LoginModal';
 
 export default function TopNav() {
   // 최소창 메뉴 토글
   const { isOpen, onToggle } = useDisclosure();
 
   const { isOpen: signupIsOpen, onOpen: signupOnOpen, onClose: signupOnClose } = useDisclosure();
+  const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
   return (
     <Box>
@@ -72,8 +74,8 @@ export default function TopNav() {
           <Box marginLeft="auto">
             <ThemeToggle />
           </Box>
-          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'#'}>
-            Sign In
+          <Button fontSize={'sm'} fontWeight={400} variant={'link'} onClick={loginOnOpen}>
+            로그인
           </Button>
           <Button
             display={{ base: 'none', md: 'inline-flex' }}
@@ -86,7 +88,7 @@ export default function TopNav() {
             }}
             onClick={signupOnOpen}
           >
-            Sign Up
+            회원가입
           </Button>
         </Stack>
       </Flex>
@@ -96,6 +98,7 @@ export default function TopNav() {
       </Collapse>
 
       <SignupModal isOpen={signupIsOpen} onClose={signupOnClose} />
+      <LoginModal isOpen={loginIsOpen} onClose={loginOnClose} />
     </Box>
   );
 }
@@ -253,6 +256,10 @@ const NAV_ITEMS: Array<NavItem> = [
   {
     label: 'about',
     href: '/about',
+  },
+  {
+    label: 'markdown',
+    href: '/markdown',
   },
   // {
   //   label: 'Inspiration',
