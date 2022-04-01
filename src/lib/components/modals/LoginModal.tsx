@@ -15,7 +15,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import axios from 'axios';
+import loginStore from '../../../stores/loginStore';
 
 interface signupProps {
   isOpen: boolean;
@@ -23,6 +23,9 @@ interface signupProps {
 }
 
 const LoginModal = ({ isOpen, onClose }: signupProps) => {
+  // const login = loginStore((state) => state.login);
+  const { loginFetch, loginLoading } = loginStore((state) => state);
+
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
@@ -40,13 +43,15 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
     async (e) => {
       e.preventDefault();
       if (!isEmailError && !isPasswordError) {
-        const credentials = { username: email, password };
-        try {
-          await axios.post('http://localhost:8080/api/login', credentials);
-        } catch (error) {
-          console.error(error);
-          alert('로그인이 실패했습니다.');
-        }
+        loginFetch(email, password);
+        // const credentials = { username: email, password };
+        // try {
+        //   // await axios.post('http://localhost:8080/api/login', credentials);
+        //   // login('hanumoka', 'hanumoka', ['ROLE_ADMIN']);
+        // } catch (error) {
+        //   console.error(error);
+        //   alert('로그인이 실패했습니다.');
+        // }
       }
     },
     [email, password]
@@ -93,7 +98,7 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
             </ModalBody>
 
             <ModalFooter>
-              <Button type="submit" colorScheme="blue" mr={3}>
+              <Button type="submit" colorScheme="blue" mr={3} isLoading={loginLoading}>
                 로그인
               </Button>
               <Button onClick={onClose}>취소</Button>

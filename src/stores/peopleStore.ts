@@ -6,7 +6,7 @@ interface PeopleState {
   addPerson: (person: string) => void;
 }
 
-const store = (set: SetState<PeopleState>) => ({
+const initStore = (set: SetState<PeopleState>) => ({
   people: ['hanumoka1', 'hanumoka2'],
   addPerson: (person: string) =>
     set((state) => ({
@@ -14,8 +14,8 @@ const store = (set: SetState<PeopleState>) => ({
     })),
 });
 
-const devStore = devtools(store);
+const devStore = devtools(initStore);
 
-const useStore = create(devStore);
+const peopleStore = create(devStore);
 
-export default useStore;
+export default peopleStore;

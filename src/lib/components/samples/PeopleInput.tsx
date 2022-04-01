@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import useStore from '../../../store';
+import peopleStore from '../../../stores/peopleStore';
 import { Button, Input } from '@chakra-ui/react';
 
 const PeopleInput = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const addPerson = useStore((state) => state.addPerson);
+  const addPerson = peopleStore((state) => state.addPerson);
 
   const add = () => {
     if (inputRef.current !== null) {

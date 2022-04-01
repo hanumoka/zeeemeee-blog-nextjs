@@ -1,8 +1,8 @@
 import React from 'react';
-import useStore from '../../../store';
+import peopleStore from '../../../stores/peopleStore';
 
 const People = () => {
-  const people = useStore((state) => state.people);
+  const people = peopleStore((state) => state.people);
   return (
     <div>
       <p>We have {people.length} people in our DB</p>
