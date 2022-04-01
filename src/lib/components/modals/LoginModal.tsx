@@ -41,8 +41,12 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
       e.preventDefault();
       if (!isEmailError && !isPasswordError) {
         const credentials = { username: email, password };
-        const user = await axios.post('http://localhost:8080/api/login', credentials);
-        console.log(user);
+        try {
+          await axios.post('http://localhost:8080/api/login', credentials);
+        } catch (error) {
+          console.error(error);
+          alert('로그인이 실패했습니다.');
+        }
       }
     },
     [email, password]

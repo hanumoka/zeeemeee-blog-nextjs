@@ -1,5 +1,5 @@
 import create, { SetState } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 
 interface PeopleState {
   people: string[];
@@ -14,9 +14,8 @@ const store = (set: SetState<PeopleState>) => ({
     })),
 });
 
-const store2 = devtools(store);
-const store3 = persist(store2, { name: 'people_settings' });
+const devStore = devtools(store);
 
-const useStore = create(store3);
+const useStore = create(devStore);
 
 export default useStore;
