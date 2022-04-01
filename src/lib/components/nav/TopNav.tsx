@@ -55,15 +55,16 @@ export default function TopNav() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Text
-            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
-            fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}
-          >
-            <Heading as="h1" size="md">
+          {/* 아래부분에서 waring 발생 */}
+          <Heading as="h1" size="md">
+            <Text
+              textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
+              fontFamily={'heading'}
+              color={useColorModeValue('gray.800', 'white')}
+            >
               <Link href="/">Sebure</Link>
-            </Heading>
-          </Text>
+            </Text>
+          </Heading>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
@@ -260,6 +261,10 @@ const NAV_ITEMS: Array<NavItem> = [
   {
     label: 'markdown',
     href: '/markdown',
+  },
+  {
+    label: 'zustand',
+    href: '/zustand',
   },
   // {
   //   label: 'Inspiration',

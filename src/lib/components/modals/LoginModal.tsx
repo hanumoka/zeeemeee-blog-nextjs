@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
   Button,
@@ -15,6 +15,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import axios from 'axios';
 
 interface signupProps {
   isOpen: boolean;
@@ -22,6 +23,9 @@ interface signupProps {
 }
 
 const LoginModal = ({ isOpen, onClose }: signupProps) => {
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -32,8 +36,18 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
   const isEmailError = email === '';
   const isPasswordError = password === '';
 
-  const initialRef = React.useRef(null);
-  const finalRef = React.useRef(null);
+  const onSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!isEmailError && !isPasswordError) {
+        const credentials = { username: email, password };
+        const user = await axios.post('http://localhost:8080/api/login', credentials);
+        console.log(user);
+      }
+    },
+    [email, password]
+  );
+
   return (
     <div>
       <Modal
@@ -44,59 +58,43 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>로그인</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl isInvalid={isEmailError}>
-              <FormLabel htmlFor="email">이메일</FormLabel>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-                ref={initialRef}
-                placeholder="Email"
-              />
-              <FormHelperText>We'll never share your email.</FormHelperText>
-              {isEmailError && <FormErrorMessage>Email is required.</FormErrorMessage>}
-              {/*{!isEmailError ? (*/}
-              {/*  <FormHelperText>이메일을 입력하셔야 회원가입을 진행 할 수 있습니다.</FormHelperText>*/}
-              {/*) : (*/}
-              {/*  <FormErrorMessage>Email is required.</FormErrorMessage>*/}
-              {/*)}*/}
-            </FormControl>
-            <FormControl isInvalid={isPasswordError}>
-              <FormLabel htmlFor="password">비밀번호</FormLabel>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={handlePasswordChange}
-                placeholder="password"
-              />
-              {isPasswordError && <FormErrorMessage>password is required.</FormErrorMessage>}
-              {/*{!isEmailError ? (*/}
-              {/*  <FormHelperText>*/}
-              {/*    비밀번호를 입력하셔야 회원가입을 진행 할 수 있습니다.*/}
-              {/*  </FormHelperText>*/}
-              {/*) : (*/}
-              {/*  <FormErrorMessage>password is required.</FormErrorMessage>*/}
-              {/*)}*/}
-            </FormControl>
-          </ModalBody>
+          <form onSubmit={onSubmit}>
+            <ModalHeader>로그인</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <FormControl isInvalid={isEmailError}>
+                <FormLabel htmlFor="email">이메일</FormLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  ref={initialRef}
+                  placeholder="Email"
+                />
+                <FormHelperText>We'll never share your email.</FormHelperText>
+                {isEmailError && <FormErrorMessage>Email is required.</FormErrorMessage>}
+              </FormControl>
+              <FormControl isInvalid={isPasswordError}>
+                <FormLabel htmlFor="password">비밀번호</FormLabel>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  placeholder="password"
+                />
+                {isPasswordError && <FormErrorMessage>password is required.</FormErrorMessage>}
+              </FormControl>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button
-              colorScheme="blue"
-              mr={3}
-              onClick={() => {
-                alert('로그인');
-              }}
-            >
-              로그인
-            </Button>
-            <Button onClick={onClose}>취소</Button>
-          </ModalFooter>
+            <ModalFooter>
+              <Button type="submit" colorScheme="blue" mr={3}>
+                로그인
+              </Button>
+              <Button onClick={onClose}>취소</Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </div>
