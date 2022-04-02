@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -21,12 +21,16 @@ import NoneLoginTop from './NoneLoginTop';
 import LoginTop from './LoginTop';
 
 export default function TopNav() {
-  const { username, nickname, logoutFetch } = loginStore((state) => state);
+  const { username, nickname, logoutFetch, loginCheckFetch } = loginStore((state) => state);
   // 최소창 메뉴 토글
   const { isOpen, onToggle } = useDisclosure();
 
   const { isOpen: signupIsOpen, onOpen: signupOnOpen, onClose: signupOnClose } = useDisclosure();
   const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
+
+  useEffect(() => {
+    loginCheckFetch();
+  }, []);
 
   return (
     <Box>

@@ -9,17 +9,22 @@ interface loginState {
   loginError: string;
   logoutLoading: boolean;
   logoutError: string;
+  loginCheckLoading: boolean;
+  loginCheckError: string;
   loginFetch: (email: string, password: string) => void;
   logoutFetch: () => void;
+  loginCheckFetch: () => void;
 }
 
 const initStore = (set: SetState<loginState>) => ({
-  username: '',
-  nickname: '',
+  username: '', // email 형태, pk
+  nickname: '', // 별명
   loginLoading: false,
   loginError: '',
   logoutLoading: false,
   logoutError: '',
+  loginCheckLoading: false,
+  loginCheckError: '',
   loginFetch: async (email: string, password: string) => {
     try {
       set(
@@ -57,6 +62,29 @@ const initStore = (set: SetState<loginState>) => ({
       set({ loginError: '로그아웃 실패' }, false, 'logoutFetch/error');
     } finally {
       set(() => ({ logoutLoading: false, username: '', nickname: '' }), false, 'logoutFetch/end');
+    }
+  },
+  loginCheckFetch: async () => {
+    try {
+      set(() => ({ loginCheckLoading: true, loginCheckError: '' }), false, 'loginCheckFetch/start');
+      const response = await axios.post('http://localhost:8080/api/logininfo', null, {
+        withCredentials: true,
+      });
+
+      const { username, nickname } = response.data;
+      console.log('loginCheckFetch ...');
+      console.log('username:', username);
+      console.log('nickname:', nickname);
+      set({ username, nickname }, false, 'loginCheckFetch/success');
+    } catch (error) {
+      console.error(error);
+      set(
+        { loginCheckError: '비 로그인 상태', username: '', nickname: '' },
+        false,
+        'loginCheckFetch/error'
+      );
+    } finally {
+      set(() => ({ loginCheckLoading: false }), false, 'loginCheckFetch/end');
     }
   },
 });
