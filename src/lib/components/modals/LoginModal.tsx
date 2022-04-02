@@ -7,7 +7,6 @@ import {
   Button,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
   Input,
   Modal,
@@ -81,7 +80,7 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
                   ref={initialRef}
                   placeholder="Email"
                 />
-                <FormHelperText>We'll never share your email.</FormHelperText>
+                {/*<FormHelperText>We'll never share your email.</FormHelperText>*/}
                 {isEmailError && <FormErrorMessage>Email is required.</FormErrorMessage>}
               </FormControl>
               <FormControl isInvalid={isPasswordError}>

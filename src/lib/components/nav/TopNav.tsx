@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -39,7 +39,12 @@ export default function TopNav() {
   const { isOpen: signupIsOpen, onOpen: signupOnOpen, onClose: signupOnClose } = useDisclosure();
   const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
-  const { username } = loginStore((state) => state);
+  const { username, nickname } = loginStore((state) => state);
+
+  useEffect(() => {
+    console.log('userneme:', username);
+    console.log(!!username);
+  }, [username]);
 
   return (
     <Box>
@@ -83,7 +88,7 @@ export default function TopNav() {
           </Flex>
         </Flex>
 
-        {username ? (
+        {!username ? (
           <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
             <Box marginLeft="auto">
               <ThemeToggle />
@@ -129,10 +134,10 @@ export default function TopNav() {
                       spacing="1px"
                       ml="2"
                     >
-                      <Text fontSize="sm">Justina Clark</Text>
-                      <Text fontSize="xs" color="gray.600">
-                        Admin
-                      </Text>
+                      <Text fontSize="sm">{nickname}</Text>
+                      {/*<Text fontSize="xs" color="gray.600">*/}
+                      {/*  Admin*/}
+                      {/*</Text>*/}
                     </VStack>
                     <Box display={{ base: 'none', md: 'flex' }}>
                       <FiChevronDown />
