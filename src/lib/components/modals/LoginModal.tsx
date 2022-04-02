@@ -1,6 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
   Button,
   FormControl,
   FormErrorMessage,
@@ -23,14 +26,19 @@ interface signupProps {
 }
 
 const LoginModal = ({ isOpen, onClose }: signupProps) => {
-  // const login = loginStore((state) => state.login);
-  const { loginFetch, loginLoading } = loginStore((state) => state);
+  const { loginFetch, loginLoading, loginError, username } = loginStore((state) => state);
 
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (username) {
+      onClose();
+    }
+  }, [username]);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -44,14 +52,6 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
       e.preventDefault();
       if (!isEmailError && !isPasswordError) {
         loginFetch(email, password);
-        // const credentials = { username: email, password };
-        // try {
-        //   // await axios.post('http://localhost:8080/api/login', credentials);
-        //   // login('hanumoka', 'hanumoka', ['ROLE_ADMIN']);
-        // } catch (error) {
-        //   console.error(error);
-        //   alert('로그인이 실패했습니다.');
-        // }
       }
     },
     [email, password]
@@ -95,6 +95,12 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
                 />
                 {isPasswordError && <FormErrorMessage>password is required.</FormErrorMessage>}
               </FormControl>
+              {loginError && (
+                <Alert status="error" style={{ marginTop: 5, borderRadius: 15 }}>
+                  <AlertIcon />
+                  <AlertTitle mr={2}>{loginError}</AlertTitle>
+                </Alert>
+              )}
             </ModalBody>
 
             <ModalFooter>
