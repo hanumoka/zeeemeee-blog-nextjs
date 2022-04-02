@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Box,
   Flex,
@@ -33,18 +33,12 @@ import loginStore from '../../../stores/loginStore';
 import { FiBell, FiChevronDown } from 'react-icons/all';
 
 export default function TopNav() {
+  const { username, nickname, logoutFetch } = loginStore((state) => state);
   // 최소창 메뉴 토글
   const { isOpen, onToggle } = useDisclosure();
 
   const { isOpen: signupIsOpen, onOpen: signupOnOpen, onClose: signupOnClose } = useDisclosure();
   const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
-
-  const { username, nickname } = loginStore((state) => state);
-
-  useEffect(() => {
-    console.log('userneme:', username);
-    console.log(!!username);
-  }, [username]);
 
   return (
     <Box>
@@ -150,9 +144,14 @@ export default function TopNav() {
                 >
                   <MenuItem>Profile</MenuItem>
                   <MenuItem>Settings</MenuItem>
-                  <MenuItem>Billing</MenuItem>
                   <MenuDivider />
-                  <MenuItem>Sign out</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      logoutFetch();
+                    }}
+                  >
+                    Sign out
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Flex>
