@@ -15,7 +15,6 @@ interface loginState {
   loginFetch: (email: string, password: string) => void;
   logoutFetch: () => void;
   loginCheckFetch: () => void;
-  loginCheckServerFetch: (cookie: string) => Promise<{ username: string; nickname: string }>;
 }
 
 const initStore = (set: SetState<loginState>) => ({
@@ -29,7 +28,7 @@ const initStore = (set: SetState<loginState>) => ({
   loginCheckError: '',
   setLoginInfo: (username: string, nickname: string) => {
     console.log('setLoginInfo username:' + username + ', nickname:' + username);
-    // TODO: 기존 값이 있는 상테에서 빈 값이 set 될때 클라이언트에 로그인이 만료된 것을 알려줘야 한다.
+    // TODO: 기존 값이 있는 상태에서 빈 값이 set 될때 클라이언트에 로그인이 만료된 것을 알려줘야 한다. ==> 로그인 만료 ==> 홈 페이지로 이동
     set({ username: username, nickname: nickname });
   },
   loginFetch: async (email: string, password: string) => {
@@ -93,22 +92,6 @@ const initStore = (set: SetState<loginState>) => ({
     } finally {
       set(() => ({ loginCheckLoading: false }), false, 'loginCheckFetch/end');
     }
-  },
-  loginCheckServerFetch: async (
-    cookie: string
-  ): Promise<{ username: string; nickname: string }> => {
-    const response = await axios.post('http://localhost:8080/api/logininfo', null, {
-      withCredentials: true,
-      headers: {
-        Cookie: cookie,
-      },
-    });
-
-    const { username, nickname } = response?.data;
-    console.log('loginCheckServerFetch ...');
-    console.log('username:', username);
-    console.log('nickname:', nickname);
-    return { username, nickname };
   },
 });
 

@@ -15,7 +15,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import ThemeToggle from '../layout/ThemeToggle';
-import { FiBell, FiChevronDown } from 'react-icons/all';
+import { FiBell, FiChevronDown, BsPencilSquare } from 'react-icons/all';
+import { useRouter } from 'next/router';
 
 type Props = {
   nickname: string;
@@ -23,12 +24,23 @@ type Props = {
 };
 
 const LoginTop = ({ nickname, logoutFetch }: Props) => {
+  const router = useRouter();
   return (
     <HStack flex={{ base: 1 }} justify={'flex-end'} direction={'row'} spacing={6}>
       <Box marginLeft="auto">
         <ThemeToggle />
       </Box>
       <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />
+      <IconButton
+        size="lg"
+        variant="ghost"
+        aria-label="open menu"
+        icon={<BsPencilSquare />}
+        onClick={(e) => {
+          e.preventDefault();
+          router.push('/write');
+        }}
+      />
       <Flex alignItems={'center'}>
         <Menu>
           <MenuButton py={2} transition="all 0.3s" _focus={{ boxShadow: 'none' }}>
@@ -59,7 +71,7 @@ const LoginTop = ({ nickname, logoutFetch }: Props) => {
             bg={useColorModeValue('white', 'gray.900')}
             borderColor={useColorModeValue('gray.200', 'gray.700')}
           >
-            <MenuItem>Profile</MenuItem>
+            <MenuItem>Workspace</MenuItem>
             <MenuItem>Settings</MenuItem>
             <MenuDivider />
             <MenuItem

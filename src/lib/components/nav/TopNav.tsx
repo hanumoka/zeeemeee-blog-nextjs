@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Box,
   Flex,
@@ -27,11 +27,6 @@ export default function TopNav() {
 
   const { isOpen: signupIsOpen, onOpen: signupOnOpen, onClose: signupOnClose } = useDisclosure();
   const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
-
-  useEffect(() => {
-    // loginCheckFetch();
-    console.log(username);
-  }, [username]);
 
   return (
     <Box>
