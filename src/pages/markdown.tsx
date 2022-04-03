@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-import { NextPage } from 'next';
+import loginStore from '../stores/loginStore';
+// import { NextPage } from 'next';
+export { getServerSideProps } from '../stores/globalStore'; // TODO: 기묘하도다
 
 const Editor = dynamic(() => import('../lib/components/Editor'), { ssr: false }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
 
-const Markdown: NextPage = () => {
+// const Markdown: NextPage = () => {
+const Markdown = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
+  useEffect(() => {
+    loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
+  }, [loginInfo.username, loginInfo.nickname]);
+
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
 
@@ -19,6 +26,7 @@ const Markdown: NextPage = () => {
       viewContainerRef.current.innerHTML += htmlStr;
     }
   }, [htmlStr]);
+
   return (
     <>
       <EditorContainer>

@@ -21,7 +21,7 @@ import NoneLoginTop from './NoneLoginTop';
 import LoginTop from './LoginTop';
 
 export default function TopNav() {
-  const { username, nickname, logoutFetch, loginCheckFetch } = loginStore((state) => state);
+  const { username, nickname, logoutFetch } = loginStore((state) => state);
   // 최소창 메뉴 토글
   const { isOpen, onToggle } = useDisclosure();
 
@@ -29,8 +29,9 @@ export default function TopNav() {
   const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure();
 
   useEffect(() => {
-    loginCheckFetch();
-  }, []);
+    // loginCheckFetch();
+    console.log(username);
+  }, [username]);
 
   return (
     <Box>
@@ -58,7 +59,6 @@ export default function TopNav() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          {/* 아래부분에서 waring 발생 */}
           <Heading as="h1" size="md">
             <Text
               textAlign={useBreakpointValue({ base: 'center', md: 'left' })}

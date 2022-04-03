@@ -11,9 +11,11 @@ interface loginState {
   logoutError: string;
   loginCheckLoading: boolean;
   loginCheckError: string;
+  setLoginInfo: (username: string, nickname: string) => void;
   loginFetch: (email: string, password: string) => void;
   logoutFetch: () => void;
   loginCheckFetch: () => void;
+  loginCheckServerFetch: (cookie: string) => Promise<{ username: string; nickname: string }>;
 }
 
 const initStore = (set: SetState<loginState>) => ({
@@ -25,6 +27,11 @@ const initStore = (set: SetState<loginState>) => ({
   logoutError: '',
   loginCheckLoading: false,
   loginCheckError: '',
+  setLoginInfo: (username: string, nickname: string) => {
+    console.log('setLoginInfo username:' + username + ', nickname:' + username);
+    // TODO: 기존 값이 있는 상테에서 빈 값이 set 될때 클라이언트에 로그인이 만료된 것을 알려줘야 한다.
+    set({ username: username, nickname: nickname });
+  },
   loginFetch: async (email: string, password: string) => {
     try {
       set(
@@ -71,10 +78,10 @@ const initStore = (set: SetState<loginState>) => ({
         withCredentials: true,
       });
 
-      const { username, nickname } = response.data;
-      console.log('loginCheckFetch ...');
-      console.log('username:', username);
-      console.log('nickname:', nickname);
+      const { username, nickname } = response?.data;
+      // console.log('loginCheckFetch ...');
+      // console.log('username:', username);
+      // console.log('nickname:', nickname);
       set({ username, nickname }, false, 'loginCheckFetch/success');
     } catch (error) {
       console.error(error);
@@ -86,6 +93,22 @@ const initStore = (set: SetState<loginState>) => ({
     } finally {
       set(() => ({ loginCheckLoading: false }), false, 'loginCheckFetch/end');
     }
+  },
+  loginCheckServerFetch: async (
+    cookie: string
+  ): Promise<{ username: string; nickname: string }> => {
+    const response = await axios.post('http://localhost:8080/api/logininfo', null, {
+      withCredentials: true,
+      headers: {
+        Cookie: cookie,
+      },
+    });
+
+    const { username, nickname } = response?.data;
+    console.log('loginCheckServerFetch ...');
+    console.log('username:', username);
+    console.log('nickname:', nickname);
+    return { username, nickname };
   },
 });
 
