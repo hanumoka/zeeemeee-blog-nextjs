@@ -75,8 +75,10 @@ const LoginTop = ({ nickname, logoutFetch }: Props) => {
             <MenuItem>Settings</MenuItem>
             <MenuDivider />
             <MenuItem
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 logoutFetch();
+                router.push('/');
               }}
             >
               Sign out
