@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { NextPage } from 'next';
 
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
@@ -13,19 +14,13 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 interface IEditor {
   htmlStr: string;
   setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
+  theme: string;
 }
 
-const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
-  const editorRef = React.useRef<ToastEditor>(null);
+const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, theme }) => {
+  const editorRef = useRef<ToastEditor>(null);
 
-  // Editor Change 이벤트
-  const onChangeEditor = () => {
-    if (editorRef.current) {
-      setHtmlStr(editorRef.current.getInstance().getHTML());
-    }
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (editorRef.current) {
       // 전달받은 html값으로 초기화
       editorRef.current.getInstance().setHTML(htmlStr);
@@ -48,21 +43,33 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
     }
   }, []);
 
+  // Editor Change 이벤트
+  const onChangeEditor = () => {
+    if (editorRef.current) {
+      setHtmlStr(editorRef.current.getInstance().getHTML());
+    }
+  };
+
   // Editor에 사용되는 plugin 추가
   const plugins = [
     colorSyntax, // 글자 색상 추가
   ];
 
   return (
-    <CustomReactQuill
-      initialValue=""
-      previewStyle="vertical"
-      initialEditType="wysiwyg"
-      useCommandShortcut={true}
-      ref={editorRef}
-      plugins={plugins}
-      onChange={onChangeEditor}
-    />
+    <>
+      <div>theme: {theme}</div>
+      <br />
+      <CustomReactQuill
+        initialValue=""
+        previewStyle="vertical"
+        initialEditType="markdown"
+        useCommandShortcut={true}
+        ref={editorRef}
+        plugins={plugins}
+        onChange={onChangeEditor}
+        theme={theme}
+      />
+    </>
   );
 };
 
