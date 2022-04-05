@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import loginStore from '../stores/loginStore';
 import { useColorMode } from '@chakra-ui/react';
+
 export { getServerSideProps } from '../stores/globalStore'; // TODO: 기묘하도다
 
 const Editor = dynamic(() => import('../lib/components/Editor'), {
@@ -46,7 +47,6 @@ const Markdown = ({ loginInfo }: { loginInfo: { username: string; nickname: stri
 
   return (
     <>
-      <br />
       <EditorContainer>
         {view && <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} theme={colorMode} />}
       </EditorContainer>
