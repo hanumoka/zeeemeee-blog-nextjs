@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import loginStore from '../stores/loginStore';
 import { useColorMode } from '@chakra-ui/react';
 
-export { getServerSideProps } from '../stores/globalStore'; // TODO: 기묘하도다
+export { getServerSideProps } from '../stores/serverStore'; // TODO: 기묘하도다
 
 const Editor = dynamic(() => import('../lib/components/Editor'), {
   ssr: false,

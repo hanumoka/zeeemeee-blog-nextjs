@@ -29,7 +29,7 @@ const initStore = (set: SetState<loginState>) => ({
   setLoginInfo: (username: string, nickname: string) => {
     console.log('setLoginInfo username:' + username + ', nickname:' + username);
     // TODO: 기존 값이 있는 상태에서 빈 값이 set 될때 클라이언트에 로그인이 만료된 것을 알려줘야 한다. ==> 로그인 만료 ==> 홈 페이지로 이동
-    set({ username: username, nickname: nickname });
+    set({ username: username, nickname: nickname }, false, 'loginFetch/setLoginInfo');
   },
   loginFetch: async (email: string, password: string) => {
     try {

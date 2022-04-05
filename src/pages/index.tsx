@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import loginStore from '../stores/loginStore';
-export { getServerSideProps } from '../stores/globalStore'; // TODO: 기묘하도다
+export { getServerSideProps } from '../stores/serverStore'; // TODO: 기묘하도다
 
 const Home = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
   const { username, nickname } = loginStore((state) => state);

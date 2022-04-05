@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import loginStore from '../stores/loginStore';
-export { getServerSideProps } from '../stores/globalStore'; // TODO: 기묘하도다
+export { getServerSideProps } from '../stores/serverStore'; // TODO: 기묘하도다
 
 const About = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
   useEffect(() => {

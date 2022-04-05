@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
 import { NextPage } from 'next';
 
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -10,6 +9,7 @@ import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import { Box, Flex } from '@chakra-ui/react';
 
 interface IEditor {
   htmlStr: string;
@@ -33,7 +33,9 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, theme }) => {
           const formData = new FormData();
           formData.append('files', blob);
 
-          const res = await axios.post('http://localhost:8080/uploadImage', formData);
+          const res = await axios.post('http://localhost:8080/api/uploadImage', formData, {
+            withCredentials: true,
+          });
 
           callback(res.data, 'input alt text');
         })();
@@ -57,18 +59,23 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, theme }) => {
 
   return (
     <>
-      <div>theme: {theme}</div>
-      <br />
-      <CustomReactQuill
-        initialValue=""
-        previewStyle="vertical"
-        initialEditType="markdown"
-        useCommandShortcut={true}
-        ref={editorRef}
-        plugins={plugins}
-        onChange={onChangeEditor}
-        theme={theme}
-      />
+      <Flex>
+        {/*<Box p="4" w="20%">*/}
+        {/*  목차위치*/}
+        {/*</Box>*/}
+        <Box p="4" w="100%">
+          <ToastEditor
+            initialValue=""
+            previewStyle="vertical"
+            initialEditType="markdown"
+            useCommandShortcut={true}
+            ref={editorRef}
+            plugins={plugins}
+            onChange={onChangeEditor}
+            theme={theme}
+          />
+        </Box>
+      </Flex>
     </>
   );
 };
@@ -76,6 +83,6 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, theme }) => {
 export default Editor;
 
 // style
-const CustomReactQuill = styled(ToastEditor)`
-  height: 300px;
-`;
+// const CustomReactQuill = styled(ToastEditor)`
+//   height: 300px;
+// `;

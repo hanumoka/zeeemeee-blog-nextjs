@@ -3,7 +3,7 @@ import { Box, Container, FormControl, Input } from '@chakra-ui/react';
 import ChakraTagInput from '../ChakraTagInput';
 
 const CustomEditor = () => {
-  const [tags, setTags] = useState(['foo', 'bar']);
+  const [tags, setTags] = useState<string[]>([]);
   const handleTagsChange = useCallback((event: SyntheticEvent, tags: string[]) => {
     setTags(tags);
   }, []);
