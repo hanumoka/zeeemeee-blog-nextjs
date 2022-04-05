@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import { Button, ButtonGroup, Center, useColorMode } from '@chakra-ui/react';
 import styled from 'styled-components';
 import layoutStore from '../stores/layoutStore';
+import remarkToc from 'remark-toc';
+import { remark } from 'remark';
 
 export { getServerSideProps } from '../stores/serverStore'; // TODO: 기묘하도다
 
@@ -48,6 +50,7 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
 
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
+  const [markdownStr, setMarkdownStr] = React.useState<string>('');
 
   // ref
   const viewContainerRef = React.useRef<HTMLDivElement>(null);
@@ -64,10 +67,29 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
     <>
       <CustomEditor />
 
-      <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} theme={colorMode} />
+      <Editor
+        htmlStr={htmlStr}
+        setHtmlStr={setHtmlStr}
+        markdownStr={markdownStr}
+        setMarkdownStr={setMarkdownStr}
+        theme={colorMode}
+      />
       <Center>
         <ButtonGroup variant="outline" spacing="6">
-          <Button colorScheme="blue" size="md" height="48px" width="200px" border="2px">
+          <Button
+            onClick={async () => {
+              console.log('===remark toc===');
+              let tocString = '## Table of contents';
+              tocString = tocString + '\n' + markdownStr;
+              const file = await remark().use(remarkToc).process(tocString);
+              console.log(String(file));
+            }}
+            colorScheme="blue"
+            size="md"
+            height="48px"
+            width="200px"
+            border="2px"
+          >
             Save
           </Button>
           <Button

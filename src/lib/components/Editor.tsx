@@ -28,16 +28,20 @@ import { EditorPlugin } from '@toast-ui/editor/types/editor';
 interface IEditor {
   htmlStr: string;
   setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
+  markdownStr: string;
+  setMarkdownStr: React.Dispatch<React.SetStateAction<string>>;
   theme: string;
 }
 
-const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, theme }) => {
+const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdownStr, theme }) => {
   const editorRef = useRef<ToastEditor>(null);
 
   useEffect(() => {
     if (editorRef.current) {
       // 전달받은 html값으로 초기화
       editorRef.current.getInstance().setHTML(htmlStr);
+      // 에디터의 마크다운 원본 상태 셋팅
+      editorRef.current.getInstance().setMarkdown(markdownStr);
 
       // 기존 이미지 업로드 기능 제거
       editorRef.current.getInstance().removeHook('addImageBlobHook');
@@ -63,6 +67,7 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, theme }) => {
   const onChangeEditor = () => {
     if (editorRef.current) {
       setHtmlStr(editorRef.current.getInstance().getHTML());
+      setMarkdownStr(editorRef.current.getInstance().getMarkdown());
     }
   };
 
