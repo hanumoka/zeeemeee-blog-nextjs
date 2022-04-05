@@ -2,14 +2,28 @@ import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { NextPage } from 'next';
 
-import { Editor as ToastEditor } from '@toast-ui/react-editor';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
+import Prism from 'prismjs';
+// 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
+import 'prismjs/themes/prism.css';
 
-import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor as ToastEditor } from '@toast-ui/react-editor';
+
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+// import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all';
+
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+
+import '@toast-ui/editor/dist/toastui-editor.css';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css'; // 다크테마
 import { Box, Flex } from '@chakra-ui/react';
+import { EditorPlugin } from '@toast-ui/editor/types/editor';
 
 interface IEditor {
   htmlStr: string;
@@ -52,18 +66,15 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, theme }) => {
     }
   };
 
-  // Editor에 사용되는 plugin 추가
-  const plugins = [
-    colorSyntax, // 글자 색상 추가
-  ];
+  const plugins: EditorPlugin[] = [colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]];
 
   return (
     <>
       <Flex>
-        {/*<Box p="4" w="20%">*/}
-        {/*  목차위치*/}
-        {/*</Box>*/}
-        <Box p="4" w="100%">
+        <Box p="4" w="10%">
+          목차위치
+        </Box>
+        <Box p="4" w="90%">
           <ToastEditor
             initialValue=""
             previewStyle="vertical"
