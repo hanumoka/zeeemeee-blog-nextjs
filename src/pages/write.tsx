@@ -20,7 +20,6 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
   const { offLayout, onLayout } = layoutStore((state) => state);
   const router = useRouter();
   const { colorMode } = useColorMode();
-  // const [view, setView] = useState(true);
 
   useEffect(() => {
     // 레이아웃 off
@@ -34,19 +33,6 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
     // 로그인 유지
     loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
   }, [loginInfo.username, loginInfo.nickname]);
-
-  // 이제 필요 없는듯...
-  // useEffect(() => {
-  //   // 다트모드 변경을 위해서 강제로 에디터를 지운다.
-  //   setView(false);
-  // }, [colorMode]);
-  //
-  // useEffect(() => {
-  //   // 모드변경시 지워진 에디터를 다시 그린다.
-  //   if (!view) {
-  //     setView(true);
-  //   }
-  // }, [view]);
 
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
@@ -79,9 +65,9 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
           <Button
             onClick={async () => {
               console.log('===remark toc===');
-              let tocString = '## Table of contents';
-              tocString = tocString + '\n' + markdownStr;
-              const file = await remark().use(remarkToc).process(tocString);
+              // let tocString = '## Table of contents';
+              // tocString = tocString + '\n' + markdownStr;
+              const file = await remark().use(remarkToc).process(markdownStr);
               console.log(String(file));
             }}
             colorScheme="blue"

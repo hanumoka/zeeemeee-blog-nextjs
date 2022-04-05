@@ -76,10 +76,10 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
   return (
     <>
       <Flex>
-        <Box p="4" w="10%">
-          목차위치
-        </Box>
-        <Box p="4" w="90%">
+        {/*<Box p="4" w="10%">*/}
+        {/*  목차위치*/}
+        {/*</Box>*/}
+        <Box p="4" w="100%">
           <ToastEditor
             initialValue=""
             previewStyle="vertical"
