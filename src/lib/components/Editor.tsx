@@ -55,6 +55,9 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
             withCredentials: true,
           });
 
+          console.log('res===');
+          console.log(JSON.stringify(res.data));
+
           callback(res.data, 'input alt text');
         })();
 
@@ -76,9 +79,6 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
   return (
     <>
       <Flex>
-        {/*<Box p="4" w="10%">*/}
-        {/*  목차위치*/}
-        {/*</Box>*/}
         <Box p="4" w="100%">
           <ToastEditor
             initialValue=""
