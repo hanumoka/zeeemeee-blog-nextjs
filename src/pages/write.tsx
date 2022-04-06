@@ -60,37 +60,52 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
         setMarkdownStr={setMarkdownStr}
         theme={colorMode}
       />
-      <Center>
-        <ButtonGroup variant="outline" spacing="6">
-          <Button
-            onClick={async () => {
-              console.log('===remark toc===');
-              // let tocString = '## Table of contents';
-              // tocString = tocString + '\n' + markdownStr;
-              const file = await remark().use(remarkToc).process(markdownStr);
-              console.log(String(file));
-            }}
-            colorScheme="blue"
-            size="md"
-            height="48px"
-            width="200px"
-            border="2px"
-          >
-            Save
-          </Button>
-          <Button
-            size="md"
-            height="48px"
-            width="200px"
-            border="2px"
-            onClick={() => {
-              router.back();
-            }}
-          >
-            Cancel
-          </Button>
-        </ButtonGroup>
-      </Center>
+      <div>
+        <Center>
+          <ButtonGroup variant="outline" spacing="6">
+            <Button
+              onClick={async () => {
+                console.log('===저장 파라미터===');
+                const file = await remark().use(remarkToc).process(markdownStr);
+                console.log(String(file));
+              }}
+              colorScheme="blue"
+              size="md"
+              // height="48px"
+              // width="200px"
+              border="2px"
+            >
+              저장
+            </Button>
+            <Button
+              onClick={async () => {
+                console.log('===저장 파라미터===');
+                const file = await remark().use(remarkToc).process(markdownStr);
+                console.log(String(file));
+              }}
+              colorScheme="teal"
+              size="md"
+              // height="48px"
+              // width="200px"
+              border="2px"
+            >
+              저장하고 나가기
+            </Button>
+            <Button
+              colorScheme="red"
+              size="md"
+              // height="48px"
+              // width="200px"
+              border="2px"
+              onClick={() => {
+                router.back();
+              }}
+            >
+              나가기
+            </Button>
+          </ButtonGroup>
+        </Center>
+      </div>
       <Contents.Container>
         <Contents.HtmlContainer>
           <h2>Editor를 통해 만들어진 html 코드입니다.</h2>
