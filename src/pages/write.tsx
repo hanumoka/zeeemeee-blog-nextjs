@@ -1,15 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import loginStore from '../stores/loginStore';
 import { useRouter } from 'next/router';
-import CustomEditor from '../lib/components/editor/CustomEditor';
 import dynamic from 'next/dynamic';
-import { Button, ButtonGroup, Center, useColorMode } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Center,
+  Container,
+  FormControl,
+  Input,
+  useColorMode,
+} from '@chakra-ui/react';
 import styled from 'styled-components';
 import layoutStore from '../stores/layoutStore';
 import remarkToc from 'remark-toc';
 import { remark } from 'remark';
+import ChakraTagInput from '../lib/components/ChakraTagInput';
 
-export { getServerSideProps } from '../stores/serverStore'; // TODO: 기묘하도다
+export { getServerSideProps } from '../stores/serverStore';
 
 const Editor = dynamic(() => import('../lib/components/Editor'), {
   ssr: false,
@@ -17,6 +26,12 @@ const Editor = dynamic(() => import('../lib/components/Editor'), {
 }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
 
 const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
+  const [title, setTitle] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const handleTagsChange = useCallback((event: SyntheticEvent, tags: string[]) => {
+    setTags(tags);
+  }, []);
+
   const { offLayout, onLayout } = layoutStore((state) => state);
   const router = useRouter();
   const { colorMode } = useColorMode();
@@ -51,7 +66,28 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
 
   return (
     <>
-      <CustomEditor />
+      <Container maxW="container.lg">
+        <Box padding="4" w="100%">
+          <FormControl>
+            <Input
+              variant="flushed"
+              placeholder="제목을 입력하세요."
+              size="lg"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.currentTarget.value);
+              }}
+            />
+            <ChakraTagInput
+              tags={tags}
+              onTagsChange={handleTagsChange}
+              size="lg"
+              placeholder="태그를 입력하세요."
+              variant="flushed"
+            />
+          </FormControl>
+        </Box>
+      </Container>
 
       <Editor
         htmlStr={htmlStr}
@@ -66,13 +102,13 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
             <Button
               onClick={async () => {
                 console.log('===저장 파라미터===');
-                const file = await remark().use(remarkToc).process(markdownStr);
-                console.log(String(file));
+                const content = await remark().use(remarkToc).process(markdownStr);
+                console.log('title:', title);
+                console.log('tags:', tags);
+                console.log(String(content));
               }}
               colorScheme="blue"
               size="md"
-              // height="48px"
-              // width="200px"
               border="2px"
             >
               저장
@@ -80,13 +116,13 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
             <Button
               onClick={async () => {
                 console.log('===저장 파라미터===');
-                const file = await remark().use(remarkToc).process(markdownStr);
-                console.log(String(file));
+                const content = await remark().use(remarkToc).process(markdownStr);
+                console.log('title:', title);
+                console.log('tags:', tags);
+                console.log(String(content));
               }}
               colorScheme="teal"
               size="md"
-              // height="48px"
-              // width="200px"
               border="2px"
             >
               저장하고 나가기
@@ -94,8 +130,6 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
             <Button
               colorScheme="red"
               size="md"
-              // height="48px"
-              // width="200px"
               border="2px"
               onClick={() => {
                 router.back();

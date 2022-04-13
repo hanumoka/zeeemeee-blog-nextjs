@@ -1,6 +1,7 @@
 import create, { SetState } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
+// layout을 적용할건지 여부를 관리하는 store
 interface LayoutState {
   layoutActive: boolean;
   onLayout: () => void;
