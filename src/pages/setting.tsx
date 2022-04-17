@@ -1,11 +1,16 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Avatar, Box, Button, Flex, HStack, Square, StackDivider, VStack } from '@chakra-ui/react';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
+import loginStore from '../stores/loginStore';
 
 export { getServerSideProps } from '../stores/serverStore';
 
-const Setting = () => {
+const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
   const [images, setImages] = React.useState([]);
+
+  useEffect(() => {
+    loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
+  }, [loginInfo.username, loginInfo.nickname]);
 
   const onChange = useCallback((imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
     // data for submit

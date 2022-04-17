@@ -7,6 +7,10 @@ const NAV_ITEMS: Array<NavItem> = [
     label: 'zustand',
     href: '/zustand',
   },
+  {
+    label: 'setting',
+    href: '/setting',
+  },
   // {
   //   label: 'Inspiration',
   //   children: [
