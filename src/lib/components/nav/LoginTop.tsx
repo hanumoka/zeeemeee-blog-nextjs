@@ -71,8 +71,22 @@ const LoginTop = ({ nickname, logoutFetch }: Props) => {
             bg={useColorModeValue('white', 'gray.900')}
             borderColor={useColorModeValue('gray.200', 'gray.700')}
           >
-            <MenuItem>Workspace</MenuItem>
-            <MenuItem>Settings</MenuItem>
+            <MenuItem
+              onClick={(e) => {
+                e.preventDefault();
+                router.push('/workspace');
+              }}
+            >
+              Workspace
+            </MenuItem>
+            <MenuItem
+              onClick={(e) => {
+                e.preventDefault();
+                router.push('/setting');
+              }}
+            >
+              Settings
+            </MenuItem>
             <MenuDivider />
             <MenuItem
               onClick={(e) => {

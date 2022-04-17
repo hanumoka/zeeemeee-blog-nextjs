@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } catch (error) {
     console.log('비 로그인 상태 url:', url);
 
-    if (url === '/write') {
+    if (url === '/write' || url === '/setting' || url === '/workspace') {
       // 로그인이 필요한 페이지
       return {
         redirect: {
