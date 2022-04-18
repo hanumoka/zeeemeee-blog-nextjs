@@ -78,13 +78,14 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
             없습니다.
           </Box>
         </Box>
-        <Box>
-          <Flex color="white">
-            <Box w="15%">소셜 정보</Box>
-            <Box w="85%">정보 추가</Box>
-          </Flex>
-          <Box>자동으로 글에 포함되는 작성자의 소셜정보입니다.</Box>
-        </Box>
+        {/* TODO: 나중에 */}
+        {/*<Box>*/}
+        {/*  <Flex color="white">*/}
+        {/*    <Box w="15%">소셜 정보</Box>*/}
+        {/*    <Box w="85%">정보 추가</Box>*/}
+        {/*  </Flex>*/}
+        {/*  <Box>자동으로 글에 포함되는 작성자의 소셜정보입니다.</Box>*/}
+        {/*</Box>*/}
         <Box>
           <Flex color="white">
             <Box w="15%">이메일 주소</Box>
@@ -92,20 +93,21 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
           </Flex>
           <Box>회원 인증과 알림 이메일을 받을 주소입니다.(고유값)</Box>
         </Box>
-        <Box>
-          <Flex color="white">
-            <Box w="15%">이메일 수신설정</Box>
-            <Box w="85%">
-              <Box>댓글 알림</Box>
-              <Box>업데이트 소식</Box>
-            </Box>
-          </Flex>
-        </Box>
+        {/* TODO: 나중에 */}
+        {/*<Box>*/}
+        {/*  <Flex color="white">*/}
+        {/*    <Box w="15%">이메일 수신설정</Box>*/}
+        {/*    <Box w="85%">*/}
+        {/*      <Box>댓글 알림</Box>*/}
+        {/*      <Box>업데이트 소식</Box>*/}
+        {/*    </Box>*/}
+        {/*  </Flex>*/}
+        {/*</Box>*/}
         <Box h="40px">
           <Flex color="white">
             <Box w="15%">회원 탈퇴</Box>
             <Box w="85%">
-              <Button>회원 탈퇴</Button>
+              <Button colorScheme="red">회원 탈퇴</Button>
             </Box>
           </Flex>
           <Box>경고: 탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.</Box>
@@ -116,7 +118,6 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
 };
 
 export const getServerSideProps = withAuthServer((context) => {
-  // Your normal `getServerSideProps` code here
   console.log('Setting getServerSideProps ...');
   return { props: { test: 'Setting 서버 응답' } };
 });
