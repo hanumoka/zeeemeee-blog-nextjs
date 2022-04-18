@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Avatar,
   Box,
@@ -25,6 +25,20 @@ type Props = {
 
 const LoginTop = ({ nickname, logoutFetch }: Props) => {
   const router = useRouter();
+
+  const logout = useCallback(
+    async (e) => {
+      e.preventDefault();
+      try {
+        await logoutFetch();
+        router.push('/');
+      } catch (error) {
+        console.error('로그아웃 error');
+      }
+    },
+    [logoutFetch]
+  );
+
   return (
     <HStack flex={{ base: 1 }} justify={'flex-end'} direction={'row'} spacing={6}>
       <Box marginLeft="auto">
@@ -88,15 +102,7 @@ const LoginTop = ({ nickname, logoutFetch }: Props) => {
               Settings
             </MenuItem>
             <MenuDivider />
-            <MenuItem
-              onClick={(e) => {
-                e.preventDefault();
-                logoutFetch();
-                router.push('/');
-              }}
-            >
-              Sign out
-            </MenuItem>
+            <MenuItem onClick={logout}>Sign out</MenuItem>
           </MenuList>
         </Menu>
       </Flex>

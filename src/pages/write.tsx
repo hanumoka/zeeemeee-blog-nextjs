@@ -17,8 +17,9 @@ import layoutStore from '../stores/layoutStore';
 import remarkToc from 'remark-toc';
 import { remark } from 'remark';
 import ChakraTagInput from '../lib/components/ChakraTagInput';
+import { withAuthServer } from '../hoc/withAuthServer';
 
-export { getServerSideProps } from '../stores/serverStore';
+// export { getServerSideProps } from '../stores/serverStore';
 
 const Editor = dynamic(() => import('../lib/components/Editor'), {
   ssr: false,
@@ -43,11 +44,6 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
       onLayout();
     };
   }, []);
-
-  useEffect(() => {
-    // 로그인 유지
-    loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
-  }, [loginInfo.username, loginInfo.nickname]);
 
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
@@ -151,6 +147,12 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
     </>
   );
 };
+
+export const getServerSideProps = withAuthServer((context) => {
+  // Your normal `getServerSideProps` code here
+  console.log('Write getServerSideProps ...');
+  return { props: { test: 'Write 서버 응답' } };
+});
 
 export default Write;
 

@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import loginStore from '../stores/loginStore';
-export { getServerSideProps } from '../stores/serverStore'; // TODO: 기묘하도다
+import { withAuthServer } from '../hoc/withAuthServer';
 
-const Home = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
+const Home = ({ loginInfo, pageProps }) => {
   const { username, nickname } = loginStore((state) => state);
-
-  useEffect(() => {
-    loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
-  }, [loginInfo.username, loginInfo.nickname]);
-
   return (
     <>
       <Head>
@@ -21,5 +16,11 @@ const Home = ({ loginInfo }: { loginInfo: { username: string; nickname: string }
     </>
   );
 };
+
+export const getServerSideProps = withAuthServer((context) => {
+  // Your normal `getServerSideProps` code here
+  console.log('index getServerSideProps ...');
+  return { props: { test: 'index 서버 응답' } };
+});
 
 export default Home;

@@ -7,8 +7,15 @@ import defaultSEOConfig from '../../next-seo.config';
 import Layout from 'lib/components/layout';
 import customTheme from 'lib/styles/customTheme';
 import 'lib/styles/globals.css';
+import { useEffect } from 'react';
+import loginStore from '../stores/loginStore';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  useEffect(() => {
+    const { loginInfo } = pageProps;
+    loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
+  }, [pageProps]);
+
   return (
     <ChakraProvider theme={customTheme}>
       <Head>

@@ -1,17 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Avatar, Box, Button, Flex, HStack, Square, StackDivider, VStack } from '@chakra-ui/react';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
-import loginStore from '../stores/loginStore';
 import axios from 'axios';
-
-export { getServerSideProps } from '../stores/serverStore';
+import { withAuthServer } from '../hoc/withAuthServer';
 
 const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
   const [images, setImages] = React.useState([]);
-
-  useEffect(() => {
-    loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
-  }, [loginInfo.username, loginInfo.nickname]);
 
   const onChange = useCallback(
     async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
@@ -120,5 +114,11 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
     </>
   );
 };
+
+export const getServerSideProps = withAuthServer((context) => {
+  // Your normal `getServerSideProps` code here
+  console.log('Setting getServerSideProps ...');
+  return { props: { test: 'Setting 서버 응답' } };
+});
 
 export default Setting;

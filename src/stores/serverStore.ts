@@ -5,6 +5,7 @@ import { AUTH_URL } from '../data/constData';
 /*
  * Next.js ---REQ--> SpringBoot
  * 페이지 마다 공통으로 요청하는 ServerSideProps
+ * TODO: 이거 삭제해야할듯, 정확시 zustand의 store가 아니다.일종의 HOC
  */
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = context.req ? context.req.headers.cookie : '';
@@ -27,8 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   } catch (error) {
     console.log('비 로그인 상태 url:', url);
-
-    // TODO: 로그인 체크할 페이지 정보등을 별도 파일로 분리하자.
+    // 로그인 필요한 URL 검사 후 redirect 처리
     for (const index in AUTH_URL) {
       if (url === AUTH_URL[index]) {
         return {
