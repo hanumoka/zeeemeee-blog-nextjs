@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Avatar, Box, Button, Flex, HStack, Square, StackDivider, VStack } from '@chakra-ui/react';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import loginStore from '../stores/loginStore';
+import axios from 'axios';
 
 export { getServerSideProps } from '../stores/serverStore';
 
@@ -12,11 +13,33 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
     loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
   }, [loginInfo.username, loginInfo.nickname]);
 
-  const onChange = useCallback((imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex);
-    setImages(imageList as never[]);
-  }, []);
+  const onChange = useCallback(
+    async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
+      if (addUpdateIndex) {
+        console.log('파일 업로드 요청을 보내자.');
+        console.dir(imageList);
+        const targetFile = imageList[0].file || '';
+        const formData = new FormData();
+        formData.append('files', targetFile);
+        try {
+          const response = await axios.post(
+            'http://localhost:8080/api/setting/profileimage',
+            formData,
+            {
+              withCredentials: true,
+              headers: { 'Content-Type': 'multipart/form-data' },
+            }
+          );
+          // TODO: 서버에 저장된 프로필 이미지 정보를 가져와야 한다. 로그인과 해당 파일에 적용
+          console.log(JSON.stringify(response));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      setImages(imageList as never[]);
+    },
+    []
+  );
 
   return (
     <>

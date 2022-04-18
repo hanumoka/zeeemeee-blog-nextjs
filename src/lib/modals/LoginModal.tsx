@@ -17,7 +17,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import loginStore from '../../../stores/loginStore';
+import loginStore from '../../stores/loginStore';
 
 interface signupProps {
   isOpen: boolean;

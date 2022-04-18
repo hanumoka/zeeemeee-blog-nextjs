@@ -1,4 +1,4 @@
-import TopNav from '../nav/TopNav';
+import TopNav from '../../nav/TopNav';
 
 const Header = () => {
   return <TopNav />;

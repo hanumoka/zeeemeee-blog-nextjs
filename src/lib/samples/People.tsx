@@ -1,5 +1,5 @@
 import React from 'react';
-import peopleStore from '../../../stores/peopleStore';
+import peopleStore from '../../stores/peopleStore';
 
 const People = () => {
   const people = peopleStore((state) => state.people);

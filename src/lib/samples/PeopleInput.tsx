@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import peopleStore from '../../../stores/peopleStore';
+import peopleStore from '../../stores/peopleStore';
 import { Button, Input } from '@chakra-ui/react';
 
 const PeopleInput = () => {

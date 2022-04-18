@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Stack } from '@chakra-ui/react';
-import ThemeToggle from '../layout/ThemeToggle';
+import ThemeToggle from '../components/layout/ThemeToggle';
 
 type Props = {
   loginOnOpen: () => void;

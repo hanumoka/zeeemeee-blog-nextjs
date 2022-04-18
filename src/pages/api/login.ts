@@ -1,3 +1,4 @@
+//서버 사이드 API 예제
 import { sign } from 'jsonwebtoken';
 import { serialize } from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';

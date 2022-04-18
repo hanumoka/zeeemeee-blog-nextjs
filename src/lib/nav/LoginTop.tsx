@@ -14,7 +14,7 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
-import ThemeToggle from '../layout/ThemeToggle';
+import ThemeToggle from '../components/layout/ThemeToggle';
 import { FiBell, FiChevronDown, BsPencilSquare } from 'react-icons/all';
 import { useRouter } from 'next/router';
 

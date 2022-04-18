@@ -14,7 +14,7 @@ import {
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import SignupModal from '../modals/SignupModal';
 import LoginModal from '../modals/LoginModal';
-import loginStore from '../../../stores/loginStore';
+import loginStore from '../../stores/loginStore';
 import MobileNav from './MobileNav';
 import DesktopNav from './DesktopNav';
 import NoneLoginTop from './NoneLoginTop';
@@ -60,7 +60,7 @@ export default function TopNav() {
               fontFamily={'heading'}
               color={useColorModeValue('gray.800', 'white')}
             >
-              <Link href="/">Sebure</Link>
+              <Link href="/src/lib/pages">Sebure</Link>
             </Text>
           </Heading>
 

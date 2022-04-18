@@ -7,7 +7,7 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import NAV_ITEMS from './NAV_ITMES';
+import { NAV_ITEMS } from '../../data/constData';
 import DesktopSubNav from './DesktopSubNav';
 import React from 'react';
 

@@ -1,4 +1,6 @@
-const NAV_ITEMS: Array<NavItem> = [
+export const AUTH_URL = ['/write', '/setting', '/workspace'];
+
+export const NAV_ITEMS: Array<NavItem> = [
   {
     label: 'about',
     href: '/about',
@@ -50,5 +52,3 @@ const NAV_ITEMS: Array<NavItem> = [
   //   href: '#',
   // },
 ];
-
-export default NAV_ITEMS;
