@@ -1,20 +1,36 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Avatar, Box, Button, Flex, HStack, Square, StackDivider, VStack } from '@chakra-ui/react';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import axios from 'axios';
 import { withAuthServer } from '../hoc/withAuthServer';
+import settingStore from '../stores/settingStore';
 
 const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
-  const [images, setImages] = React.useState([]);
+  const [images, setImages] = useState([]);
 
-  const onChange = useCallback(
+  const {
+    nickname,
+    introduction,
+    sebureUri,
+    email,
+    profileImageUri,
+    setProfileImageUri,
+    fetchLoading,
+    fetchError,
+    fetchSetting,
+  } = settingStore((state) => state);
+
+  useEffect(() => {
+    fetchSetting();
+  }, []);
+
+  const uploadProfileImage = useCallback(
+    // TODO: 업로드시 파일 타입 및 맥스 사이즈 해상도 검사 필요, 라이브러리에 내장되어 있다.
     async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
       if (addUpdateIndex) {
-        console.log('파일 업로드 요청을 보내자.');
-        console.dir(imageList);
         const targetFile = imageList[0].file || '';
         const formData = new FormData();
-        formData.append('files', targetFile);
+        formData.append('file', targetFile);
         try {
           const response = await axios.post(
             'http://localhost:8080/api/setting/profileimage',
@@ -25,7 +41,8 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
             }
           );
           // TODO: 서버에 저장된 프로필 이미지 정보를 가져와야 한다. 로그인과 해당 파일에 적용
-          console.log(JSON.stringify(response));
+          console.log(response.data.profileImageUri);
+          setProfileImageUri(response.data.profileImageUri);
         } catch (error) {
           console.log(error);
         }
@@ -35,22 +52,49 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
     []
   );
 
+  const removeProfileImage = async (cb) => {
+    try {
+      const response = await axios.delete('http://localhost:8080/api/setting/profileimage', {
+        withCredentials: true,
+      });
+      setProfileImageUri('');
+      cb();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
         <HStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
           <VStack w="20%">
-            <ImageUploading value={images} onChange={onChange} maxNumber={1}>
+            <ImageUploading value={images} onChange={uploadProfileImage} maxNumber={1}>
               {({ imageList, onImageUpload, onImageRemoveAll }) => (
                 <>
-                  {imageList.map((image, index) => (
-                    <Avatar key={index} size="2xl" name="hanumoka" src={image.dataURL} />
-                  ))}
-                  {images.length === 0 && <Avatar size="2xl" name="hanumoka" />}
-                  <Button colorScheme="blue" onClick={onImageUpload}>
+                  {profileImageUri && <Avatar size="2xl" name={nickname} src={profileImageUri} />}
+
+                  {!profileImageUri &&
+                    imageList.map((image, index) => (
+                      <Avatar key={index} size="2xl" name={nickname} src={image.dataURL} />
+                    ))}
+                  {!profileImageUri && images.length === 0 && <Avatar size="2xl" name={nickname} />}
+
+                  <Button
+                    colorScheme="blue"
+                    onClick={() => {
+                      onImageRemoveAll();
+                      onImageUpload();
+                    }}
+                  >
                     이미지 업로드
                   </Button>
-                  <Button colorScheme="red" onClick={onImageRemoveAll}>
+                  <Button
+                    colorScheme="red"
+                    onClick={() => {
+                      removeProfileImage(onImageRemoveAll);
+                    }}
+                  >
                     이미지 제거
                   </Button>
                 </>
@@ -59,10 +103,10 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
           </VStack>
           <Box w="80%">
             <Box h="30%" p={4}>
-              닉네임(중복검사하지 않느다.)
+              {nickname}
             </Box>
             <Box h="50%" p={4}>
-              자기설명
+              {introduction}
             </Box>
             <Button colorScheme="blue">수정</Button>
           </Box>
@@ -70,7 +114,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         <Box>
           <Flex color="white">
             <Box w="15%">블로그 URL</Box>
-            <Box w="80%">hanumoka</Box>
+            <Box w="80%">{sebureUri}</Box>
             <Square flex="1">수정</Square>
           </Flex>
           <Box>
@@ -89,7 +133,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         <Box>
           <Flex color="white">
             <Box w="15%">이메일 주소</Box>
-            <Box w="85%">이메일 입력</Box>
+            <Box w="85%">{email}</Box>
           </Flex>
           <Box>회원 인증과 알림 이메일을 받을 주소입니다.(고유값)</Box>
         </Box>

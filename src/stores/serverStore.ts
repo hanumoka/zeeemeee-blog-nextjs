@@ -3,6 +3,10 @@ import UserApi from '../api/UserApi';
 import { AUTH_URL } from '../data/constData';
 
 /*
+ * 2022.04.19 현재 사용하지 않는다.
+ * 참고용으로 납둠
+ *
+ *
  * Next.js ---REQ--> SpringBoot
  * 페이지 마다 공통으로 요청하는 ServerSideProps
  * TODO: 이거 삭제해야할듯, 정확시 zustand의 store가 아니다.일종의 HOC

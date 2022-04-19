@@ -47,7 +47,7 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
   const isPasswordError = password === '';
 
   const onSubmit = useCallback(
-    async (e) => {
+    (e) => {
       e.preventDefault();
       if (!isEmailError && !isPasswordError) {
         loginFetch(email, password);
