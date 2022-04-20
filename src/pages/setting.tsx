@@ -1,25 +1,35 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Avatar, Box, Button, Flex, HStack, Square, StackDivider, VStack } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Input,
+  Square,
+  StackDivider,
+  Textarea,
+  VStack,
+} from '@chakra-ui/react';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
-import axios from 'axios';
 import { withAuthServer } from '../hoc/withAuthServer';
 import settingStore from '../stores/settingStore';
 import Head from 'next/head';
-import SettingApi from '../api/SettingApi';
 
 const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
-  const [images, setImages] = useState([]);
-
   const {
+    images,
+    setImages,
     nickname,
     introduction,
     sebureUri,
     email,
     profileImageUri,
     setProfileImageUri,
-    fetchLoading,
-    fetchError,
     fetchSetting,
+    uploadProfileImage,
+    deleteProfileImage,
   } = settingStore((state) => state);
 
   useEffect(() => {
@@ -27,20 +37,14 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
     //TODO: 새로고침시 프로필이 깜박거린다. 서버사이드 렌더링 고려 필요
   }, []);
 
-  const uploadProfileImage = useCallback(
+  const onChangeUploadProfileImage = useCallback(
     // TODO: 업로드시 파일 타입 및 맥스 사이즈 해상도 검사 필요, 라이브러리에 내장되어 있다.
     async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
       if (addUpdateIndex) {
         const targetFile = imageList[0].file || '';
         const formData = new FormData();
         formData.append('file', targetFile);
-        try {
-          const response = await SettingApi.uploadProfileImage(formData);
-          // TODO: 서버에 저장된 프로필 이미지 정보를 가져와야 한다. 로그인과 해당 파일에 적용
-          setProfileImageUri(response.data.profileImageUri);
-        } catch (error) {
-          console.log(error);
-        }
+        uploadProfileImage(formData);
       }
       setImages(imageList as never[]);
     },
@@ -49,8 +53,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
 
   const removeProfileImage = async (cb) => {
     try {
-      await SettingApi.deleteProfileImage();
-      setProfileImageUri('');
+      deleteProfileImage();
       cb();
     } catch (error) {
       console.log(error);
@@ -65,7 +68,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
       <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
         <HStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
           <VStack w="20%">
-            <ImageUploading value={images} onChange={uploadProfileImage} maxNumber={1}>
+            <ImageUploading value={images} onChange={onChangeUploadProfileImage} maxNumber={1}>
               {({ imageList, onImageUpload, onImageRemoveAll }) => (
                 <>
                   {profileImageUri && <Avatar size="2xl" name={nickname} src={profileImageUri} />}
@@ -99,10 +102,12 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
           </VStack>
           <Box w="80%">
             <Box h="30%" p={4}>
-              {nickname}
+              <Heading as="h2" size="xl">
+                <Input placeholder="닉네임을 입력하세요." size="lg" value={nickname} />
+              </Heading>
             </Box>
             <Box h="50%" p={4}>
-              {introduction}
+              <Textarea placeholder="자기소개를 입력하세요." value={introduction} />
             </Box>
             <Button colorScheme="blue" variant="link">
               수정
@@ -110,7 +115,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
           </Box>
         </HStack>
         <Box>
-          <Flex color="white">
+          <Flex>
             <Box w="15%">블로그 URL</Box>
             <Box w="80%">{sebureUri}</Box>
             <Square flex="1">수정</Square>
@@ -129,7 +134,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         {/*  <Box>자동으로 글에 포함되는 작성자의 소셜정보입니다.</Box>*/}
         {/*</Box>*/}
         <Box>
-          <Flex color="white">
+          <Flex>
             <Box w="15%">이메일 주소</Box>
             <Box w="85%">{email}</Box>
           </Flex>
@@ -146,7 +151,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         {/*  </Flex>*/}
         {/*</Box>*/}
         <Box h="40px">
-          <Flex color="white">
+          <Flex>
             <Box w="15%">회원 탈퇴</Box>
             <Box w="85%">
               <Button colorScheme="red">회원 탈퇴</Button>

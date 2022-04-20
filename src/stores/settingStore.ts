@@ -1,8 +1,10 @@
-import create, { SetState } from 'zustand';
+import create, { GetState, SetState } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import SettingApi from '../api/SettingApi';
 
 interface SettingState {
+  images: Array<any>;
+  setImages: (images: Array<any>) => void;
   nickname: string;
   introduction: string;
   sebureUri: string;
@@ -12,9 +14,19 @@ interface SettingState {
   fetchLoading: boolean;
   fetchError: string;
   fetchSetting: () => void;
+  uploadProfileImageLoading: boolean;
+  uploadProfileImageError: string;
+  uploadProfileImage: (formData: any) => void;
+  deleteProfileImageLoading: boolean;
+  deleteProfileImageError: string;
+  deleteProfileImage: () => void;
 }
 
-const initStore = (set: SetState<SettingState>) => ({
+const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => ({
+  images: [],
+  setImages: (images) => {
+    set({ images }, false, 'setImages');
+  },
   nickname: '',
   introduction: '',
   sebureUri: '',
@@ -35,12 +47,31 @@ const initStore = (set: SetState<SettingState>) => ({
         false,
         'settingFetch/success'
       );
-      set(() => ({ fetchLoading: true }), false, 'settingFetch/success');
     } catch (error) {
       console.error(error);
       set(() => ({ fetchError: 'setting 조회 실패' }), false, 'settingFetch/error');
     } finally {
       set(() => ({ fetchLoading: false }), false, 'settingFetch/end');
+    }
+  },
+  uploadProfileImageLoading: false,
+  uploadProfileImageError: '',
+  uploadProfileImage: async (formData) => {
+    try {
+      const response = await SettingApi.uploadProfileImage(formData);
+      get().setProfileImageUri(response.data.profileImageUri);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  deleteProfileImageLoading: false,
+  deleteProfileImageError: '',
+  deleteProfileImage: async () => {
+    try {
+      await SettingApi.deleteProfileImage();
+      get().setProfileImageUri('');
+    } catch (error) {
+      console.log(error);
     }
   },
 });
