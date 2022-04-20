@@ -4,6 +4,8 @@ import ImageUploading, { ImageListType } from 'react-images-uploading';
 import axios from 'axios';
 import { withAuthServer } from '../hoc/withAuthServer';
 import settingStore from '../stores/settingStore';
+import Head from 'next/head';
+import SettingApi from '../api/SettingApi';
 
 const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
   const [images, setImages] = useState([]);
@@ -22,6 +24,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
 
   useEffect(() => {
     fetchSetting();
+    //TODO: 새로고침시 프로필이 깜박거린다. 서버사이드 렌더링 고려 필요
   }, []);
 
   const uploadProfileImage = useCallback(
@@ -32,16 +35,8 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         const formData = new FormData();
         formData.append('file', targetFile);
         try {
-          const response = await axios.post(
-            'http://localhost:8080/api/setting/profileimage',
-            formData,
-            {
-              withCredentials: true,
-              headers: { 'Content-Type': 'multipart/form-data' },
-            }
-          );
+          const response = await SettingApi.uploadProfileImage(formData);
           // TODO: 서버에 저장된 프로필 이미지 정보를 가져와야 한다. 로그인과 해당 파일에 적용
-          console.log(response.data.profileImageUri);
           setProfileImageUri(response.data.profileImageUri);
         } catch (error) {
           console.log(error);
@@ -54,9 +49,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
 
   const removeProfileImage = async (cb) => {
     try {
-      const response = await axios.delete('http://localhost:8080/api/setting/profileimage', {
-        withCredentials: true,
-      });
+      await SettingApi.deleteProfileImage();
       setProfileImageUri('');
       cb();
     } catch (error) {
@@ -66,6 +59,9 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
 
   return (
     <>
+      <Head>
+        <title>Sebure/setting</title>
+      </Head>
       <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
         <HStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
           <VStack w="20%">
@@ -108,7 +104,9 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
             <Box h="50%" p={4}>
               {introduction}
             </Box>
-            <Button colorScheme="blue">수정</Button>
+            <Button colorScheme="blue" variant="link">
+              수정
+            </Button>
           </Box>
         </HStack>
         <Box>

@@ -60,7 +60,7 @@ export default function TopNav() {
               fontFamily={'heading'}
               color={useColorModeValue('gray.800', 'white')}
             >
-              <Link href="/src/lib/pages">Sebure</Link>
+              <Link href="/">Sebure</Link>
             </Text>
           </Heading>
 
