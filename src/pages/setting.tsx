@@ -103,11 +103,11 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
           <Box w="80%">
             <Box h="30%" p={4}>
               <Heading as="h2" size="xl">
-                <Input placeholder="닉네임을 입력하세요." size="lg" value={nickname} />
+                <Input placeholder="닉네임을 입력하세요." size="lg" defaultValue={nickname} />
               </Heading>
             </Box>
             <Box h="50%" p={4}>
-              <Textarea placeholder="자기소개를 입력하세요." value={introduction} />
+              <Textarea placeholder="자기소개를 입력하세요." defaultValue={introduction} />
             </Box>
             <Button colorScheme="blue" variant="link">
               수정
