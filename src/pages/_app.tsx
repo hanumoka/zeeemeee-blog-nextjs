@@ -13,7 +13,9 @@ import loginStore from '../stores/loginStore';
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     const { loginInfo } = pageProps;
-    loginStore.getState().setLoginInfo(loginInfo.username, loginInfo.nickname);
+    loginStore
+      .getState()
+      .setLoginInfo(loginInfo.username, loginInfo.nickname, loginInfo.profileImageUri);
   }, [pageProps]);
 
   return (

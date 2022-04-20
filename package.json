@@ -4,7 +4,7 @@
   "private": true,
   "author": "sozonome",
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--inspect --max_old_space_size=4096' next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "start": "next start",
@@ -32,6 +32,7 @@
     "cookie": "^0.4.2",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
+    "formik": "^2.2.9",
     "framer-motion": "^5.6.0",
     "jsonwebtoken": "^8.5.1",
     "next": "^12.1.0",

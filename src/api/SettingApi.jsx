@@ -21,4 +21,11 @@ export default {
       method: 'delete',
     });
   },
+  updateNicknameAndIntroduction(param) {
+    return Send({
+      url: '/setting/nicknameintroduction',
+      method: 'patch',
+      data: param,
+    });
+  },
 };

@@ -18,7 +18,6 @@ export default {
     });
   },
   checkLoginForServerStore(cookie) {
-    //server store가 요청하는 로그인 체크 api
     return Send({
       url: '/logininfo',
       method: 'post',

@@ -16,10 +16,15 @@ interface SettingState {
   fetchSetting: () => void;
   uploadProfileImageLoading: boolean;
   uploadProfileImageError: string;
-  uploadProfileImage: (formData: any) => void;
+  uploadProfileImage: (formData: any) => any;
   deleteProfileImageLoading: boolean;
   deleteProfileImageError: string;
   deleteProfileImage: () => void;
+  isModNickAndIntro: boolean;
+  setIsModNickAndIntro: (param) => void;
+  updateNicknameAndIntroductionLoading: boolean;
+  updateNicknameAndIntroductionError: string;
+  updateNicknameAndIntroduction: (nickname: string, introduction: string) => any;
 }
 
 const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => ({
@@ -60,6 +65,7 @@ const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => 
     try {
       const response = await SettingApi.uploadProfileImage(formData);
       get().setProfileImageUri(response.data.profileImageUri);
+      return response.data.profileImageUri;
     } catch (error) {
       console.log(error);
     }
@@ -70,6 +76,26 @@ const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => 
     try {
       await SettingApi.deleteProfileImage();
       get().setProfileImageUri('');
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  isModNickAndIntro: false,
+  setIsModNickAndIntro: (param) => {
+    set(() => ({ isModNickAndIntro: param }), false, 'setIsModNickAndIntro');
+  },
+  updateNicknameAndIntroductionLoading: false,
+  updateNicknameAndIntroductionError: '',
+  updateNicknameAndIntroduction: async (nickname: string, introduction: string) => {
+    try {
+      const response = await SettingApi.updateNicknameAndIntroduction({ nickname, introduction });
+      const { nickname: savedNickname, introduction: savedIntroduction } = response.data;
+      set(
+        () => ({ nickname: savedNickname, introduction: savedIntroduction }),
+        false,
+        'updateNicknameAndIntroduction/success'
+      );
+      return response.data;
     } catch (error) {
       console.log(error);
     }

@@ -1,9 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Avatar,
   Box,
   Button,
+  Center,
   Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Heading,
   HStack,
   Input,
@@ -16,6 +20,8 @@ import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { withAuthServer } from '../hoc/withAuthServer';
 import settingStore from '../stores/settingStore';
 import Head from 'next/head';
+import loginStore from '../stores/loginStore';
+import { Field, Form, Formik } from 'formik';
 
 const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
   const {
@@ -26,11 +32,15 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
     sebureUri,
     email,
     profileImageUri,
-    setProfileImageUri,
     fetchSetting,
     uploadProfileImage,
     deleteProfileImage,
+    isModNickAndIntro,
+    setIsModNickAndIntro,
+    updateNicknameAndIntroduction,
   } = settingStore((state) => state);
+
+  const { setProfileImageUri, setNickname } = loginStore((state) => state);
 
   useEffect(() => {
     fetchSetting();
@@ -44,7 +54,8 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         const targetFile = imageList[0].file || '';
         const formData = new FormData();
         formData.append('file', targetFile);
-        uploadProfileImage(formData);
+        const data = await uploadProfileImage(formData);
+        setProfileImageUri(data);
       }
       setImages(imageList as never[]);
     },
@@ -59,6 +70,14 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
       console.log(error);
     }
   };
+
+  function validateNickname(value) {
+    let error;
+    if (!value) {
+      error = 'Nickname is required';
+    }
+    return error;
+  }
 
   return (
     <>
@@ -101,17 +120,100 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
             </ImageUploading>
           </VStack>
           <Box w="80%">
-            <Box h="30%" p={4}>
-              <Heading as="h2" size="xl">
-                <Input placeholder="닉네임을 입력하세요." size="lg" defaultValue={nickname} />
-              </Heading>
-            </Box>
-            <Box h="50%" p={4}>
-              <Textarea placeholder="자기소개를 입력하세요." defaultValue={introduction} />
-            </Box>
-            <Button colorScheme="blue" variant="link">
-              수정
-            </Button>
+            {isModNickAndIntro ? (
+              <Formik
+                initialValues={{ nickname: nickname, introduction: introduction }}
+                onSubmit={async (values, actions) => {
+                  const { nickname, introduction } = values;
+                  const data = await updateNicknameAndIntroduction(nickname, introduction);
+                  const { nickname: savedNickname } = data;
+                  setNickname(savedNickname);
+                  actions.setSubmitting(false);
+                  setIsModNickAndIntro(false);
+                }}
+              >
+                {(props) => (
+                  <Form>
+                    <Box h="30%" p={4}>
+                      <Heading as="h2" size="xl">
+                        <Field name="nickname" validate={validateNickname}>
+                          {({ field, form }) => (
+                            <FormControl isInvalid={form.errors.nickname && form.touched.nickname}>
+                              <FormLabel htmlFor="nickname">닉네임</FormLabel>
+                              <Input
+                                {...field}
+                                id="nickname"
+                                placeholder="닉네임을 입력하세요."
+                                size="lg"
+                              />
+                              <FormErrorMessage>{form.errors.nickname}</FormErrorMessage>
+                            </FormControl>
+                          )}
+                        </Field>
+                      </Heading>
+                    </Box>
+                    <Box h="50%" p={4}>
+                      <Field name="introduction">
+                        {({ field, form }) => (
+                          <FormControl
+                            isInvalid={form.errors.introduction && form.touched.introduction}
+                          >
+                            <FormLabel htmlFor="introduction">자기소개</FormLabel>
+                            <Textarea
+                              {...field}
+                              id="introduction"
+                              placeholder="자기소개를 입력하세요."
+                            />
+                            <FormErrorMessage>{form.errors.introduction}</FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
+                    </Box>
+                    <Center>
+                      <HStack>
+                        <Center>
+                          <Button isLoading={props.isSubmitting} colorScheme="blue" type="submit">
+                            저장
+                          </Button>
+                        </Center>
+                        <Center>
+                          <Button
+                            colorScheme="orange"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setIsModNickAndIntro(false);
+                            }}
+                          >
+                            취소
+                          </Button>
+                        </Center>
+                      </HStack>
+                    </Center>
+                  </Form>
+                )}
+              </Formik>
+            ) : (
+              <>
+                <Box h="30%" p={4}>
+                  <Heading as="h2" size="xl">
+                    {nickname}
+                  </Heading>
+                </Box>
+                <Box h="50%" p={4}>
+                  {introduction}
+                </Box>
+                <Button
+                  colorScheme="blue"
+                  variant="link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsModNickAndIntro(true);
+                  }}
+                >
+                  수정
+                </Button>
+              </>
+            )}
           </Box>
         </HStack>
         <Box>
@@ -136,7 +238,8 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         <Box>
           <Flex>
             <Box w="15%">이메일 주소</Box>
-            <Box w="85%">{email}</Box>
+            <Box w="80%">{email}</Box>
+            <Square flex="1">수정</Square>
           </Flex>
           <Box>회원 인증과 알림 이메일을 받을 주소입니다.(고유값)</Box>
         </Box>

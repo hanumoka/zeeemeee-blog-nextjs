@@ -3,15 +3,19 @@ import { AUTH_URL } from '../data/constData';
 
 export function withAuthServer(gssp) {
   return async (context) => {
-    console.log('withAuthServer ...');
-
     const cookie = context.req ? context.req.headers.cookie : '';
     const url = context.resolvedUrl;
 
     try {
       // 서버사이드 렌더링으로 로그인 체크요청
       const response = await UserApi.checkLoginForServerStore(cookie);
-      const { username, nickname } = response?.data;
+
+      console.log('withAuthServer -------');
+
+      const temp = await response?.data;
+      console.log(JSON.stringify(temp));
+
+      const { username, nickname, profileImageUri } = await response?.data;
       console.log('로그인 체크 성공');
       const gsspData = await gssp(context); // Run `getServerSideProps` to get page-specific data
       return {
@@ -20,6 +24,7 @@ export function withAuthServer(gssp) {
           loginInfo: {
             username: username,
             nickname: nickname,
+            profileImageUri: profileImageUri,
           },
         },
       };
