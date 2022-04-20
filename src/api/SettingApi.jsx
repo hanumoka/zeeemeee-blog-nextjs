@@ -28,4 +28,11 @@ export default {
       data: param,
     });
   },
+  updateSebureUri(param) {
+    return Send({
+      url: '/setting/sebureuri',
+      method: 'patch',
+      data: param,
+    });
+  },
 };

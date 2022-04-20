@@ -25,6 +25,11 @@ interface SettingState {
   updateNicknameAndIntroductionLoading: boolean;
   updateNicknameAndIntroductionError: string;
   updateNicknameAndIntroduction: (nickname: string, introduction: string) => any;
+  isModSebureUri: boolean;
+  setIsModSebureUri: (param) => void;
+  updateSebureUriLoading: boolean;
+  updateSebureUriError: string;
+  updateSebureUri: (param: string) => any;
 }
 
 const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => ({
@@ -95,6 +100,22 @@ const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => 
         false,
         'updateNicknameAndIntroduction/success'
       );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  isModSebureUri: false,
+  setIsModSebureUri: (param) => {
+    set(() => ({ isModSebureUri: param }), false, 'setIsModSebureUri');
+  },
+  updateSebureUriLoading: false,
+  updateSebureUriError: '',
+  updateSebureUri: async (param: string) => {
+    try {
+      const response = await SettingApi.updateSebureUri({ sebureUri: param });
+      const { sebureUri } = response.data;
+      set(() => ({ sebureUri }), false, 'updateSebureUri/success');
       return response.data;
     } catch (error) {
       console.log(error);

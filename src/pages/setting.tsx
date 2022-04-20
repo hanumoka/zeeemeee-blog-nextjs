@@ -7,6 +7,7 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   HStack,
@@ -38,6 +39,9 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
     isModNickAndIntro,
     setIsModNickAndIntro,
     updateNicknameAndIntroduction,
+    isModSebureUri,
+    setIsModSebureUri,
+    updateSebureUri,
   } = settingStore((state) => state);
 
   const { setProfileImageUri, setNickname } = loginStore((state) => state);
@@ -217,15 +221,108 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
           </Box>
         </HStack>
         <Box>
-          <Flex>
-            <Box w="15%">블로그 URL</Box>
-            <Box w="80%">{sebureUri}</Box>
-            <Square flex="1">수정</Square>
-          </Flex>
-          <Box>
-            개인 페이지의 고유한 대표 URL 입니다.(고유값) 해당 정보없이 작성하신 글을 공개 할 수
-            없습니다.
-          </Box>
+          {!isModSebureUri ? (
+            <>
+              <Flex>
+                <Box w="15%">블로그 URL</Box>
+                <Box w="80%">{sebureUri}</Box>
+                <Square flex="1">
+                  <Button
+                    colorScheme="blue"
+                    variant="link"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsModSebureUri(true);
+                    }}
+                  >
+                    수정
+                  </Button>
+                </Square>
+              </Flex>
+              <Box>
+                <FormControl>
+                  <FormHelperText>
+                    개인 페이지의 고유한 대표 URL 입니다. 해당 정보없이 작성하신 글을 공개 할 수
+                    없습니다.
+                  </FormHelperText>
+                </FormControl>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Formik
+                initialValues={{ sebureUri: sebureUri }}
+                onSubmit={async (values, actions) => {
+                  const { sebureUri } = values;
+                  const data = await updateSebureUri(sebureUri);
+                  console.log('블로그 URL 수정 후');
+                  console.log(JSON.stringify(data));
+                  actions.setSubmitting(false);
+                  setIsModSebureUri(false);
+                }}
+              >
+                {(props) => (
+                  <Form>
+                    <Field name="sebureUri">
+                      {({ field, form }) => (
+                        <>
+                          <FormControl isInvalid={form.errors.sebureUri && form.touched.sebureUri}>
+                            <Flex>
+                              <Box w="15%" mt="7px">
+                                블로그 URL
+                              </Box>
+                              <Box w="80%">
+                                <Input {...field} id="sebureUri" placeholder="블로그 URL" />
+                                <FormErrorMessage>{form.errors.sebureUri}</FormErrorMessage>
+                              </Box>
+                            </Flex>
+                            <Box>
+                              <FormHelperText>
+                                개인 페이지의 고유한 대표 URL 입니다. 해당 정보없이 작성하신 글을
+                                공개 할 수 없습니다.
+                              </FormHelperText>
+                            </Box>
+                          </FormControl>
+                        </>
+                      )}
+                    </Field>
+
+                    <Center mt={4}>
+                      <HStack>
+                        <Center>
+                          <Button isLoading={props.isSubmitting} colorScheme="blue" type="submit">
+                            저장
+                          </Button>
+                        </Center>
+                        <Center>
+                          <Button
+                            colorScheme="orange"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setIsModSebureUri(false);
+                            }}
+                          >
+                            취소
+                          </Button>
+                        </Center>
+                      </HStack>
+                    </Center>
+                  </Form>
+                )}
+              </Formik>
+            </>
+          )}
+        </Box>
+        <Box>
+          <FormControl>
+            <Flex>
+              <Box w="15%">이메일 주소</Box>
+              <Box w="80%">{email}</Box>
+            </Flex>
+            <Box>
+              <FormHelperText>회원 인증과 알림 이메일을 받을 주소입니다.</FormHelperText>
+            </Box>
+          </FormControl>
         </Box>
         {/* TODO: 나중에 */}
         {/*<Box>*/}
@@ -235,14 +332,6 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         {/*  </Flex>*/}
         {/*  <Box>자동으로 글에 포함되는 작성자의 소셜정보입니다.</Box>*/}
         {/*</Box>*/}
-        <Box>
-          <Flex>
-            <Box w="15%">이메일 주소</Box>
-            <Box w="80%">{email}</Box>
-            <Square flex="1">수정</Square>
-          </Flex>
-          <Box>회원 인증과 알림 이메일을 받을 주소입니다.(고유값)</Box>
-        </Box>
         {/* TODO: 나중에 */}
         {/*<Box>*/}
         {/*  <Flex color="white">*/}
@@ -253,15 +342,16 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         {/*    </Box>*/}
         {/*  </Flex>*/}
         {/*</Box>*/}
-        <Box h="40px">
-          <Flex>
-            <Box w="15%">회원 탈퇴</Box>
-            <Box w="85%">
-              <Button colorScheme="red">회원 탈퇴</Button>
-            </Box>
-          </Flex>
-          <Box>경고: 탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.</Box>
-        </Box>
+        {/* TODO: 나중에 */}
+        {/*<Box h="40px">*/}
+        {/*  <Flex>*/}
+        {/*    <Box w="15%">회원 탈퇴</Box>*/}
+        {/*    <Box w="85%">*/}
+        {/*      <Button colorScheme="red">회원 탈퇴</Button>*/}
+        {/*    </Box>*/}
+        {/*  </Flex>*/}
+        {/*  <Box>경고: 탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.</Box>*/}
+        {/*</Box>*/}
       </VStack>
     </>
   );
