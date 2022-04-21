@@ -2,6 +2,7 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useInfiniteQuery } from 'react-query';
 import { Box, Image, SimpleGrid } from '@chakra-ui/react';
+import { withAuthServer } from '../hoc/withAuthServer';
 
 const ReactQueryScroll = () => {
   const { data, status, fetchNextPage, hasNextPage } = useInfiniteQuery(
@@ -77,5 +78,11 @@ const ReactQueryScroll = () => {
     </>
   );
 };
+
+export const getServerSideProps = withAuthServer((context) => {
+  // Your normal `getServerSideProps` code here
+  console.log('react-query-scroll getServerSideProps ...');
+  return { props: { test: 'react-query-scroll 서버 응답' } };
+});
 
 export default ReactQueryScroll;
