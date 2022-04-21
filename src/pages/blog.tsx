@@ -135,8 +135,27 @@ function AirbnbExample() {
   };
 
   return (
-    <Box maxW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
-      <Image src={property.imageUrl} alt={property.imageAlt} />
+    <Box
+      maxW="lg"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      p="4"
+      shadow="base"
+      rounded="md"
+      transitionProperty="shadow"
+      transitionDuration="1"
+      transitionTimingFunction="ease-in-out"
+      _hover={{ borderColor: 'teal.600', shadow: '2xl' }}
+    >
+      <Image
+        src={property.imageUrl}
+        alt={property.imageAlt}
+        borderRadius={'lg'}
+        objectFit={'cover'}
+        _hover={{ transform: 'scale(1.03)' }}
+        transition={'0.2s ease-in-out'}
+      />
 
       <Box p="6">
         <Box display="flex" alignItems="baseline" shadow="md" borderWidth="1px">

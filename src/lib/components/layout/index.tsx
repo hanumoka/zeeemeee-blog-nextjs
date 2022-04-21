@@ -1,7 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import type { ReactNode } from 'react';
 
-import Footer from './Footer';
 import Header from './Header';
 import layoutStore from '../../../stores/layoutStore';
 
@@ -18,7 +17,8 @@ const Layout = ({ children }: LayoutProps) => {
         <Box as="main" marginY={22}>
           {children}
         </Box>
-        {layoutActive && <Footer />}
+        {/* 스크롤 화면시 푸터가 거슬려서 제거 */}
+        {/*{layoutActive && <Footer />}*/}
       </Box>
     </Box>
   );
