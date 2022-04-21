@@ -31,6 +31,9 @@ const nextConfig = {
     config.module.rules.push({ test: /\.yml$/, use: 'raw-loader' });
     return config;
   },
+  experimental: {
+    esmExternals: false,
+  },
 };
 
 module.exports = withPlugins([withTM], nextConfig);

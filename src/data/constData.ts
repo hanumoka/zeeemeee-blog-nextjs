@@ -1,4 +1,4 @@
-export const AUTH_URL = ['/write', '/setting', '/workspace'];
+export const AUTH_URL = ['/write', '/setting', '/blog'];
 
 export const NAV_ITEMS: Array<NavItem> = [
   {

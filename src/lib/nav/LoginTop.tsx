@@ -88,10 +88,10 @@ const LoginTop = ({ nickname, profileImageUri, logoutFetch }: Props) => {
             <MenuItem
               onClick={(e) => {
                 e.preventDefault();
-                router.push('/workspace');
+                router.push('/blog');
               }}
             >
-              Workspace
+              Blog
             </MenuItem>
             <MenuItem
               onClick={(e) => {
