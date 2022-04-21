@@ -10,8 +10,8 @@ export const NAV_ITEMS: Array<NavItem> = [
     href: '/zustand',
   },
   {
-    label: 'setting',
-    href: '/setting',
+    label: 'react-query-scroll',
+    href: '/react-query-scroll',
   },
   // {
   //   label: 'Inspiration',
