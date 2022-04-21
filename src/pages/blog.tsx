@@ -62,7 +62,7 @@ const Blog = ({ loginInfo, pageProps }) => {
             <TabPanels>
               <TabPanel>
                 <Box>
-                  <HStack spacing="10px">
+                  <HStack spacing="100px">
                     <Box w="20%" h="lg">
                       <Heading as="h5" size="sm">
                         태그목록
@@ -92,7 +92,7 @@ const Blog = ({ loginInfo, pageProps }) => {
                       </Box>
                       <VStack
                         mt={5}
-                        divider={<StackDivider borderColor="gray.200" />}
+                        // divider={<StackDivider borderColor="gray.200" />}
                         spacing={4}
                         align="stretch"
                       >
