@@ -51,6 +51,7 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
           const formData = new FormData();
           formData.append('files', blob);
 
+          // TODO 해당 request 수정하기
           const res = await axios.post('http://localhost:8080/api/uploadImage', formData, {
             withCredentials: true,
           });
@@ -85,6 +86,7 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
             plugins={plugins}
             onChange={onChangeEditor}
             theme={theme}
+            height="500px"
           />
         </Box>
       </Flex>
