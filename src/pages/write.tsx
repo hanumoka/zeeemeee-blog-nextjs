@@ -2,7 +2,6 @@ import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import {
-  AspectRatio,
   Box,
   Button,
   ButtonGroup,
@@ -27,7 +26,6 @@ import {
   useDisclosure,
   Image,
   HStack,
-  IconButton,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import layoutStore from '../stores/layoutStore';
@@ -36,7 +34,8 @@ import { remark } from 'remark';
 import ChakraTagInput from '../lib/components/ChakraTagInput';
 import { withAuthServer } from '../hoc/withAuthServer';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
-import { PlusSquareIcon, AddIcon, EmailIcon, SearchIcon } from '@chakra-ui/icons';
+import { useMutation } from 'react-query';
+import Send from '../utils/Send';
 
 const Editor = dynamic(() => import('../lib/components/Editor'), {
   ssr: false,
@@ -44,6 +43,7 @@ const Editor = dynamic(() => import('../lib/components/Editor'), {
 }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
 
 const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
+  const [postId, setPostId] = useState(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const handleTagsChange = useCallback((event: SyntheticEvent, tags: string[]) => {
@@ -60,7 +60,7 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
     return () => {
       onLayout();
     };
-  }, []);
+  }, [offLayout, onLayout]);
 
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
@@ -83,6 +83,47 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
   const onChange = (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
     setImages(imageList as never[]);
   };
+
+  const saveDraft = useMutation(
+    (param: any) =>
+      Send({
+        url: '/draft',
+        method: 'post',
+        data: param,
+      }),
+    {
+      onMutate: (variable) => {
+        console.log('onMutate', variable);
+        // variable : {loginId: 'xxx', password; 'xxx'}
+      },
+      onError: (error, variable, context) => {
+        // error
+        console.error(error);
+      },
+      onSuccess: (data, variables, context) => {
+        console.log('success', data, variables, context);
+        setPostId(data.data.data.postId);
+        console.log('tags...');
+        console.log(data.data.data.tags);
+        // setTags(data.data.data.tags);
+        setTags([...data.data.data.tags]);
+      },
+      onSettled: () => {
+        console.log('end');
+      },
+    }
+  );
+
+  const handleSubmit = useCallback(async () => {
+    const content = await remark().use(remarkToc).process(markdownStr);
+
+    saveDraft.mutate({
+      postId: postId,
+      title,
+      content: content.value,
+      tags,
+    });
+  }, [markdownStr, saveDraft, postId, title, tags]);
 
   return (
     <>
@@ -120,33 +161,10 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
       <Box>
         <Center>
           <ButtonGroup variant="outline" spacing="6">
-            <Button
-              onClick={async () => {
-                console.log('===저장 파라미터===');
-                const content = await remark().use(remarkToc).process(markdownStr);
-                console.log('title:', title);
-                console.log('tags:', tags);
-                console.log(String(content));
-              }}
-              colorScheme="blue"
-              size="md"
-              border="2px"
-            >
+            <Button onClick={handleSubmit} colorScheme="blue" size="md" border="2px">
               임시저장
             </Button>
-            <Button
-              // onClick={async () => {
-              //   console.log('===저장 파라미터===');
-              //   const content = await remark().use(remarkToc).process(markdownStr);
-              //   console.log('title:', title);
-              //   console.log('tags:', tags);
-              //   console.log(String(content));
-              // }}
-              onClick={onOpen}
-              colorScheme="teal"
-              size="md"
-              border="2px"
-            >
+            <Button onClick={onOpen} colorScheme="teal" size="md" border="2px">
               출간하기
             </Button>
             <Button
@@ -154,6 +172,7 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
               size="md"
               border="2px"
               onClick={() => {
+                // TODO: 쿠키가 있는 상태에서 write 패키지 진입후 나가기가 안된다. (router 히스토리가 없기 때문에)
                 router.back();
               }}
             >
@@ -162,14 +181,14 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
           </ButtonGroup>
         </Center>
       </Box>
-      {/*<Contents.Container>*/}
-      {/*  <Contents.HtmlContainer>*/}
-      {/*    <h2>Editor를 통해 만들어진 html 코드입니다.</h2>*/}
-      {/*    {htmlStr}*/}
-      {/*  </Contents.HtmlContainer>*/}
-
-      {/*  <Contents.ViewContainer ref={viewContainerRef} />*/}
-      {/*</Contents.Container>*/}
+      <Contents.Container>
+        <Contents.HtmlContainer>
+          <h2>Editor를 통해 만들어진 html 코드입니다.</h2>
+          {htmlStr}
+        </Contents.HtmlContainer>
+        {/* TODO: 이부분 삭제 하지 말것 나중에 글 읽을때 사용하면 될듯 */}
+        <Contents.ViewContainer ref={viewContainerRef} />
+      </Contents.Container>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="lg">
         <DrawerOverlay />
@@ -203,14 +222,14 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
                           <Image
                             src={image.dataURL}
                             fallbackSrc="https://via.placeholder.com/250"
-                            alt="Dan Abramov"
+                            // alt="Dan Abramov"
                             objectFit="cover"
                             borderRadius="md"
                           />
                         ))}
 
                         {(!imageList || (imageList && imageList.length === 0)) && (
-                          <Image src="gibbresh.png" fallbackSrc="https://via.placeholder.com/300" />
+                          <Image fallbackSrc="https://via.placeholder.com/300" />
                         )}
                       </Box>
                     </Box>
@@ -257,7 +276,7 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
   );
 };
 
-export const getServerSideProps = withAuthServer((context) => {
+export const getServerSideProps = withAuthServer((context: any) => {
   console.log('Write getServerSideProps ...');
   return { props: { test: 'Write 서버 응답' } };
 });
