@@ -15,7 +15,7 @@ export function withAuthServer(gssp) {
       const temp = await response?.data;
       console.log(JSON.stringify(temp));
 
-      const { username, nickname, profileImageUri } = await response?.data;
+      const { username, nickname, profileImageUri, sebureUri } = await response?.data;
       console.log('로그인 체크 성공');
       const gsspData = await gssp(context); // Run `getServerSideProps` to get page-specific data
       return {
@@ -25,6 +25,7 @@ export function withAuthServer(gssp) {
             username: username,
             nickname: nickname,
             profileImageUri: profileImageUri,
+            sebureUri: sebureUri,
           },
         },
       };
@@ -38,12 +39,16 @@ export function withAuthServer(gssp) {
               permanent: false,
               destination: '/',
             },
-            props: { loginInfo: { username: '', nickname: '' } },
+            props: {
+              loginInfo: { username: '', nickname: '', profileImageUri: '', sebureUri: '' },
+            },
           };
         }
       }
 
-      return { props: { loginInfo: { username: '', nickname: '' } } };
+      return {
+        props: { loginInfo: { username: '', nickname: '', profileImageUri: '', sebureUri: '' } },
+      };
     }
   };
 }

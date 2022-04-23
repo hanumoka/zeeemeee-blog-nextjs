@@ -1,5 +1,5 @@
 import React from 'react';
-import { withAuthServer } from '../hoc/withAuthServer';
+import { withAuthServer } from '../../hoc/withAuthServer';
 import {
   Avatar,
   Badge,
@@ -18,14 +18,13 @@ import {
   Tabs,
   VStack,
   Image,
-  StackDivider,
   InputGroup,
   InputLeftElement,
   Input,
-  Tooltip,
 } from '@chakra-ui/react';
 import { StarIcon, SearchIcon } from '@chakra-ui/icons';
-import BlogSettingTab from '../lib/pages/blog/BlogSettingTab';
+import { useRouter } from 'next/router';
+import BlogSettingTab from '../../lib/pages/blog/BlogSettingTab';
 
 const Blog = ({ loginInfo, pageProps }) => {
   return (

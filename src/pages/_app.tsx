@@ -21,7 +21,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     if (loginInfo) {
       loginStore
         .getState()
-        .setLoginInfo(loginInfo.username, loginInfo.nickname, loginInfo.profileImageUri);
+        .setLoginInfo(
+          loginInfo.username,
+          loginInfo.nickname,
+          loginInfo.profileImageUri,
+          loginInfo.sebureUri
+        );
     }
   }, [pageProps]);
 

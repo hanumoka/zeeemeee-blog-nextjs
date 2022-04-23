@@ -6,10 +6,16 @@ import UserApi from '../api/UserApi';
 interface loginState {
   username: string;
   nickname: string;
+  sebureUri: string;
   setNickname: (param: string) => void;
   profileImageUri: string;
   setProfileImageUri: (param: string) => void;
-  setLoginInfo: (username: string, nickname: string, profileImageUri: string) => void;
+  setLoginInfo: (
+    username: string,
+    nickname: string,
+    profileImageUri: string,
+    sebureUri: string
+  ) => void;
   loginLoading: boolean;
   loginError: string;
   loginFetch: (email: string, password: string) => void;
@@ -21,6 +27,7 @@ interface loginState {
 const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
   username: '', // email 형태, pk
   nickname: '', // 별명
+  sebureUri: '', // 블로그 URL
   setNickname: (param: string) => {
     set({ nickname: param }, false, 'setNickname');
   },
@@ -28,11 +35,21 @@ const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
   setProfileImageUri: (param: string) => {
     set({ profileImageUri: param }, false, 'setProfileImageUri');
   },
-  setLoginInfo: (username: string, nickname: string, profileImageUri: string) => {
+  setLoginInfo: (
+    username: string,
+    nickname: string,
+    profileImageUri: string,
+    sebureUri: string
+  ) => {
     console.log('setLoginInfo username:' + username + ', nickname:' + username);
     // TODO: 기존 값이 있는 상태에서 빈 값이 set 될때 클라이언트에 로그인이 만료된 것을 알려줘야 한다. ==> 로그인 만료 ==> 홈 페이지로 이동
     set(
-      { username: username, nickname: nickname, profileImageUri: profileImageUri },
+      {
+        username: username,
+        nickname: nickname,
+        profileImageUri: profileImageUri,
+        sebureUri: sebureUri,
+      },
       false,
       'loginFetch/setLoginInfo'
     );
@@ -48,8 +65,12 @@ const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
       );
 
       const response = await UserApi.login(email, password);
-      const { username, nickname, profileImageUri } = response.data;
-      set({ username, nickname, profileImageUri, loginError: '' }, false, 'loginFetch/success');
+      const { username, nickname, profileImageUri, sebureUri } = response.data;
+      set(
+        { username, nickname, profileImageUri, sebureUri, loginError: '' },
+        false,
+        'loginFetch/success'
+      );
     } catch (error) {
       console.error(error);
       set({ loginError: '로그인 실패' }, false, 'loginFetch/error');

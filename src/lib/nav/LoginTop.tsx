@@ -15,16 +15,17 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import ThemeToggle from '../components/layout/ThemeToggle';
-import { FiBell, FiChevronDown, BsPencilSquare } from 'react-icons/all';
+import { FiChevronDown, BsPencilSquare } from 'react-icons/all';
 import { useRouter } from 'next/router';
 
 type Props = {
   nickname: string;
   profileImageUri: string;
+  sebureUri: string;
   logoutFetch: () => void;
 };
 
-const LoginTop = ({ nickname, profileImageUri, logoutFetch }: Props) => {
+const LoginTop = ({ nickname, profileImageUri, sebureUri, logoutFetch }: Props) => {
   const router = useRouter();
 
   const logout = useCallback(
@@ -88,7 +89,7 @@ const LoginTop = ({ nickname, profileImageUri, logoutFetch }: Props) => {
             <MenuItem
               onClick={(e) => {
                 e.preventDefault();
-                router.push('/blog');
+                router.push('/blog' + '/' + sebureUri);
               }}
             >
               Blog

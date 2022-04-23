@@ -21,7 +21,9 @@ import NoneLoginTop from './NoneLoginTop';
 import LoginTop from './LoginTop';
 
 export default function TopNav() {
-  const { username, nickname, profileImageUri, logoutFetch } = loginStore((state) => state);
+  const { username, nickname, sebureUri, profileImageUri, logoutFetch } = loginStore(
+    (state) => state
+  );
   // 최소창 메뉴 토글
   const { isOpen, onToggle } = useDisclosure();
 
@@ -75,6 +77,7 @@ export default function TopNav() {
           <LoginTop
             nickname={nickname}
             profileImageUri={profileImageUri}
+            sebureUri={sebureUri}
             logoutFetch={logoutFetch}
           />
         )}
