@@ -22,8 +22,10 @@ import {
   InputGroup,
   InputLeftElement,
   Input,
+  Tooltip,
 } from '@chakra-ui/react';
 import { StarIcon, SearchIcon } from '@chakra-ui/icons';
+import BlogSettingTab from '../lib/pages/blog/BlogSettingTab';
 
 const Blog = ({ loginInfo, pageProps }) => {
   return (
@@ -48,14 +50,32 @@ const Blog = ({ loginInfo, pageProps }) => {
         <Box mt="10" w={[300, 600, 800, 1000]}>
           <Tabs isFitted>
             <TabList mb="1em">
+              {/* TODO : 나중에 컨셉은 유튜브 */}
+              {/*<Tab>*/}
+              {/*  <Heading as="h5" size="sm">*/}
+              {/*    홈*/}
+              {/*  </Heading>*/}
+              {/*</Tab>*/}
               <Tab>
-                <Heading as="h4" size="md">
-                  글
+                <Heading as="h5" size="sm">
+                  포스트
                 </Heading>
               </Tab>
+              {/*<Tab>*/}
+              {/*  <Heading as="h5" size="sm">*/}
+              {/*    시리즈*/}
+              {/*  </Heading>*/}
+              {/*</Tab>*/}
+              {/* TODO : 나중에 컨셉은 유튜브 */}
+              {/*<Tab>*/}
+              {/*  <Heading as="h5" size="sm">*/}
+              {/*    커뮤니티*/}
+              {/*  </Heading>*/}
+              {/*</Tab>*/}
               <Tab>
-                <Heading as="h4" size="md">
-                  시리즈
+                {/* TODO: 블로그 관리 탭은 주인만 볼수 있어야 한다.*/}
+                <Heading as="h5" size="sm">
+                  관리
                 </Heading>
               </Tab>
             </TabList>
@@ -107,11 +127,14 @@ const Blog = ({ loginInfo, pageProps }) => {
                   </HStack>
                 </Box>
               </TabPanel>
+              {/*<TabPanel>*/}
+              {/*  <Box h="lg" bg="teal.700">*/}
+              {/*    시리즈 영역*/}
+              {/*  </Box>*/}
+              {/*</TabPanel>*/}
               <TabPanel>
-                <Box p={4}>
-                  <Box w="100%" h="lg" bg="teal.700">
-                    시리즈 영역
-                  </Box>
+                <Box h="lg">
+                  <BlogSettingTab />
                 </Box>
               </TabPanel>
             </TabPanels>

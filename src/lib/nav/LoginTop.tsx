@@ -45,7 +45,7 @@ const LoginTop = ({ nickname, profileImageUri, logoutFetch }: Props) => {
       <Box marginLeft="auto">
         <ThemeToggle />
       </Box>
-      <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />
+      {/*<IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />*/}
       <IconButton
         size="lg"
         variant="ghost"
