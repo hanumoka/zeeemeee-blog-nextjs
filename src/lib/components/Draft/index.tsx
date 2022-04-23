@@ -1,13 +1,12 @@
 import React from 'react';
-import { Box, Center, Heading, Text, Stack, useColorModeValue, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Stack, useColorModeValue, Button, Badge } from '@chakra-ui/react';
 
-const Index = () => {
+const Index = ({ data }) => {
   return (
     <Box
       maxW={'800px'}
       w={'full'}
       bg={useColorModeValue('white', 'gray.900')}
-      // boxShadow={'2xl'}
       rounded={'md'}
       p={6}
       overflow={'hidden'}
@@ -19,27 +18,52 @@ const Index = () => {
       _hover={{ borderColor: 'teal.600', shadow: '2xl' }}
     >
       <Stack>
-        <Text
-          color={'green.500'}
-          textTransform={'uppercase'}
-          fontWeight={800}
-          fontSize={'sm'}
-          letterSpacing={1.1}
-        >
-          Blog
-        </Text>
+        <Stack direction={'row'}>
+          <Text
+            color={'green.500'}
+            textTransform={'uppercase'}
+            fontWeight={800}
+            fontSize={'sm'}
+            letterSpacing={1.1}
+          >
+            임시글
+          </Text>
+          <Badge
+            px={2}
+            py={1}
+            bg={useColorModeValue('gray.50', 'gray.800')}
+            fontWeight={'400'}
+            variant="outline"
+          >
+            art
+          </Badge>
+          <Badge
+            px={2}
+            py={1}
+            bg={useColorModeValue('gray.50', 'gray.800')}
+            fontWeight={'400'}
+            variant="outline"
+          >
+            photography
+          </Badge>
+          <Badge
+            px={2}
+            py={1}
+            bg={useColorModeValue('gray.50', 'gray.800')}
+            fontWeight={'400'}
+            variant="outline"
+          >
+            music
+          </Badge>
+        </Stack>
         <Heading
           color={useColorModeValue('gray.700', 'white')}
           fontSize={'2xl'}
           fontFamily={'body'}
         >
-          Boost your conversion rate
+          {data.title}
         </Heading>
-        <Text color={'gray.500'}>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-          invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-          accusam et justo duo dolores et ea rebum.
-        </Text>
+        <Text color={'gray.500'}>{data.content}</Text>
       </Stack>
       <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
         <Stack direction={'column'} spacing={0} fontSize={'sm'}>

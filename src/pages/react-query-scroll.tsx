@@ -14,6 +14,8 @@ const ReactQueryScroll = () => {
     {
       getNextPageParam: (lastPage, pages) => {
         if (lastPage.info.next) {
+          // console.log('length:', pages.length);
+          // console.log(JSON.stringify(pages));
           return pages.length + 1;
         }
       },

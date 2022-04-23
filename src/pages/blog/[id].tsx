@@ -39,15 +39,13 @@ const Blog = ({ loginInfo, pageProps }) => {
               </Heading>
             </Box>
             <Box>
-              <FormHelperText>
-                자기소개ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
-              </FormHelperText>
+              <FormHelperText>자기소개</FormHelperText>
             </Box>
           </FormControl>
         </HStack>
         <Divider />
         <Box mt="10" w={[300, 600, 800, 1000]}>
-          <Tabs isFitted>
+          <Tabs isFitted isLazy={true}>
             <TabList mb="1em">
               {/* TODO : 나중에 컨셉은 유튜브 */}
               {/*<Tab>*/}
