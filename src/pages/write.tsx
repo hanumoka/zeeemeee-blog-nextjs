@@ -42,7 +42,7 @@ const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   loading: () => <p>에디터 준비중...</p>,
 }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
 
-const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string } }) => {
+const Write = ({ loginInfo, pageProps }) => {
   const [postId, setPostId] = useState(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -61,6 +61,26 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
       onLayout();
     };
   }, [offLayout, onLayout]);
+
+  useEffect(() => {
+    console.log(pageProps);
+    const { postId } = pageProps;
+
+    if (postId) {
+      // TODO : 나중에 리팩토링 할것
+      const tmpFetch = async () => {
+        const response = await Send({
+          url: '/status',
+          method: 'get',
+          params: {
+            postId: postId,
+          },
+        });
+      };
+
+      tmpFetch();
+    } // if
+  }, [pageProps]);
 
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
@@ -94,7 +114,6 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
     {
       onMutate: (variable) => {
         console.log('onMutate', variable);
-        // variable : {loginId: 'xxx', password; 'xxx'}
       },
       onError: (error, variable, context) => {
         // error
@@ -278,7 +297,9 @@ const Write = ({ loginInfo }: { loginInfo: { username: string; nickname: string 
 
 export const getServerSideProps = withAuthServer((context: any) => {
   console.log('Write getServerSideProps ...');
-  return { props: { test: 'Write 서버 응답' } };
+  console.log('query:' + context.query.postId);
+  const postId = context.query.postId;
+  return { props: { postId } };
 });
 
 export default Write;

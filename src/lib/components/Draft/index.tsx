@@ -12,16 +12,18 @@ import {
 } from '@chakra-ui/react';
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 
 const MarkdownView = dynamic(() => import('../Editor/MarkdownView'), {
   ssr: false,
 });
 
 const Index = ({ data }) => {
+  const router = useRouter();
   const { colorMode } = useColorMode();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
-  const { title, content, tags, createdAt, updatedAt } = data;
+  const { postId, title, content, tags, createdAt, updatedAt } = data;
 
   return (
     <Box
@@ -39,7 +41,10 @@ const Index = ({ data }) => {
       _hover={{ borderColor: 'teal.600', shadow: '2xl' }}
       onClick={(e) => {
         e.stopPropagation();
-        alert('글 클릭');
+        router.push({
+          pathname: '/write',
+          query: { postId: postId },
+        });
       }}
     >
       <Stack>
@@ -106,6 +111,7 @@ const Index = ({ data }) => {
           colorScheme="red"
           onClick={(e) => {
             e.stopPropagation();
+
             alert('삭제하기');
           }}
         >

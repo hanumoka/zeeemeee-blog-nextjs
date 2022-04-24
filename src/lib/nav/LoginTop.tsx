@@ -53,7 +53,7 @@ const LoginTop = ({ nickname, profileImageUri, sebureUri, logoutFetch }: Props) 
         aria-label="open menu"
         icon={<BsPencilSquare />}
         onClick={(e) => {
-          e.preventDefault();
+          e.stopPropagation();
           router.push('/write');
         }}
       />
