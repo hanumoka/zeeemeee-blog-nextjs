@@ -36,6 +36,7 @@ import { withAuthServer } from '../hoc/withAuthServer';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { useMutation } from 'react-query';
 import Send from '../utils/Send';
+import post from '../lib/components/Post';
 
 const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   ssr: false,
@@ -67,10 +68,10 @@ const Write = ({ loginInfo, pageProps }) => {
     const { postId } = pageProps;
 
     if (postId) {
-      // TODO : 나중에 리팩토링 할것
+      // TODO : 나중에 리팩토링 할것 이런부분도 react-query를 사용할 필요가 있는가?
       const tmpFetch = async () => {
         const response = await Send({
-          url: '/status',
+          url: '/draft',
           method: 'get',
           params: {
             postId: postId,
@@ -297,9 +298,15 @@ const Write = ({ loginInfo, pageProps }) => {
 
 export const getServerSideProps = withAuthServer((context: any) => {
   console.log('Write getServerSideProps ...');
-  console.log('query:' + context.query.postId);
-  const postId = context.query.postId;
-  return { props: { postId } };
+  // console.log('query:' + context.query.postId);
+  const { postId } = context.query;
+  console.log('postId:' + postId);
+
+  if (postId) {
+    return { props: { postId: postId } };
+  } else {
+    return { props: { postId: '' } };
+  }
 });
 
 export default Write;
