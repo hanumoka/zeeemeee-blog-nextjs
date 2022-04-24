@@ -2,6 +2,9 @@ import React from 'react';
 import { Box, Heading, Text, Stack, useColorModeValue, Button, Badge } from '@chakra-ui/react';
 
 const Index = ({ data }) => {
+  const badgeColor = useColorModeValue('gray.50', 'gray.800');
+  const { title, content, tags } = data;
+
   return (
     <Box
       maxW={'800px'}
@@ -28,46 +31,26 @@ const Index = ({ data }) => {
           >
             임시글
           </Text>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-            variant="outline"
-          >
-            art
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-            variant="outline"
-          >
-            photography
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-            variant="outline"
-          >
-            music
-          </Badge>
+          {tags.map((tag) => {
+            return (
+              <Badge px={2} py={1} bg={badgeColor} fontWeight={'400'} variant="outline">
+                {tag}
+              </Badge>
+            );
+          })}
         </Stack>
         <Heading
           color={useColorModeValue('gray.700', 'white')}
           fontSize={'2xl'}
           fontFamily={'body'}
         >
-          {data.title}
+          {title}
         </Heading>
-        <Text color={'gray.500'}>{data.content}</Text>
+        <Text color={'gray.500'}>{content}</Text>
       </Stack>
       <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
         <Stack direction={'column'} spacing={0} fontSize={'sm'}>
-          <Text fontWeight={600}>Hanumoka</Text>
+          {/*<Text fontWeight={600}>Hanumoka</Text>*/}
           <Text color={'gray.500'}> 작성일: 2022-01-01 / 수정일 : 2022-01-01</Text>
         </Stack>
       </Stack>

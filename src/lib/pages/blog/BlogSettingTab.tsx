@@ -56,10 +56,10 @@ const BlogSettingTab = () => {
         if (!lastPage.isLast) return lastPage.nextPage;
         return undefined;
       },
-      // refetchOnWindowFocus: false,
-      // refetchOnMount: true,
-      // refetchOnReconnect: true,
-      // retry: 1,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      retry: 1,
     }
   );
 
@@ -123,7 +123,6 @@ const BlogSettingTab = () => {
           </VStack>
         </Box>
         <Box w="80%" h="lg">
-          {/* TODO: 리스트루 출력 해야 한다. */}
           {menuFocus === BlogSettingMenu.draft && status === 'success' && (
             <InfiniteScroll
               dataLength={data?.pages.length * 20}
@@ -134,9 +133,7 @@ const BlogSettingTab = () => {
               <VStack>
                 {data?.pages.map((page) => (
                   <>
-                    {/*{JSON.stringify(page.data)}*/}
                     {page.data.map((draft) => (
-                      // <Box>{draft.postId}</Box>
                       <Draft data={draft} />
                     ))}
                   </>
