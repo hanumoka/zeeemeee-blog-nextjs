@@ -61,6 +61,8 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
         return false;
       });
     }
+
+    //TODO: 주의 절대 의종성 추가 하지 말것.
   }, []);
 
   // Editor Change 이벤트

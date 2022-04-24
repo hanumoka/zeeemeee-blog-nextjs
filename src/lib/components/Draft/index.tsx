@@ -1,9 +1,30 @@
 import React from 'react';
-import { Box, Heading, Text, Stack, useColorModeValue, Button, Badge } from '@chakra-ui/react';
+import Moment from 'react-moment';
+import {
+  Box,
+  Heading,
+  Text,
+  Stack,
+  useColorModeValue,
+  Button,
+  Badge,
+  useColorMode,
+} from '@chakra-ui/react';
+
+import dynamic from 'next/dynamic';
+
+const MarkdownView = dynamic(() => import('../Editor/MarkdownView'), {
+  ssr: false,
+});
 
 const Index = ({ data }) => {
+  const { colorMode } = useColorMode();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
-  const { title, content, tags } = data;
+
+  console.log('=========Index==========');
+  console.log(JSON.stringify(data));
+
+  const { title, content, tags, createdAt, updatedAt } = data;
 
   return (
     <Box
@@ -46,12 +67,15 @@ const Index = ({ data }) => {
         >
           {title}
         </Heading>
-        <Text color={'gray.500'}>{content}</Text>
+        {/*<MarkdownView markdownStr={content} theme={colorMode} />*/}
       </Stack>
       <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
         <Stack direction={'column'} spacing={0} fontSize={'sm'}>
           {/*<Text fontWeight={600}>Hanumoka</Text>*/}
-          <Text color={'gray.500'}> 작성일: 2022-01-01 / 수정일 : 2022-01-01</Text>
+          <Text color={'gray.500'}>
+            작성일: <Moment format="YYYY-MM-DD HH:mm:ss">{createdAt}</Moment> / 수정일 :{' '}
+            <Moment format="YYYY-MM-DD HH:mm:ss">{updatedAt}</Moment>
+          </Text>
         </Stack>
       </Stack>
       <Stack mt="5" direction={{ base: 'column', md: 'row' }}>

@@ -37,7 +37,7 @@ import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { useMutation } from 'react-query';
 import Send from '../utils/Send';
 
-const Editor = dynamic(() => import('../lib/components/Editor'), {
+const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   ssr: false,
   loading: () => <p>에디터 준비중...</p>,
 }); // client 사이드에서만 동작되기 때문에 ssr false로 설정

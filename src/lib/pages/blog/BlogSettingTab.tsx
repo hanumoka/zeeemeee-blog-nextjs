@@ -38,16 +38,15 @@ const BlogSettingTab = () => {
       });
 
       const result = response.data;
-      let isLast = false;
+      const { pages, pageNo, pageSize, totalElements, totalPages, last } = result.data;
 
-      if (result.data.length <= 10) {
-        isLast = true;
-      }
+      console.log('====pages=====');
+      console.log(JSON.stringify(pages));
 
       return {
-        data: result.data,
+        data: pages,
         nextPage: pageParam + 1,
-        isLast,
+        isLast: last,
       };
     },
     {
@@ -61,6 +60,9 @@ const BlogSettingTab = () => {
       retry: 1,
     }
   );
+
+  console.log('==========data============');
+  console.log(JSON.stringify(data));
 
   return (
     <>
@@ -115,8 +117,10 @@ const BlogSettingTab = () => {
               loader={<h4>Loading...</h4>}
             >
               <VStack>
-                {data?.pages.map((page) => {
-                  return page.data.map((draft) => <Draft data={draft} />);
+                {data?.pages.map((pageData) => {
+                  return pageData?.data.map((draftData) => {
+                    return <Draft data={draftData} />;
+                  });
                 })}
               </VStack>
             </InfiniteScroll>
