@@ -21,9 +21,6 @@ const Index = ({ data }) => {
   const { colorMode } = useColorMode();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
-  console.log('=========Index==========');
-  console.log(JSON.stringify(data));
-
   const { title, content, tags, createdAt, updatedAt } = data;
 
   return (
@@ -40,6 +37,10 @@ const Index = ({ data }) => {
       transitionDuration="1"
       transitionTimingFunction="ease-in-out"
       _hover={{ borderColor: 'teal.600', shadow: '2xl' }}
+      onClick={(e) => {
+        e.stopPropagation();
+        alert('글 클릭');
+      }}
     >
       <Stack>
         <Stack direction={'row'}>
@@ -79,10 +80,37 @@ const Index = ({ data }) => {
         </Stack>
       </Stack>
       <Stack mt="5" direction={{ base: 'column', md: 'row' }}>
-        <Button variant="outline" colorScheme="green">
+        <Button
+          variant="outline"
+          colorScheme="blue"
+          onClick={(e) => {
+            e.stopPropagation();
+            alert('수정하기');
+          }}
+        >
           수정하기
         </Button>
-        <Button colorScheme="green">출간하기</Button>
+        <Button
+          variant="outline"
+          colorScheme="green"
+          onClick={(e) => {
+            e.stopPropagation();
+            alert('출간하기');
+          }}
+        >
+          출간하기
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          colorScheme="red"
+          onClick={(e) => {
+            e.stopPropagation();
+            alert('삭제하기');
+          }}
+        >
+          삭제하기
+        </Button>
       </Stack>
     </Box>
   );
