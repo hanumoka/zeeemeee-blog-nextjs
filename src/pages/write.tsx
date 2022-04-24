@@ -36,7 +36,6 @@ import { withAuthServer } from '../hoc/withAuthServer';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { useMutation } from 'react-query';
 import Send from '../utils/Send';
-import post from '../lib/components/Post';
 
 const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   ssr: false,
@@ -47,6 +46,9 @@ const Write = ({ loginInfo, pageProps }) => {
   const [postId, setPostId] = useState(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+
+  const [readyEditor, setReadyEditor] = useState(false);
+
   const handleTagsChange = useCallback((event: SyntheticEvent, tags: string[]) => {
     setTags(tags);
   }, []);
@@ -64,23 +66,36 @@ const Write = ({ loginInfo, pageProps }) => {
   }, [offLayout, onLayout]);
 
   useEffect(() => {
-    console.log(pageProps);
     const { postId } = pageProps;
 
     if (postId) {
       // TODO : 나중에 리팩토링 할것 이런부분도 react-query를 사용할 필요가 있는가?
       const tmpFetch = async () => {
         const response = await Send({
-          url: '/draft',
+          url: '/post',
           method: 'get',
           params: {
             postId: postId,
           },
         });
+
+        const result = response.data;
+        if (result.data) {
+          const { postId, title, content, tags } = result.data;
+          setPostId(postId);
+          setTitle(title);
+          setTags(tags);
+          setMarkdownStr(content);
+        }
       };
 
       tmpFetch();
     } // if
+
+    console.log('에디터 초기화 완료');
+    // TODO: 조회된 포스트 저보가 에디터에 출력 안됨 => setTimeout으로 처리, 서버사이드를 하든 다른 방법을 쓰는게 좋아 보인다.
+    const timeout = setTimeout(() => setReadyEditor(true), 1000);
+    return () => clearTimeout(timeout);
   }, [pageProps]);
 
   // state
@@ -123,9 +138,6 @@ const Write = ({ loginInfo, pageProps }) => {
       onSuccess: (data, variables, context) => {
         console.log('success', data, variables, context);
         setPostId(data.data.data.postId);
-        console.log('tags...');
-        console.log(data.data.data.tags);
-        // setTags(data.data.data.tags);
         setTags([...data.data.data.tags]);
       },
       onSettled: () => {
@@ -170,13 +182,15 @@ const Write = ({ loginInfo, pageProps }) => {
           </FormControl>
         </Box>
       </Container>
-      <Editor
-        htmlStr={htmlStr}
-        setHtmlStr={setHtmlStr}
-        markdownStr={markdownStr}
-        setMarkdownStr={setMarkdownStr}
-        theme={colorMode}
-      />
+      {readyEditor && (
+        <Editor
+          htmlStr={htmlStr}
+          setHtmlStr={setHtmlStr}
+          markdownStr={markdownStr}
+          setMarkdownStr={setMarkdownStr}
+          theme={colorMode}
+        />
+      )}
 
       <Box>
         <Center>
