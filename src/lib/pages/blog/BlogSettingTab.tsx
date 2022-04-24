@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -25,10 +25,6 @@ const BlogSettingTab = () => {
   const categoryColor = useColorModeValue('black', 'gray.500');
   const [menuFocus, setMenuFocus] = useState<BlogSettingMenu>(BlogSettingMenu.draft);
 
-  useEffect(() => {
-    console.log('BlogSettingTab renderd...');
-  }, []);
-
   const { data, status, fetchNextPage, hasNextPage } = useInfiniteQuery(
     ['infiniteDrafts'],
     async ({ pageParam = 0 }) => {
@@ -37,18 +33,21 @@ const BlogSettingTab = () => {
         method: 'get',
         params: {
           pageNo: pageParam,
+          pageSize: 10,
         },
       });
 
       const result = response.data;
+      let isLast = false;
 
-      // console.log('draft 인피니트 스크롤 응답');
-      // console.log(JSON.stringify(result.data));
+      if (result.data.length <= 10) {
+        isLast = true;
+      }
 
       return {
         data: result.data,
         nextPage: pageParam + 1,
-        isLast: false,
+        isLast,
       };
     },
     {
@@ -105,21 +104,6 @@ const BlogSettingTab = () => {
             >
               비공개글 (100)
             </Button>
-            {/*<Divider />*/}
-            {/*<Button*/}
-            {/*  variant="link"*/}
-            {/*  _hover={{ transform: 'scale(1.10)' }}*/}
-            {/*  transition={'0.2s ease-in-out'}*/}
-            {/*>*/}
-            {/*  공개시리즈 (100)*/}
-            {/*</Button>*/}
-            {/*<Button*/}
-            {/*  variant="link"*/}
-            {/*  _hover={{ transform: 'scale(1.10)' }}*/}
-            {/*  transition={'0.2s ease-in-out'}*/}
-            {/*>*/}
-            {/*  비공개시리즈 (100)*/}
-            {/*</Button>*/}
           </VStack>
         </Box>
         <Box w="80%" h="lg">
@@ -131,13 +115,9 @@ const BlogSettingTab = () => {
               loader={<h4>Loading...</h4>}
             >
               <VStack>
-                {data?.pages.map((page) => (
-                  <>
-                    {page.data.map((draft) => (
-                      <Draft data={draft} />
-                    ))}
-                  </>
-                ))}
+                {data?.pages.map((page) => {
+                  return page.data.map((draft) => <Draft data={draft} />);
+                })}
               </VStack>
             </InfiniteScroll>
           )}

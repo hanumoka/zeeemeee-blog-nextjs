@@ -33,7 +33,7 @@ const Index = ({ data }) => {
           </Text>
           {tags.map((tag) => {
             return (
-              <Badge px={2} py={1} bg={badgeColor} fontWeight={'400'} variant="outline">
+              <Badge key={tag} px={2} py={1} bg={badgeColor} fontWeight={'400'} variant="outline">
                 {tag}
               </Badge>
             );
