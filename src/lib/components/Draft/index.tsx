@@ -112,32 +112,11 @@ const Index = ({ data }) => {
       </Stack>
       <Stack mt="5" direction={{ base: 'column', md: 'row' }}>
         <Button
-          variant="outline"
-          colorScheme="blue"
-          onClick={(e) => {
-            e.stopPropagation();
-            alert('수정하기');
-          }}
-        >
-          수정하기
-        </Button>
-        <Button
-          variant="outline"
-          colorScheme="green"
-          onClick={(e) => {
-            e.stopPropagation();
-            alert('출간하기');
-          }}
-        >
-          출간하기
-        </Button>
-        <Button
           type="button"
           variant="outline"
           colorScheme="red"
           onClick={(e) => {
             e.stopPropagation();
-            // deleteDraft();
             handleDeleteDraft();
           }}
         >
