@@ -40,9 +40,6 @@ const BlogSettingTab = () => {
       const result = response.data;
       const { pages, pageNo, pageSize, totalElements, totalPages, last } = result.data;
 
-      console.log('====pages=====');
-      console.log(JSON.stringify(pages));
-
       return {
         data: pages,
         nextPage: pageParam + 1,
@@ -60,9 +57,6 @@ const BlogSettingTab = () => {
       retry: 1,
     }
   );
-
-  console.log('==========data============');
-  console.log(JSON.stringify(data));
 
   return (
     <>

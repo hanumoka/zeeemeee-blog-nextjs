@@ -26,6 +26,7 @@ import {
   useDisclosure,
   Image,
   HStack,
+  Spinner,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import layoutStore from '../stores/layoutStore';
@@ -182,7 +183,7 @@ const Write = ({ loginInfo, pageProps }) => {
           </FormControl>
         </Box>
       </Container>
-      {readyEditor && (
+      {readyEditor ? (
         <Editor
           htmlStr={htmlStr}
           setHtmlStr={setHtmlStr}
@@ -190,6 +191,8 @@ const Write = ({ loginInfo, pageProps }) => {
           setMarkdownStr={setMarkdownStr}
           theme={colorMode}
         />
+      ) : (
+        <Spinner size="xl" />
       )}
 
       <Box>
