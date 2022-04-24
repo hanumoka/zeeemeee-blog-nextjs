@@ -33,7 +33,7 @@ export function withAuthServer(gssp) {
       console.log('비 로그인 상태 url:', url);
       // 로그인 필요한 URL 검사 후 redirect 처리
       for (const index in AUTH_URL) {
-        if (url === AUTH_URL[index]) {
+        if (url.startsWith(AUTH_URL[index])) {
           return {
             redirect: {
               permanent: false,

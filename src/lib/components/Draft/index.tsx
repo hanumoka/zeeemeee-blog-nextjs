@@ -1,29 +1,55 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Moment from 'react-moment';
-import {
-  Box,
-  Heading,
-  Text,
-  Stack,
-  useColorModeValue,
-  Button,
-  Badge,
-  useColorMode,
-} from '@chakra-ui/react';
+import { Box, Heading, Text, Stack, useColorModeValue, Button, Badge } from '@chakra-ui/react';
 
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import Send from '../../../utils/Send';
+import { useMutation, useQueryClient } from 'react-query';
 
-const MarkdownView = dynamic(() => import('../Editor/MarkdownView'), {
-  ssr: false,
-});
+// const MarkdownView = dynamic(() => import('../Editor/MarkdownView'), {
+//   ssr: false,
+// });
 
 const Index = ({ data }) => {
+  const queryClient = useQueryClient(); // 등록된 quieryClient 가져오기
   const router = useRouter();
-  const { colorMode } = useColorMode();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
-  const { postId, title, content, tags, createdAt, updatedAt } = data;
+  const { postId, title, tags, createdAt, updatedAt } = data;
+
+  const deleteDraft = useMutation(
+    (param: any) =>
+      Send({
+        url: '/draft',
+        method: 'delete',
+        params: {
+          postId: param.postId,
+        },
+      }),
+    {
+      onMutate: (variable) => {
+        console.log('onMutate', variable);
+      },
+      onError: (error, variable, context) => {
+        // error
+        console.error(error);
+      },
+      onSuccess: (data, variables, context) => {
+        console.log('success', data, variables, context);
+        queryClient.invalidateQueries('infiniteDrafts'); // queryKey 유효성 제거
+      },
+      onSettled: () => {
+        console.log('end');
+      },
+    }
+  );
+
+  const handleDeleteDraft = useCallback(() => {
+    deleteDraft.mutate({
+      postId: postId,
+    });
+  }, [deleteDraft, postId]);
 
   return (
     <Box
@@ -111,8 +137,8 @@ const Index = ({ data }) => {
           colorScheme="red"
           onClick={(e) => {
             e.stopPropagation();
-
-            alert('삭제하기');
+            // deleteDraft();
+            handleDeleteDraft();
           }}
         >
           삭제하기

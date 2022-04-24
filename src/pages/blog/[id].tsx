@@ -23,7 +23,6 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { StarIcon, SearchIcon } from '@chakra-ui/icons';
-import { useRouter } from 'next/router';
 import BlogSettingTab from '../../lib/pages/blog/BlogSettingTab';
 
 const Blog = ({ loginInfo, pageProps }) => {
