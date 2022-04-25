@@ -219,7 +219,7 @@ const Write = ({ loginInfo, pageProps }) => {
 
   const deletePostImage = async () => {
     try {
-      await PostApi.deletePostImage();
+      await PostApi.deletePostImage(postId);
       setPostImageUri('');
     } catch (error) {
       console.log(error);

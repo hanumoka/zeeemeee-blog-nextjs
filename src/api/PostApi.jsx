@@ -9,10 +9,13 @@ export default {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
-  deletePostImage() {
+  deletePostImage(postId) {
     return Send({
       url: '/post/image',
       method: 'delete',
+      params: {
+        postId: postId,
+      },
     });
   },
 };

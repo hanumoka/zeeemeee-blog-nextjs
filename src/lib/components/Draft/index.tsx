@@ -59,12 +59,12 @@ const Index = ({ data }) => {
       rounded={'md'}
       p={6}
       overflow={'hidden'}
-      borderWidth="1px"
+      borderWidth="2px"
       borderRadius="lg"
       transitionProperty="shadow"
       transitionDuration="1"
       transitionTimingFunction="ease-in-out"
-      _hover={{ borderColor: 'teal.600', shadow: '2xl' }}
+      _hover={{ borderColor: 'teal.600', shadow: '2xl', cursor: 'pointer' }}
       onClick={(e) => {
         e.stopPropagation();
         router.push({
