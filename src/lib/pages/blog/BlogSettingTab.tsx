@@ -80,26 +80,26 @@ const BlogSettingTab = () => {
             >
               임시글 (100)
             </Button>
-            <Button
-              variant="link"
-              _hover={{ transform: 'scale(1.10)' }}
-              transition={'0.2s ease-in-out'}
-              onClick={() => {
-                setMenuFocus(BlogSettingMenu.public);
-              }}
-            >
-              공개글 (100)
-            </Button>
-            <Button
-              variant="link"
-              _hover={{ transform: 'scale(1.10)' }}
-              transition={'0.2s ease-in-out'}
-              onClick={() => {
-                setMenuFocus(BlogSettingMenu.private);
-              }}
-            >
-              비공개글 (100)
-            </Button>
+            {/*<Button*/}
+            {/*  variant="link"*/}
+            {/*  _hover={{ transform: 'scale(1.10)' }}*/}
+            {/*  transition={'0.2s ease-in-out'}*/}
+            {/*  onClick={() => {*/}
+            {/*    setMenuFocus(BlogSettingMenu.public);*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  공개글 (100)*/}
+            {/*</Button>*/}
+            {/*<Button*/}
+            {/*  variant="link"*/}
+            {/*  _hover={{ transform: 'scale(1.10)' }}*/}
+            {/*  transition={'0.2s ease-in-out'}*/}
+            {/*  onClick={() => {*/}
+            {/*    setMenuFocus(BlogSettingMenu.private);*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  비공개글 (100)*/}
+            {/*</Button>*/}
           </VStack>
         </Box>
         <Box w="80%" h="lg">

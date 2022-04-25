@@ -44,6 +44,7 @@ const Blog = ({ loginInfo, pageProps }) => {
         </HStack>
         <Divider />
         <Box mt="10" w={[300, 600, 800, 1000]}>
+          {/* TODO: 탭 선택 정보를 store에 저장하고 블러오자. 임시글에서 나왔을때 유지하기 위해 */}
           <Tabs isFitted isLazy={true}>
             <TabList mb="1em">
               {/* TODO : 나중에 컨셉은 유튜브 */}

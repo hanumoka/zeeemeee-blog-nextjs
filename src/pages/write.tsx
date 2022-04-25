@@ -37,6 +37,7 @@ import { withAuthServer } from '../hoc/withAuthServer';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { useMutation } from 'react-query';
 import Send from '../utils/Send';
+import PostApi from '../api/PostApi';
 
 const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   ssr: false,
@@ -47,6 +48,7 @@ const Write = ({ loginInfo, pageProps }) => {
   const [postId, setPostId] = useState(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [postImageUri, setPostImageUri] = useState('');
 
   const [readyEditor, setReadyEditor] = useState(false);
 
@@ -82,11 +84,12 @@ const Write = ({ loginInfo, pageProps }) => {
 
         const result = response.data;
         if (result.data) {
-          const { postId, title, content, tags } = result.data;
+          const { postId, title, content, tags, postImageUri } = result.data;
           setPostId(postId);
           setTitle(title);
           setTags(tags);
           setMarkdownStr(content);
+          setPostImageUri(postImageUri);
         }
       };
 
@@ -117,9 +120,32 @@ const Write = ({ loginInfo, pageProps }) => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // 출간하기 drawer 상태
   const [images, setImages] = useState([]);
 
-  const onChange = (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
-    setImages(imageList as never[]);
-  };
+  const uploadPostImage = useCallback(async (formData) => {
+    try {
+      const response = await PostApi.uploadPostImage(formData);
+      return response.data.postImageUri;
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const onChangeUploadPostImage = useCallback(
+    // TODO: 업로드시 파일 타입 및 맥스 사이즈 해상도 검사 필요, 라이브러리에 내장되어 있다.
+    async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
+      if (addUpdateIndex) {
+        const targetFile = imageList[0].file || '';
+        const formData = new FormData();
+        formData.append('postImagefile', targetFile);
+        formData.append('postId', postId);
+        const data = await uploadPostImage(formData);
+        console.log('포스트 이미지 업로드 결과');
+        console.log(JSON.stringify(data));
+        setPostImageUri(data);
+      }
+      setImages(imageList as never[]);
+    },
+    [postId, uploadPostImage]
+  );
 
   const saveDraft = useMutation(
     (param: any) =>
@@ -147,7 +173,7 @@ const Write = ({ loginInfo, pageProps }) => {
     }
   );
 
-  const handleSubmit = useCallback(async () => {
+  const handleSaveDraft = useCallback(async () => {
     const content = await remark().use(remarkToc).process(markdownStr);
 
     saveDraft.mutate({
@@ -157,6 +183,48 @@ const Write = ({ loginInfo, pageProps }) => {
       tags,
     });
   }, [markdownStr, saveDraft, postId, title, tags]);
+
+  const handleSavePost = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      /**
+       * 파라미터 정리
+       * 1. 포스트 썸네일 URL
+       * 2. 포스트 요약정보
+       * 3. 포스트 URL
+       * 4. 공개설정
+       *
+       * 5. postId
+       * 5. 제목 : title
+       * 6. 태그 : tags
+       * 7. 콘텐츠 : content
+       */
+      const content = await remark().use(remarkToc).process(markdownStr);
+      console.log(postId);
+      console.log(title);
+      console.log(tags);
+      console.log(content);
+    },
+    [markdownStr, postId, tags, title]
+  );
+
+  const removePostImage = async (cb) => {
+    try {
+      await deletePostImage();
+      cb();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deletePostImage = async () => {
+    try {
+      await PostApi.deletePostImage();
+      setPostImageUri('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -198,7 +266,7 @@ const Write = ({ loginInfo, pageProps }) => {
       <Box>
         <Center>
           <ButtonGroup variant="outline" spacing="6">
-            <Button onClick={handleSubmit} colorScheme="blue" size="md" border="2px">
+            <Button onClick={handleSaveDraft} colorScheme="blue" size="md" border="2px">
               임시저장
             </Button>
             <Button onClick={onOpen} colorScheme="teal" size="md" border="2px">
@@ -237,7 +305,7 @@ const Write = ({ loginInfo, pageProps }) => {
             <Stack spacing="24px">
               <Box>
                 <FormLabel htmlFor="username">포스트 썸네일</FormLabel>
-                <ImageUploading value={images} onChange={onChange} maxNumber={1}>
+                <ImageUploading value={images} onChange={onChangeUploadPostImage} maxNumber={1}>
                   {({ imageList, onImageUpload, onImageRemoveAll }) => (
                     <Box>
                       <HStack>
@@ -250,22 +318,36 @@ const Write = ({ loginInfo, pageProps }) => {
                         >
                           이미지 업로드
                         </Button>
-                        <Button colorScheme="red" onClick={onImageRemoveAll}>
+                        <Button
+                          colorScheme="red"
+                          onClick={() => {
+                            removePostImage(onImageRemoveAll);
+                          }}
+                        >
                           이미지 제거
                         </Button>
                       </HStack>
                       <Box boxSize="xs" mt="5">
-                        {imageList.map((image, index) => (
+                        {postImageUri && (
                           <Image
-                            src={image.dataURL}
+                            src={postImageUri}
                             fallbackSrc="https://via.placeholder.com/250"
-                            // alt="Dan Abramov"
                             objectFit="cover"
                             borderRadius="md"
                           />
-                        ))}
+                        )}
 
-                        {(!imageList || (imageList && imageList.length === 0)) && (
+                        {!postImageUri &&
+                          imageList.map((image, index) => (
+                            <Image
+                              src={image.dataURL}
+                              fallbackSrc="https://via.placeholder.com/250"
+                              objectFit="cover"
+                              borderRadius="md"
+                            />
+                          ))}
+
+                        {!postImageUri && (!imageList || (imageList && imageList.length === 0)) && (
                           <Image fallbackSrc="https://via.placeholder.com/300" />
                         )}
                       </Box>
@@ -305,7 +387,9 @@ const Write = ({ loginInfo, pageProps }) => {
             <Button variant="outline" mr={3} onClick={onClose}>
               취소
             </Button>
-            <Button colorScheme="blue">출간하기</Button>
+            <Button colorScheme="blue" onClick={handleSavePost}>
+              출간하기
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -317,7 +401,6 @@ export const getServerSideProps = withAuthServer((context: any) => {
   console.log('Write getServerSideProps ...');
   // console.log('query:' + context.query.postId);
   const { postId } = context.query;
-  console.log('postId:' + postId);
 
   if (postId) {
     return { props: { postId: postId } };

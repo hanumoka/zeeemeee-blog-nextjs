@@ -49,7 +49,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
   useEffect(() => {
     fetchSetting();
     //TODO: 새로고침시 프로필이 깜박거린다. 서버사이드 렌더링 고려 필요
-  }, []);
+  }, [fetchSetting]);
 
   const onChangeUploadProfileImage = useCallback(
     // TODO: 업로드시 파일 타입 및 맥스 사이즈 해상도 검사 필요, 라이브러리에 내장되어 있다.
@@ -63,7 +63,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
       }
       setImages(imageList as never[]);
     },
-    []
+    [setImages, setProfileImageUri, uploadProfileImage]
   );
 
   const removeProfileImage = async (cb) => {
