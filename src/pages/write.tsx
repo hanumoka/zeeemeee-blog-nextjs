@@ -38,6 +38,7 @@ import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { useMutation } from 'react-query';
 import Send from '../utils/Send';
 import PostApi from '../api/PostApi';
+import { BlogSettingMenu } from '../enum/BlogSettingMenu';
 
 const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   ssr: false,
@@ -49,6 +50,10 @@ const Write = ({ loginInfo, pageProps }) => {
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [postImageUri, setPostImageUri] = useState('');
+  const [summary, setSummary] = useState('');
+  const [sebureUri, setSebureUri] = useState('');
+  const [postUri, setPostUri] = useState('');
+  const [postStatus, setPostStatus] = useState('');
 
   const [readyEditor, setReadyEditor] = useState(false);
 
@@ -84,13 +89,21 @@ const Write = ({ loginInfo, pageProps }) => {
 
         const result = response.data;
         if (result.data) {
-          const { postId, title, content, tags, postImageUri } = result.data;
+          const { postId, title, content, tags, postImageUri, sebureUri } = result.data;
           setPostId(postId);
           setTitle(title);
           setTags(tags);
           setMarkdownStr(content);
           setPostImageUri(postImageUri);
-        }
+          setSebureUri(sebureUri);
+          if (!postUri) {
+            setPostUri(title.slice(0, 50));
+          } //if
+
+          if (!postStatus) {
+            setPostStatus(BlogSettingMenu.PRIVATE);
+          } //if
+        } //if
       };
 
       tmpFetch();
@@ -184,6 +197,32 @@ const Write = ({ loginInfo, pageProps }) => {
     });
   }, [markdownStr, saveDraft, postId, title, tags]);
 
+  const savePost = useMutation(
+    (param: any) =>
+      Send({
+        url: '/post',
+        method: 'post',
+        data: param,
+      }),
+    {
+      onMutate: (variable) => {
+        console.log('onMutate', variable);
+      },
+      onError: (error, variable, context) => {
+        // error
+        console.error(error);
+      },
+      onSuccess: (data, variables, context) => {
+        console.log('success', data, variables, context);
+        // setPostId(data.data.data.postId);
+        // setTags([...data.data.data.tags]);
+      },
+      onSettled: () => {
+        console.log('end');
+      },
+    }
+  );
+
   const handleSavePost = useCallback(
     async (e) => {
       e.stopPropagation();
@@ -200,12 +239,17 @@ const Write = ({ loginInfo, pageProps }) => {
        * 7. 콘텐츠 : content
        */
       const content = await remark().use(remarkToc).process(markdownStr);
-      console.log(postId);
-      console.log(title);
-      console.log(tags);
-      console.log(content);
+      savePost.mutate({
+        postId: postId,
+        title: title,
+        content: content.value,
+        tags: tags,
+        summary: summary,
+        postUri: postUri,
+        postStatus: postStatus,
+      });
     },
-    [markdownStr, postId, tags, title]
+    [markdownStr, postId, postStatus, postUri, savePost, summary, tags, title]
   );
 
   const removePostImage = async (cb) => {
@@ -317,6 +361,7 @@ const Write = ({ loginInfo, pageProps }) => {
                           }}
                         >
                           이미지 업로드
+                          {/*  TODO: 출간하기를 누르면 미리 임시저장을 해서 postId를 만들어야 한다.*/}
                         </Button>
                         <Button
                           colorScheme="red"
@@ -358,22 +403,47 @@ const Write = ({ loginInfo, pageProps }) => {
 
               <Box>
                 <FormLabel htmlFor="desc">포스트 요약정보</FormLabel>
-                <Textarea id="desc" placeholder="작성하신 포스트를 간단히 설명해주세요." />
+                <Textarea
+                  id="desc"
+                  placeholder="작성하신 포스트를 간단히 설명해주세요."
+                  value={summary}
+                  onChange={(e) => {
+                    setSummary(e.target.value);
+                  }}
+                />
               </Box>
 
               <Box>
                 <FormLabel htmlFor="url">Url 설정</FormLabel>
                 <InputGroup>
-                  <InputLeftAddon>/@hanumoka/</InputLeftAddon>
-                  <Input type="url" id="url" placeholder="디폴트로 제목을가져온다." />
+                  <InputLeftAddon>/@{sebureUri}/</InputLeftAddon>
+                  <Input
+                    maxLength={50}
+                    type="url"
+                    value={postUri}
+                    onChange={(e) => {
+                      setPostUri(e.currentTarget.value);
+                    }}
+                    placeholder="디폴트로 제목을가져온다."
+                  />
                 </InputGroup>
               </Box>
 
               <Box>
                 <FormLabel htmlFor="owner">공개설정</FormLabel>
-                <Select id="owner" defaultValue="private">
-                  <option value="private">비공개</option>
-                  <option value="public">전체공개</option>
+                <Select
+                  id="owner"
+                  value={postStatus}
+                  onChange={(e) => {
+                    setPostStatus(e.currentTarget.value);
+                  }}
+                >
+                  <option value={BlogSettingMenu.PRIVATE}>
+                    {BlogSettingMenu.PRIVATE.toString()}
+                  </option>
+                  <option value={BlogSettingMenu.PUBLIC}>
+                    {BlogSettingMenu.PUBLIC.toString()}
+                  </option>
                 </Select>
               </Box>
 

@@ -14,16 +14,11 @@ import Draft from '../../components/Draft';
 import { useInfiniteQuery } from 'react-query';
 import Send from '../../../utils/Send';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
-enum BlogSettingMenu {
-  draft = '임시글',
-  public = '공개글',
-  private = '비공개글',
-}
+import { BlogSettingMenu } from '../../../enum/BlogSettingMenu';
 
 const BlogSettingTab = () => {
   const categoryColor = useColorModeValue('black', 'gray.500');
-  const [menuFocus, setMenuFocus] = useState<BlogSettingMenu>(BlogSettingMenu.draft);
+  const [menuFocus, setMenuFocus] = useState<BlogSettingMenu>(BlogSettingMenu.DRAFT);
 
   const { data, status, fetchNextPage, hasNextPage } = useInfiniteQuery(
     ['infiniteDrafts'],
@@ -75,7 +70,7 @@ const BlogSettingTab = () => {
               _hover={{ transform: 'scale(1.10)' }}
               transition={'0.2s ease-in-out'}
               onClick={() => {
-                setMenuFocus(BlogSettingMenu.draft);
+                setMenuFocus(BlogSettingMenu.DRAFT);
               }}
             >
               임시글 (100)
@@ -103,7 +98,7 @@ const BlogSettingTab = () => {
           </VStack>
         </Box>
         <Box w="80%" h="lg">
-          {menuFocus === BlogSettingMenu.draft && status === 'success' && (
+          {menuFocus === BlogSettingMenu.DRAFT && status === 'success' && (
             <InfiniteScroll
               dataLength={data?.pages.length * 20}
               next={fetchNextPage}
