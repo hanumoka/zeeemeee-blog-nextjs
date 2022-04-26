@@ -35,7 +35,7 @@ import { remark } from 'remark';
 import ChakraTagInput from '../lib/components/ChakraTagInput';
 import { withAuthServer } from '../hoc/withAuthServer';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import Send from '../utils/Send';
 import PostApi from '../api/PostApi';
 import { BlogSettingMenu } from '../enum/BlogSettingMenu';
@@ -51,11 +51,13 @@ const Write = ({ loginInfo, pageProps }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [postImageUri, setPostImageUri] = useState('');
   const [summary, setSummary] = useState('');
-  const [sebureUri, setSebureUri] = useState('');
+  const [sebureUri, setSebureUri] = useState(loginInfo.sebureUri);
   const [postUri, setPostUri] = useState('');
   const [postStatus, setPostStatus] = useState('');
 
   const [readyEditor, setReadyEditor] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const handleTagsChange = useCallback((event: SyntheticEvent, tags: string[]) => {
     setTags(tags);
@@ -89,13 +91,12 @@ const Write = ({ loginInfo, pageProps }) => {
 
         const result = response.data;
         if (result.data) {
-          const { postId, title, content, tags, postImageUri, sebureUri } = result.data;
+          const { postId, title, content, tags, postImageUri } = result.data;
           setPostId(postId);
           setTitle(title);
           setTags(tags);
           setMarkdownStr(content);
           setPostImageUri(postImageUri);
-          setSebureUri(sebureUri);
           if (!postUri) {
             setPostUri(title.slice(0, 50));
           } //if
@@ -113,7 +114,7 @@ const Write = ({ loginInfo, pageProps }) => {
     // TODO: 조회된 포스트 저보가 에디터에 출력 안됨 => setTimeout으로 처리, 서버사이드를 하든 다른 방법을 쓰는게 좋아 보인다.
     const timeout = setTimeout(() => setReadyEditor(true), 1000);
     return () => clearTimeout(timeout);
-  }, [pageProps]);
+  }, [pageProps, postStatus, postUri]);
 
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
@@ -214,8 +215,7 @@ const Write = ({ loginInfo, pageProps }) => {
       },
       onSuccess: (data, variables, context) => {
         console.log('success', data, variables, context);
-        // setPostId(data.data.data.postId);
-        // setTags([...data.data.data.tags]);
+        queryClient.invalidateQueries('infiniteDrafts'); // queryKey 유효성 제거
       },
       onSettled: () => {
         console.log('end');
@@ -226,18 +226,6 @@ const Write = ({ loginInfo, pageProps }) => {
   const handleSavePost = useCallback(
     async (e) => {
       e.stopPropagation();
-      /**
-       * 파라미터 정리
-       * 1. 포스트 썸네일 URL
-       * 2. 포스트 요약정보
-       * 3. 포스트 URL
-       * 4. 공개설정
-       *
-       * 5. postId
-       * 5. 제목 : title
-       * 6. 태그 : tags
-       * 7. 콘텐츠 : content
-       */
       const content = await remark().use(remarkToc).process(markdownStr);
       savePost.mutate({
         postId: postId,
@@ -248,8 +236,9 @@ const Write = ({ loginInfo, pageProps }) => {
         postUri: postUri,
         postStatus: postStatus,
       });
+      await router.push('/blog' + '/' + sebureUri);
     },
-    [markdownStr, postId, postStatus, postUri, savePost, summary, tags, title]
+    [markdownStr, postId, postStatus, postUri, savePost, sebureUri, summary, tags, title]
   );
 
   const removePostImage = async (cb) => {
@@ -313,7 +302,19 @@ const Write = ({ loginInfo, pageProps }) => {
             <Button onClick={handleSaveDraft} colorScheme="blue" size="md" border="2px">
               임시저장
             </Button>
-            <Button onClick={onOpen} colorScheme="teal" size="md" border="2px">
+            <Button
+              onClick={async () => {
+                // postId를 만들기 위해서 임시저장을 먼저 한다.
+                await handleSaveDraft();
+                if (!postUri) {
+                  setPostUri(title.slice(0, 50));
+                } //if
+                onOpen();
+              }}
+              colorScheme="teal"
+              size="md"
+              border="2px"
+            >
               출간하기
             </Button>
             <Button
