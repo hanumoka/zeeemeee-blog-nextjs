@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from 'react-query';
 //   ssr: false,
 // });
 
-const Index = ({ data }) => {
+const Draft = ({ data }) => {
   const queryClient = useQueryClient(); // 등록된 quieryClient 가져오기
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
@@ -127,4 +127,4 @@ const Index = ({ data }) => {
   );
 };
 
-export default Index;
+export default Draft;

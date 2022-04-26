@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-import Draft from '../../components/Draft';
+import Draft from './Draft';
 import { useInfiniteQuery } from 'react-query';
 import Send from '../../../utils/Send';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -73,7 +73,7 @@ const BlogSettingTab = () => {
                 setMenuFocus(BlogSettingMenu.DRAFT);
               }}
             >
-              임시글 (100)
+              임시글 (카운트)
             </Button>
             {/*<Button*/}
             {/*  variant="link"*/}
