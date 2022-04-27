@@ -238,7 +238,7 @@ const Write = ({ loginInfo, pageProps }) => {
       });
       await router.push('/blog' + '/' + sebureUri);
     },
-    [markdownStr, postId, postStatus, postUri, savePost, sebureUri, summary, tags, title]
+    [markdownStr, postId, postStatus, postUri, router, savePost, sebureUri, summary, tags, title]
   );
 
   const removePostImage = async (cb) => {

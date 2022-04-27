@@ -84,13 +84,18 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
   }
 
   return (
-    <>
+    <Center>
       <Head>
         <title>Sebure/setting</title>
       </Head>
-      <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
+      <VStack
+        divider={<StackDivider borderColor="gray.200" />}
+        spacing={4}
+        align="stretch"
+        w="100%"
+      >
         <HStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch">
-          <VStack w="20%">
+          <VStack>
             <ImageUploading value={images} onChange={onChangeUploadProfileImage} maxNumber={1}>
               {({ imageList, onImageUpload, onImageRemoveAll }) => (
                 <>
@@ -353,7 +358,7 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         {/*  <Box>경고: 탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.</Box>*/}
         {/*</Box>*/}
       </VStack>
-    </>
+    </Center>
   );
 };
 

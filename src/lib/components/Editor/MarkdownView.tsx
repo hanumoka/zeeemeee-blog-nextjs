@@ -22,8 +22,21 @@ const MarkdownView = ({ markdownStr, theme }) => {
   return (
     <>
       <Flex>
-        <Box p="4" w="100%">
+        <Box p="4" w="90%">
           <Viewer initialValue={markdownStr} theme={theme} />
+        </Box>
+        <Box w="10%">
+          <Box
+            position="fixed"
+            backgroundColor="rgba(255,255,255,0.8)"
+            backdropFilter="saturate(180%) blur(5px)"
+            w={{ base: '0%', md: '10%', lg: '15%' }}
+            h="30%"
+            // marginY="10%"
+            overflow="hidden"
+          >
+            목차 자리
+          </Box>
         </Box>
       </Flex>
     </>

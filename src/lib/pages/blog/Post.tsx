@@ -4,14 +4,14 @@ import {
   Box,
   Center,
   Divider,
+  Heading,
   Image,
-  Spacer,
   Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { StarIcon } from '@chakra-ui/icons';
 import Moment from 'react-moment';
+import { useRouter } from 'next/router';
 
 const property = {
   imageUrl: 'https://bit.ly/2Z4KKcF',
@@ -24,25 +24,32 @@ const property = {
   rating: 4,
 };
 const Post = ({ data }) => {
+  const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
   return (
     <Box
-      maxW="lg"
-      borderWidth="1px"
+      maxW={'800px'}
+      w={'full'}
+      bg={useColorModeValue('white', 'gray.900')}
+      rounded={'md'}
+      p={6}
+      overflow={'hidden'}
+      borderWidth="2px"
       borderRadius="lg"
-      overflow="hidden"
-      p="4"
-      shadow="base"
-      rounded="md"
       transitionProperty="shadow"
       transitionDuration="1"
       transitionTimingFunction="ease-in-out"
-      _hover={{ borderColor: 'teal.600', shadow: '2xl' }}
+      _hover={{ borderColor: 'teal.600', shadow: '2xl', cursor: 'pointer' }}
+      onClick={(e) => {
+        e.stopPropagation();
+        // alert('클릭');
+        router.push('/@' + '/' + data.sebureUri + '/' + data.postUri);
+      }}
     >
       {data.postUri && (
         <Center>
           <Image
-            src={data.postUri}
+            src={data.postImageUri}
             // alt={property.imageAlt}
             alt="포스트 썸네일"
             borderRadius={'lg'}
@@ -97,7 +104,13 @@ const Post = ({ data }) => {
         </Box>
 
         <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-          {data.title}
+          <Heading
+            color={useColorModeValue('gray.700', 'white')}
+            fontSize={'2xl'}
+            fontFamily={'body'}
+          >
+            {data.title}
+          </Heading>
         </Box>
         <Stack mt="2" direction={'row'} spacing={4} align={'center'}>
           <Stack direction={'column'} spacing={0} fontSize={'sm'}>

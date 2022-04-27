@@ -16,9 +16,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import Post from './Post';
 import { useInfiniteQuery } from 'react-query';
 import Send from '../../../utils/Send';
-import { BlogSettingMenu } from '../../../enum/BlogSettingMenu';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Draft from './Draft';
 
 const BlogPostTab = () => {
   const categoryColor = useColorModeValue('black', 'gray.500');
@@ -71,12 +69,12 @@ const BlogPostTab = () => {
               <Button mt="3" variant="link">
                 전체보기 (카운트)
               </Button>
-              {/*<Button mt="3" variant="link">*/}
-              {/*  Java (100)*/}
-              {/*</Button>*/}
-              {/*<Button mt="3" variant="link">*/}
-              {/*  Spring (100)*/}
-              {/*</Button>*/}
+              <Button mt="3" variant="link">
+                공개 (카운트)
+              </Button>
+              <Button mt="3" variant="link">
+                비공개 (카운트)
+              </Button>
             </VStack>
           </Box>
           <Box w="80%" h="lg">
@@ -86,9 +84,6 @@ const BlogPostTab = () => {
                 <Input type="text" placeholder="검색어를 입력하세요.(미개발)" />
               </InputGroup>
             </Box>
-            {/*<VStack mt={5} spacing={4} align="stretch">*/}
-            {/*  <Post />*/}
-            {/*</VStack>*/}
             {status === 'success' && (
               <InfiniteScroll
                 dataLength={data?.pages.length * 20}
