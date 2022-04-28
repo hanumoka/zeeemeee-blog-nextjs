@@ -2,17 +2,21 @@ export const AUTH_URL = ['/write', '/setting', '/blog'];
 
 export const NAV_ITEMS: Array<NavItem> = [
   {
+    label: 'home',
+    href: '/',
+  },
+  {
     label: 'about',
     href: '/about',
   },
-  {
-    label: 'zustand',
-    href: '/zustand',
-  },
-  {
-    label: 'react-query-scroll',
-    href: '/react-query-scroll',
-  },
+  // {
+  //   label: 'zustand',
+  //   href: '/zustand',
+  // },
+  // {
+  //   label: 'react-query-scroll',
+  //   href: '/react-query-scroll',
+  // },
   // {
   //   label: 'Inspiration',
   //   children: [
