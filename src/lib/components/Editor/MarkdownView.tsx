@@ -32,7 +32,7 @@ const MarkdownView = ({ markdownStr, theme }) => {
   return (
     <>
       <Flex>
-        <Button onClick={testMark}>테스트</Button>
+        {/*<Button onClick={testMark}>테스트</Button>*/}
         <Box p="4" w="90%">
           <Viewer initialValue={markdownStr} theme={theme} />
         </Box>
@@ -46,7 +46,7 @@ const MarkdownView = ({ markdownStr, theme }) => {
             // marginY="10%"
             overflow="hidden"
           >
-            <Toc content={markdownStr} />
+            <Toc content={markdownStr || ''} />
           </Box>
         </Box>
       </Flex>

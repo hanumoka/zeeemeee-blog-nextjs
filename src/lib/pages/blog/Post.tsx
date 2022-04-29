@@ -46,7 +46,7 @@ const Post = ({ data }) => {
         router.push('/@' + '/' + data.sebureUri + '/' + data.postUri);
       }}
     >
-      {data.postUri && (
+      {data.postImageUri && (
         <Center>
           <Image
             src={data.postImageUri}

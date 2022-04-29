@@ -15,6 +15,11 @@ import loginStore from '../stores/loginStore';
 const queryClient = new QueryClient();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  // if (ctx.res.statusCode === 404) {
+  //   res.writeHead(301, { Location: '/' })
+  //   res.end()
+  // }
+
   useEffect(() => {
     const { loginInfo } = pageProps;
 

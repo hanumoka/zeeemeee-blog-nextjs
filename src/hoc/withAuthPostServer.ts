@@ -1,7 +1,6 @@
 import UserApi from '../api/UserApi';
-import { AUTH_URL } from '../data/constData';
 
-export function withAuthServer(gssp) {
+export function withAuthPostServer(gssp) {
   return async (context) => {
     const cookie = context.req ? context.req.headers.cookie : '';
     const url = context.resolvedUrl;
@@ -30,24 +29,13 @@ export function withAuthServer(gssp) {
       };
     } catch (error) {
       // console.error(error);
-      console.log('1비 로그인 상태 url:', url);
-      // 로그인 필요한 URL 검사 후 redirect 처리
-      for (const index in AUTH_URL) {
-        if (url.startsWith(AUTH_URL[index])) {
-          return {
-            redirect: {
-              permanent: false,
-              destination: '/',
-            },
-            props: {
-              loginInfo: { username: '', nickname: '', profileImageUri: '', sebureUri: '' },
-            },
-          };
-        }
-      }
-      console.log('222');
+      console.log('비 로그인 상태 url:', url);
+      const gsspData = await gssp(context);
       return {
-        props: { loginInfo: { username: '', nickname: '', profileImageUri: '', sebureUri: '' } },
+        props: {
+          pageProps: gsspData.props,
+          loginInfo: { username: '', nickname: '', profileImageUri: '', sebureUri: '' },
+        },
       };
     }
   };
