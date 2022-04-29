@@ -1,1 +1,6 @@
 /* Global Styling here */
+
+/* 토스트 뷰어 css 오버라이딩*/
+.toastui-editor-contents {
+    font-size: 16px !important;
+}

@@ -9,19 +9,14 @@ import {
   Button,
   Center,
   Divider,
-  Flex,
   FormControl,
   FormHelperText,
   Heading,
   HStack,
-  space,
   Spacer,
   Stack,
-  Text,
   useColorMode,
   useColorModeValue,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react';
 
 const MarkdownView = dynamic(() => import('../../../lib/components/Editor/MarkdownView'), {
@@ -34,33 +29,8 @@ const PostPage = () => {
   const { sebureUri, postUri } = router.query;
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
-  const content =
-    '# 재목\n' +
-    '\n' +
-    '가나다라\n' +
-    '\n' +
-    '호호호\n' +
-    '\n' +
-    '```\n' +
-    'int a = 1234\n' +
-    '\n' +
-    'System.out.println(a)\n' +
-    '```\n' +
-    '\n' +
-    '![input alt text](http://localhost:8080/api/getImage/16510142135732951/png)';
-
   return (
     <>
-      {/*<Flex*/}
-      {/*  position="fixed"*/}
-      {/*  backgroundColor="rgba(255,255, 255, 0.8)"*/}
-      {/*  backdropFilter="saturate(180%) blur(5px)"*/}
-      {/*  w="15%"*/}
-      {/*  h="50%"*/}
-      {/*  ml="60%"*/}
-      {/*>*/}
-      {/*  스티키?2222*/}
-      {/*</Flex>*/}
       <Box mt="100">
         <Heading
           color={useColorModeValue('gray.700', 'white')}
@@ -111,9 +81,7 @@ const PostPage = () => {
         </Badge>
       </Stack>
       <Divider />
-      <Box>
-        <MarkdownView markdownStr={content} theme={colorMode} />
-      </Box>
+      <MarkdownView markdownStr={''} theme={colorMode} />
 
       <Divider />
       <Center>
