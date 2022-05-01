@@ -33,8 +33,8 @@ const Home = ({ loginInfo, pageProps }) => {
       </Head>
       <Tabs variant="soft-rounded" colorScheme="green">
         <TabList>
-          <Tab>트렌딩</Tab>
           <Tab>최신</Tab>
+          <Tab>트렌딩</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

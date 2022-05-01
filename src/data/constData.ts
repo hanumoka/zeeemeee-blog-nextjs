@@ -9,10 +9,10 @@ export const NAV_ITEMS: Array<NavItem> = [
     label: 'about',
     href: '/about',
   },
-  {
-    label: 'reactmarkdown',
-    href: '/reactmarkdown',
-  },
+  // {
+  //   label: 'reactmarkdown',
+  //   href: '/reactmarkdown',
+  // },
   // {
   //   label: 'zustand',
   //   href: '/zustand',
