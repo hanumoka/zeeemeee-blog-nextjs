@@ -4,3 +4,92 @@
 .toastui-editor-contents {
     font-size: 16px !important;
 }
+
+/****************************/
+:root {
+    --ff-sans: system-ui;
+    --ff-mono:
+            'San Francisco Mono',
+            'Monaco',
+            'Consolas',
+            'Lucida Console',
+            'DejaVu Sans Mono',
+            'Bitstream Vera Sans Mono',
+            monospace;
+    --gray-0: #fafbfc;
+    --gray-2: #e1e4e8;
+    --gray-4: #959da5;
+    --gray-6: #586069;
+    --gray-8: #2f363d;
+    --gray-10: #1b1f23;
+}
+
+* {
+    line-height: calc(1em + 1ex);
+    box-sizing: border-box;
+}
+
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    word-wrap: break-word;
+    font-kerning: normal;
+    font-family: var(--ff-sans);
+    font-feature-settings: 'kern', 'liga', 'clig', 'calt';
+}
+
+textarea,
+code,
+pre,
+kbd {
+    font-family: var(--ff-mono);
+    font-feature-settings: normal;
+    font-size: smaller;
+}
+
+.editor,
+.result {
+    position: fixed;
+    top: calc(3 * (1em + 1ex));
+    bottom: 0;
+    overflow: auto;
+}
+
+.CodeMirror {
+    width: 100%;
+    height: 100%;
+}
+
+.editor textarea {
+    display: block;
+    min-height: 100vh;
+    width: 100%;
+    border: 0;
+    resize: none;
+    padding: calc(1em + 1ex);
+    background-color: var(--gray-10);
+    color: var(--gray-0);
+}
+
+/* Fix too low contrast on code */
+.cm-s-nord span.cm-comment {
+    color: var(--gray-4) !important;
+}
+
+@media (min-width: 40em) {
+    html {
+        font-size: 1.125em;
+    }
+
+    .controls {
+        position: fixed;
+        top: calc(3 * (1em + 1ex));
+        right: 50%;
+        z-index: 4;
+        border-bottom-left-radius: 1ex;
+    }
+
+    .show-big {
+        display: initial;
+    }
+}

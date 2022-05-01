@@ -7,6 +7,7 @@ import defaultSEOConfig from '../../next-seo.config';
 import Layout from 'lib/components/layout';
 import customTheme from 'lib/styles/customTheme';
 import 'lib/styles/globals.css';
+import 'lib/styles/githubMarkdown.css';
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -15,11 +16,6 @@ import loginStore from '../stores/loginStore';
 const queryClient = new QueryClient();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  // if (ctx.res.statusCode === 404) {
-  //   res.writeHead(301, { Location: '/' })
-  //   res.end()
-  // }
-
   useEffect(() => {
     const { loginInfo } = pageProps;
 

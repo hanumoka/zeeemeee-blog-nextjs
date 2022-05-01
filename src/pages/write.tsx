@@ -331,14 +331,14 @@ const Write = ({ loginInfo, pageProps }) => {
           </ButtonGroup>
         </Center>
       </Box>
-      {/*<Contents.Container>*/}
-      {/*  <Contents.HtmlContainer>*/}
-      {/*    <h2>Editor를 통해 만들어진 html 코드입니다.</h2>*/}
-      {/*    {htmlStr}*/}
-      {/*  </Contents.HtmlContainer>*/}
-      {/*  /!* TODO: 이부분 삭제 하지 말것 나중에 글 읽을때 사용하면 될듯 *!/*/}
-      {/*  <Contents.ViewContainer ref={viewContainerRef} />*/}
-      {/*</Contents.Container>*/}
+      <Contents.Container>
+        <Contents.HtmlContainer>
+          <h2>Editor를 통해 만들어진 html 코드입니다.</h2>
+          {htmlStr}
+        </Contents.HtmlContainer>
+        {/* TODO: 이부분 삭제 하지 말것 나중에 글 읽을때 사용하면 될듯 */}
+        <Contents.ViewContainer ref={viewContainerRef} />
+      </Contents.Container>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="lg">
         <DrawerOverlay />

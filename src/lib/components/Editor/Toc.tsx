@@ -26,7 +26,7 @@ const Toc = ({ content }: Props) => {
     });
 
   return (
-    <Box>
+    <Box ml={5}>
       목차
       <Box>
         {result.map((item, idx) => {
