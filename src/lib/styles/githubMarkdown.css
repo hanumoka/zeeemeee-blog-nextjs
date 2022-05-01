@@ -984,6 +984,21 @@
     vertical-align: middle;
 }
 
+/*다크 모드 추가*/
 .markdown-dark {
     color: #ffffff
 }
+
+.markdown-dark pre {
+    color: black;
+}
+
+.markdown-dark table {
+    color: black;
+}
+
+/*.markdown-dark table td,*/
+/*.markdown-dark table th {*/
+/*    border: 1px solid #333638;*/
+/*}*/
+

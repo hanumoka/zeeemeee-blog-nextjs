@@ -21,7 +21,6 @@ const MarkdownView2 = ({ markdownStr }) => {
     <>
       <Flex>
         <Box p="4" w="90%">
-          <Box>{colorMode}</Box>
           {colorMode === 'dark' ? (
             <ReactMarkdown
               className="markdown-body markdown-dark"
