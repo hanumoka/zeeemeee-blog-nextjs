@@ -3,7 +3,6 @@ import {
   Avatar,
   Badge,
   Box,
-  Divider,
   Heading,
   HStack,
   Image,
@@ -17,6 +16,9 @@ import { useRouter } from 'next/router';
 const Post = ({ data }) => {
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
+
+  console.log(JSON.stringify(data));
+
   return (
     <Box
       maxW={'sm'}
@@ -112,8 +114,8 @@ const Post = ({ data }) => {
       </Box>
       <Box m={2} left={0} bottom={0}>
         <HStack>
-          <Avatar size={'sm'} name={'작성자'} />
-          <Text fontSize="sm">작성자</Text>
+          <Avatar size={'sm'} name={data.nickname} src={data.profileImageUri} />
+          <Text fontSize="sm">{data.nickname}</Text>
         </HStack>
       </Box>
     </Box>

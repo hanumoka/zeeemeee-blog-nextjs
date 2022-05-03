@@ -2,9 +2,7 @@ import React from 'react';
 import { withAuthServer } from '../../hoc/withAuthServer';
 import {
   Avatar,
-  Badge,
   Box,
-  Button,
   Center,
   Divider,
   FormControl,
@@ -17,29 +15,27 @@ import {
   TabPanels,
   Tabs,
   VStack,
-  Image,
-  InputGroup,
-  InputLeftElement,
-  Input,
 } from '@chakra-ui/react';
-import { StarIcon, SearchIcon } from '@chakra-ui/icons';
 import BlogSettingTab from '../../lib/pages/blog/BlogSettingTab';
 import BlogPostTab from '../../lib/pages/blog/BlogPostTab';
+import loginStore from '../../stores/loginStore';
 
 const Blog = ({ loginInfo, pageProps }) => {
+  const { nickname, profileImageUri, introduction } = loginStore((state) => state);
+
   return (
     <Center>
       <VStack>
         <HStack mt="10" mb="5">
-          <Avatar size="2xl" name="hanumoka" />
+          <Avatar size="2xl" name={nickname} src={profileImageUri} />
           <FormControl>
             <Box>
               <Heading as="h2" size="xl">
-                하누모카
+                {nickname}
               </Heading>
             </Box>
             <Box>
-              <FormHelperText>자기소개</FormHelperText>
+              <FormHelperText>{introduction}</FormHelperText>
             </Box>
           </FormControl>
         </HStack>

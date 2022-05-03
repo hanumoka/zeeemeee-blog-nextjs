@@ -7,6 +7,7 @@ interface loginState {
   username: string;
   nickname: string;
   sebureUri: string;
+  introduction: string;
   setNickname: (param: string) => void;
   profileImageUri: string;
   setProfileImageUri: (param: string) => void;
@@ -28,6 +29,7 @@ const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
   username: '', // email 형태, pk
   nickname: '', // 별명
   sebureUri: '', // 블로그 URL
+  introduction: '', // 자기소개
   setNickname: (param: string) => {
     set({ nickname: param }, false, 'setNickname');
   },
@@ -58,15 +60,21 @@ const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
   loginFetch: async (email: string, password: string) => {
     try {
       set(
-        () => ({ loginLoading: true, username: '', nickname: '', loginError: '' }),
+        () => ({
+          loginLoading: true,
+          username: '',
+          nickname: '',
+          introduction: '',
+          loginError: '',
+        }),
         false,
         'loginFetch/start'
       );
 
       const response = await UserApi.login(email, password);
-      const { username, nickname, profileImageUri, sebureUri } = response.data;
+      const { username, nickname, profileImageUri, sebureUri, introduction } = response.data;
       set(
-        { username, nickname, profileImageUri, sebureUri, loginError: '' },
+        { username, nickname, profileImageUri, sebureUri, introduction, loginError: '' },
         false,
         'loginFetch/success'
       );
