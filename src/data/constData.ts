@@ -6,6 +6,10 @@ export const NAV_ITEMS: Array<NavItem> = [
     href: '/',
   },
   {
+    label: '개발진행과정',
+    href: '/devlog',
+  },
+  {
     label: 'about',
     href: '/about',
   },
