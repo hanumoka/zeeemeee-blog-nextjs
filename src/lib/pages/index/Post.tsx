@@ -104,16 +104,17 @@ const Post = ({ data }) => {
             <Text fontSize="13" color={'gray.500'}>
               작성일: <Moment format="YYYY-MM-DD HH:mm:ss">{data.createdAt}</Moment>
             </Text>
-            <Box>
-              <HStack>
-                <Avatar size={'sm'} name={'작성자'} />
-                <Text fontSize="sm">작성자</Text>
-              </HStack>
-            </Box>
+
             {/*  TODO: 작성자 */}
             {/*  TODO:  댓글수 맅크, 좧아요 아이콘이 필요 하다.*/}
           </Stack>
         </Box>
+      </Box>
+      <Box m={2} left={0} bottom={0}>
+        <HStack>
+          <Avatar size={'sm'} name={'작성자'} />
+          <Text fontSize="sm">작성자</Text>
+        </HStack>
       </Box>
     </Box>
   );
