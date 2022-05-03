@@ -30,9 +30,7 @@ const Blog = ({ loginInfo, pageProps }) => {
           <Avatar size="2xl" name={nickname} src={profileImageUri} />
           <FormControl>
             <Box>
-              <Heading as="h2" size="xl">
-                {nickname}
-              </Heading>
+              <Heading size="xl">{nickname}</Heading>
             </Box>
             <Box>
               <FormHelperText>{introduction}</FormHelperText>

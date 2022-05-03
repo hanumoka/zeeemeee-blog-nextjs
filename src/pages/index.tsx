@@ -63,8 +63,8 @@ const Home = ({ loginInfo, pageProps }) => {
                 >
                   <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={3}>
                     {data?.pages.map((pageData) => {
-                      return pageData?.data.map((postData) => {
-                        return <Post data={postData} />;
+                      return pageData?.data.map((postData, index) => {
+                        return <Post key={index} data={postData} />;
                       });
                     })}
                   </SimpleGrid>

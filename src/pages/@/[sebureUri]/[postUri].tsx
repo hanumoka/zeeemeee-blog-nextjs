@@ -133,9 +133,7 @@ const PostPage = ({ loginInfo, pageProps }) => {
           <FormControl>
             <Box>
               <Button variant="link" onClick={goWriterPage}>
-                <Heading as="h2" size="xl">
-                  {writerNickname}
-                </Heading>
+                <Heading size="xl">{writerNickname}</Heading>
               </Button>
             </Box>
             <Box>

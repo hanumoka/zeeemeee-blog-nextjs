@@ -73,7 +73,7 @@ const Post = ({ data }) => {
           </Stack>
         </Box>
 
-        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+        <Box mt="1" fontWeight="semibold" lineHeight="tight" isTruncated>
           <Heading
             color={useColorModeValue('gray.700', 'white')}
             fontSize={'2xl'}
