@@ -9,10 +9,6 @@ export function withAuthServer(gssp) {
     try {
       // 서버사이드 렌더링으로 로그인 체크요청
       const response = await UserApi.checkLoginForServerStore(cookie);
-      const temp = await response?.data;
-
-      console.log('withAuthServer -------');
-      console.log(JSON.stringify(temp));
 
       const { username, nickname, profileImageUri, sebureUri } = await response?.data;
       console.log('로그인 체크 성공');

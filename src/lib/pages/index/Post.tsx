@@ -17,8 +17,6 @@ const Post = ({ data }) => {
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
-  console.log(JSON.stringify(data));
-
   return (
     <Box
       maxW={'sm'}
