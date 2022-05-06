@@ -39,6 +39,7 @@ const BlogSettingTab = () => {
         data: pages,
         nextPage: pageParam + 1,
         isLast: last,
+        totalElements: totalElements,
       };
     },
     {
@@ -52,6 +53,9 @@ const BlogSettingTab = () => {
       retry: 1,
     }
   );
+
+  console.log('=======================');
+  console.log(JSON.stringify(data));
 
   return (
     <>
@@ -73,28 +77,8 @@ const BlogSettingTab = () => {
                 setMenuFocus(BlogSettingMenu.DRAFT);
               }}
             >
-              임시글 (카운트)
+              임시글 ({data?.pages[0]?.totalElements})
             </Button>
-            {/*<Button*/}
-            {/*  variant="link"*/}
-            {/*  _hover={{ transform: 'scale(1.10)' }}*/}
-            {/*  transition={'0.2s ease-in-out'}*/}
-            {/*  onClick={() => {*/}
-            {/*    setMenuFocus(BlogSettingMenu.public);*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  공개글 (100)*/}
-            {/*</Button>*/}
-            {/*<Button*/}
-            {/*  variant="link"*/}
-            {/*  _hover={{ transform: 'scale(1.10)' }}*/}
-            {/*  transition={'0.2s ease-in-out'}*/}
-            {/*  onClick={() => {*/}
-            {/*    setMenuFocus(BlogSettingMenu.private);*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  비공개글 (100)*/}
-            {/*</Button>*/}
           </VStack>
         </Box>
         <Box w="80%" h="lg">

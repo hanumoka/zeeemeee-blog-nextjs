@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import {
   Avatar,
   Badge,
@@ -14,30 +13,18 @@ import {
   HStack,
   Spacer,
   Stack,
-  useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
 import Send from '../../../utils/Send';
 import { withAuthPostServer } from '../../../hoc/withAuthPostServer';
 import Moment from 'react-moment';
-import { remark } from 'remark';
-import remarkToc from 'remark-toc';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
-import ReactMarkdown from 'react-markdown';
-import MarkdownView2 from '../../../lib/components/Editor/MarkdownView2';
 
-const MarkdownView = dynamic(() => import('../../../lib/components/Editor/MarkdownView'), {
-  ssr: false,
-});
+import MarkdownView2 from '../../../lib/components/Editor/MarkdownView2';
 
 const PostPage = ({ loginInfo, pageProps }) => {
   console.log('postPage start...');
 
   const router = useRouter();
-  const { colorMode } = useColorMode();
-  const { sebureUri, postUri } = router.query;
-  const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
   const {
     title,
@@ -48,7 +35,6 @@ const PostPage = ({ loginInfo, pageProps }) => {
     writerProfileImageUri,
     writerNickname,
     writerIntroduction,
-    writerSebureUri,
     isMine,
     statusCode,
   } = pageProps || {};
@@ -58,10 +44,6 @@ const PostPage = ({ loginInfo, pageProps }) => {
       router.push('/404');
     }
   }, [router, statusCode]);
-
-  useEffect(() => {
-    // const content = await remark().use(remarkToc).process(markdownStr);
-  }, []);
 
   const goWriterPage = useCallback(() => {
     alert('작성자 페이지 이동');
@@ -119,13 +101,6 @@ const PostPage = ({ loginInfo, pageProps }) => {
         ))}
       </Stack>
       <Divider />
-      {/*<MarkdownView markdownStr={content} theme={colorMode} />*/}
-      {/*<Divider />*/}
-      {/*<br />*/}
-      {/*<br />*/}
-      {/*<div>=====================================</div>*/}
-      {/*<br />*/}
-      {/*<br />*/}
       <MarkdownView2 markdownStr={content} />
       <Center>
         <HStack mt="10" mb="5">
@@ -207,19 +182,11 @@ export const getServerSideProps = withAuthPostServer(async (context: any) => {
   } else {
     console.log('렌더링할 데이터 없음=========================');
     // 보여줄 데이터가 없는 경우 404 페이지 오류 발생시킨다.
-
-    // console.log(response.data);
-    // console.log(response.data.data);
     res.statusCode = 404; // 404 응답값을 리턴하지만, 페이지 리다이렉팅은 안된다.
 
     return {
       props: { title: '', content: '', tags: [], statusCode: 404 },
     };
-    // res.writeHead(302, {
-    //   // or 301
-    //   Location: 'localized/url/product/categories',
-    // });
-    // res.end();
   }
 });
 

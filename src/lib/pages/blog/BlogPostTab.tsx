@@ -40,6 +40,7 @@ const BlogPostTab = () => {
         data: pages,
         nextPage: pageParam + 1,
         isLast: last,
+        totalElements: totalElements,
       };
     },
     {
@@ -67,14 +68,14 @@ const BlogPostTab = () => {
             <Divider mt="3" />
             <VStack align="baseline">
               <Button mt="3" variant="link">
-                전체보기 (카운트)
+                전체 ({data?.pages[0]?.totalElements})
               </Button>
-              <Button mt="3" variant="link">
-                공개 (카운트)
-              </Button>
-              <Button mt="3" variant="link">
-                비공개 (카운트)
-              </Button>
+              {/*<Button mt="3" variant="link">*/}
+              {/*  공개 (카운트)*/}
+              {/*</Button>*/}
+              {/*<Button mt="3" variant="link">*/}
+              {/*  비공개 (카운트)*/}
+              {/*</Button>*/}
             </VStack>
           </Box>
           <Box w="80%" h="lg">
