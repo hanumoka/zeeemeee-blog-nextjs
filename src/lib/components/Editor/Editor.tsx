@@ -79,17 +79,19 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
     <>
       <Flex>
         <Box p="4" w="100%">
-          <ToastEditor
-            initialValue=""
-            previewStyle="vertical"
-            initialEditType="markdown"
-            useCommandShortcut={true}
-            ref={editorRef}
-            plugins={plugins}
-            onChange={onChangeEditor}
-            theme={theme}
-            height="500px"
-          />
+          <>
+            <ToastEditor
+              initialValue=""
+              previewStyle="vertical"
+              initialEditType="markdown"
+              useCommandShortcut={true}
+              ref={editorRef}
+              plugins={plugins}
+              onChange={onChangeEditor}
+              theme={theme}
+              height="500px"
+            />
+          </>
         </Box>
       </Flex>
     </>

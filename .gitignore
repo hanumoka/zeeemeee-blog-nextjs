@@ -45,3 +45,4 @@ sitemap*.xml
 *.tsbuildinfo
 
 .idea
+.env
