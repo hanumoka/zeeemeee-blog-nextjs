@@ -24,6 +24,8 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css'; // 다크테마
 import { Box, Flex } from '@chakra-ui/react';
 import { EditorPlugin } from '@toast-ui/editor/types/editor';
+import PostApi from '../../../api/PostApi';
+import ImageApi from '../../../api/ImageApi';
 
 interface IEditor {
   htmlStr: string;
@@ -51,10 +53,10 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
           const formData = new FormData();
           formData.append('files', blob);
 
-          // TODO 해당 request 수정하기
-          const res = await axios.post('http://localhost:8080/api/uploadImage', formData, {
-            withCredentials: true,
-          });
+          // const res = await axios.post('http://localhost:8080/api/uploadImage', formData, {
+          //   withCredentials: true,
+          // });
+          const res = await ImageApi.uploadPostImage(formData);
           callback(res.data, 'input alt text');
         })();
 

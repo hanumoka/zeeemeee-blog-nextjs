@@ -46,3 +46,5 @@ sitemap*.xml
 
 .idea
 .env
+
+*.tar

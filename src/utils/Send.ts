@@ -7,7 +7,7 @@ import axios from 'axios';
 */
 // TODO: baseURL을 env 파일로 분리 해야 한다.
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: process.env.NEXT_PUBLIC_API,
   timeout: 10000,
 });
 

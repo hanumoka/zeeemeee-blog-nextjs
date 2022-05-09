@@ -5,6 +5,10 @@ export function withAuthPostServer(gssp) {
     const cookie = context.req ? context.req.headers.cookie : '';
     const url = context.resolvedUrl;
 
+    console.log('withAuthPostServer start...');
+    console.log('cookie:', cookie);
+    console.log('url:', url);
+
     try {
       // 서버사이드 렌더링으로 로그인 체크요청
       const response = await UserApi.checkLoginForServerStore(cookie);
@@ -25,7 +29,7 @@ export function withAuthPostServer(gssp) {
         },
       };
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       console.log('비 로그인 상태 url:', url);
       const gsspData = await gssp(context);
       return {

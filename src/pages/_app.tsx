@@ -45,6 +45,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         </Head>
         <DefaultSeo {...defaultSEOConfig} />
         <Layout>
+          {/*<h1>프로파일: {process.env.NEXT_PUBLIC_PROFILE}</h1>*/}
           <Component {...pageProps} />
         </Layout>
       </ChakraProvider>
