@@ -13,8 +13,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
+import UserApi from '../../api/UserApi';
 
 interface signupProps {
   isOpen: boolean;
@@ -24,12 +26,13 @@ interface signupProps {
 interface formError {
   email?: string;
   password?: string;
-  password2?: string;
+  passwordRepeat?: string;
 }
 
 const SignupModal = ({ isOpen, onClose }: signupProps) => {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
+  const toast = useToast();
 
   const closeModal = () => {
     onClose();
@@ -47,9 +50,8 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
         <ModalContent>
           <ModalHeader>회원가입</ModalHeader>
           <ModalCloseButton />
-
           <Formik
-            initialValues={{ email: '', password: '', password2: '' }}
+            initialValues={{ email: '', password: '', passwordRepeat: '' }}
             validate={(values) => {
               const errors: formError = {};
 
@@ -65,25 +67,48 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
                 errors.password = '8 ~ 16자 영문, 숫자 조합의 비밀번호를 입력해주세요.';
               }
 
-              if (!values.password2) {
-                errors.password2 = '확인용 비밀번호를 입력하세요.';
+              if (!values.passwordRepeat) {
+                errors.passwordRepeat = '확인용 비밀번호를 입력하세요.';
               } else if (
                 values.password &&
-                values.password2 &&
-                values.password !== values.password2
+                values.passwordRepeat &&
+                values.password !== values.passwordRepeat
               ) {
-                errors.password2 = '비밀번호와 확인용 비밀번호가 일치하지 않습니다.';
+                errors.passwordRepeat = '비밀번호와 확인용 비밀번호가 일치하지 않습니다.';
               }
 
               // 벨리데이션에서 빈 객체를 리턴할 경우 submit을 허용한다.
               return errors;
             }}
-            onSubmit={(values, actions) => {
-              console.log('회원가입 제출');
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
+            onSubmit={async (values, actions) => {
+              try {
+                await UserApi.signup(values.email, values.password, values.passwordRepeat);
+                //  성공 -> 회원가입 모달 창 끄기
+                toast({
+                  title: `회원가입 성공`,
+                  status: 'success',
+                  isClosable: true,
+                });
+
+                closeModal();
+              } catch (error) {
+                console.error(error);
+                if (error.response && error.response.data) {
+                  toast({
+                    title: `회원가입 실패 [${error.response.data.message}]`,
+                    status: 'error',
+                    isClosable: true,
+                  });
+                } else {
+                  toast({
+                    title: `회원가입 실패`,
+                    status: 'error',
+                    isClosable: true,
+                  });
+                }
+              } finally {
                 actions.setSubmitting(false);
-              }, 1000);
+              }
             }}
           >
             {(props) => (
@@ -107,17 +132,19 @@ const SignupModal = ({ isOpen, onClose }: signupProps) => {
                       </FormControl>
                     )}
                   </Field>
-                  <Field name="password2">
+                  <Field name="passwordRepeat">
                     {({ field, form }) => (
-                      <FormControl isInvalid={form.errors.password2 && form.touched.password2}>
-                        <FormLabel htmlFor="password2">비밀번호 확인</FormLabel>
+                      <FormControl
+                        isInvalid={form.errors.passwordRepeat && form.touched.passwordRepeat}
+                      >
+                        <FormLabel htmlFor="passwordRepeat">비밀번호 확인</FormLabel>
                         <Input
                           {...field}
-                          id="password2"
+                          id="passwordRepeat"
                           placeholder="비밀번호 확인"
                           type="password"
                         />
-                        <FormErrorMessage>{form.errors.password2}</FormErrorMessage>
+                        <FormErrorMessage>{form.errors.passwordRepeat}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>

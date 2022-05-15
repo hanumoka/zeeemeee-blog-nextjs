@@ -1,9 +1,20 @@
 import Send from '../utils/Send';
 
 export default {
-  login(email, password) {
+  signup(email: string, password: string, passwordRepeat: string) {
     return Send({
-      url: '/login',
+      url: '/user/signup',
+      method: 'post',
+      data: {
+        username: email,
+        password,
+        passwordRepeat,
+      },
+    });
+  },
+  login(email: string, password: string) {
+    return Send({
+      url: '/user/login',
       method: 'post',
       data: {
         username: email,
@@ -13,14 +24,14 @@ export default {
   },
   logout() {
     return Send({
-      url: '/logout',
+      url: '/user/logout',
       method: 'post',
     });
   },
   checkLoginForServerStore(cookie) {
     return Send({
-      url: '/logininfo',
-      method: 'post',
+      url: '/user/logininfo',
+      method: 'get',
       withCredentials: true,
       headers: {
         Cookie: cookie || '',
