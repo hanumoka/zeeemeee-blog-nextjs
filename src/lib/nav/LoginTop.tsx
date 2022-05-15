@@ -12,6 +12,7 @@ import {
   MenuList,
   Text,
   useColorModeValue,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import ThemeToggle from '../components/layout/ThemeToggle';
@@ -27,18 +28,25 @@ type Props = {
 
 const LoginTop = ({ nickname, profileImageUri, sebureUri, logoutFetch }: Props) => {
   const router = useRouter();
+  const toast = useToast();
 
   const logout = useCallback(
     async (e) => {
       e.preventDefault();
       try {
         await logoutFetch();
+        toast({
+          title: `로그아웃 성공`,
+          status: 'success',
+          isClosable: true,
+          duration: 2000,
+        });
         router.push('/');
       } catch (error) {
         console.error('로그아웃 error');
       }
     },
-    [logoutFetch]
+    [logoutFetch, router]
   );
 
   return (
@@ -73,9 +81,6 @@ const LoginTop = ({ nickname, profileImageUri, sebureUri, logoutFetch }: Props) 
                 ml="2"
               >
                 <Text fontSize="sm">{nickname}</Text>
-                {/*<Text fontSize="xs" color="gray.600">*/}
-                {/*  Admin*/}
-                {/*</Text>*/}
               </VStack>
               <Box display={{ base: 'none', md: 'flex' }}>
                 <FiChevronDown />

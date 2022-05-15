@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 
 import {
   Button,
@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react';
 import loginStore from '../../stores/loginStore';
 import { Field, Form, Formik } from 'formik';
-import UserApi from '../../api/UserApi';
 
 interface formError {
   email?: string;
@@ -77,6 +76,7 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
                   title: `로그인 성공`,
                   status: 'success',
                   isClosable: true,
+                  duration: 2000,
                 });
 
                 onClose();
@@ -86,6 +86,7 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
                   title: `로그인 실패`,
                   status: 'error',
                   isClosable: true,
+                  duration: 2000,
                 });
               } finally {
                 actions.setSubmitting(false);
