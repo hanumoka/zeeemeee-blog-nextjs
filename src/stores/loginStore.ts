@@ -8,8 +8,8 @@ interface loginState {
   nickname: string;
   sebureUri: string;
   introduction: string;
-  setNickname: (param: string) => void;
   profileImageUri: string;
+  setNickname: (param: string) => void;
   setProfileImageUri: (param: string) => void;
   setLoginInfo: (
     username: string,
@@ -17,11 +17,7 @@ interface loginState {
     profileImageUri: string,
     sebureUri: string
   ) => void;
-  loginLoading: boolean;
-  loginError: string;
   loginFetch: (email: string, password: string) => void;
-  logoutLoading: boolean;
-  logoutError: string;
   logoutFetch: () => void;
 }
 
@@ -30,10 +26,10 @@ const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
   nickname: '', // 별명
   sebureUri: '', // 블로그 URL
   introduction: '', // 자기소개
+  profileImageUri: '', // 프로필 이미지 URI
   setNickname: (param: string) => {
     set({ nickname: param }, false, 'setNickname');
   },
-  profileImageUri: '', // 프로필 이미지 URI
   setProfileImageUri: (param: string) => {
     set({ profileImageUri: param }, false, 'setProfileImageUri');
   },
@@ -55,17 +51,15 @@ const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
       'loginFetch/setLoginInfo'
     );
   },
-  loginLoading: false,
-  loginError: '',
   loginFetch: async (email: string, password: string) => {
     try {
       set(
         () => ({
-          loginLoading: true,
-          username: '',
-          nickname: '',
-          introduction: '',
-          loginError: '',
+          username: '', // email 형태, pk
+          nickname: '', // 별명
+          sebureUri: '', // 블로그 URL
+          introduction: '', // 자기소개
+          profileImageUri: '', // 프로필 이미지 URI
         }),
         false,
         'loginFetch/start'
@@ -74,29 +68,21 @@ const initStore = (set: SetState<loginState>, get: GetState<loginState>) => ({
       const response = await UserApi.login(email, password);
       const { username, nickname, profileImageUri, sebureUri, introduction } = response.data;
       set(
-        { username, nickname, profileImageUri, sebureUri, introduction, loginError: '' },
+        { username, nickname, profileImageUri, sebureUri, introduction },
         false,
         'loginFetch/success'
       );
     } catch (error) {
       console.error(error);
-      set({ loginError: '로그인 실패' }, false, 'loginFetch/error');
-    } finally {
-      set(() => ({ loginLoading: false }), false, 'loginFetch/end');
+      throw error;
     }
   },
-  logoutLoading: false,
-  logoutError: '',
   logoutFetch: async () => {
     try {
-      set(() => ({ logoutLoading: true, logoutError: '' }), false, 'logoutFetch/start');
       await UserApi.logout();
-      set({ logoutError: '' }, false, 'logoutFetch/success');
     } catch (error) {
       console.error(error);
-      set({ loginError: '로그아웃 실패' }, false, 'logoutFetch/error');
-    } finally {
-      set(() => ({ logoutLoading: false, username: '', nickname: '' }), false, 'logoutFetch/end');
+      throw error;
     }
   },
 });
