@@ -30,7 +30,11 @@ const Blog = ({ loginInfo, pageProps }) => {
           <Avatar size="2xl" name={nickname} src={profileImageUri} />
           <FormControl>
             <Box>
-              <Heading size="xl">{nickname}</Heading>
+              {nickname ? (
+                <Heading size="xl">{nickname}</Heading>
+              ) : (
+                <Heading size="lg">닉네임을 입력하셔야 합니다.(setting에서 수정해주세요)</Heading>
+              )}
             </Box>
             <Box>
               <FormHelperText>{introduction}</FormHelperText>

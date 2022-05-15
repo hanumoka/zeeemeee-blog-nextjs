@@ -103,6 +103,7 @@ const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => 
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   isModSebureUri: false,

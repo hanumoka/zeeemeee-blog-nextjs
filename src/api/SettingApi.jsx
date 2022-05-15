@@ -3,13 +3,13 @@ import Send from '../utils/Send';
 export default {
   getSetting() {
     return Send({
-      url: '/setting',
+      url: '/user/setting',
       method: 'get',
     });
   },
   uploadProfileImage(formData) {
     return Send({
-      url: '/setting/profileimage',
+      url: '/user/setting/profileimage',
       method: 'post',
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -17,20 +17,20 @@ export default {
   },
   deleteProfileImage() {
     return Send({
-      url: '/setting/profileimage',
+      url: '/user/setting/profileimage',
       method: 'delete',
     });
   },
   updateNicknameAndIntroduction(param) {
     return Send({
-      url: '/setting/nicknameintroduction',
+      url: '/user/setting/nicknameintroduction',
       method: 'patch',
       data: param,
     });
   },
   updateSebureUri(param) {
     return Send({
-      url: '/setting/sebureuri',
+      url: '/user/setting/sebureuri',
       method: 'patch',
       data: param,
     });

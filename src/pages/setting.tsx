@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Avatar,
   Box,
   Button,
@@ -15,6 +19,7 @@ import {
   Square,
   StackDivider,
   Textarea,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
@@ -43,6 +48,8 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
     setIsModSebureUri,
     updateSebureUri,
   } = settingStore((state) => state);
+
+  const toast = useToast();
 
   const { setProfileImageUri, setNickname } = loginStore((state) => state);
 
@@ -134,11 +141,34 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
                 initialValues={{ nickname: nickname, introduction: introduction }}
                 onSubmit={async (values, actions) => {
                   const { nickname, introduction } = values;
-                  const data = await updateNicknameAndIntroduction(nickname, introduction);
-                  const { nickname: savedNickname } = data;
-                  setNickname(savedNickname);
-                  actions.setSubmitting(false);
-                  setIsModNickAndIntro(false);
+                  try {
+                    const data = await updateNicknameAndIntroduction(nickname, introduction);
+                    const { nickname: savedNickname } = data;
+                    setNickname(savedNickname);
+                    setIsModNickAndIntro(false);
+                    toast({
+                      title: `성공`,
+                      status: 'success',
+                      isClosable: true,
+                      duration: 2000,
+                    });
+                  } catch (error) {
+                    if (error.response && error.response.data) {
+                      toast({
+                        title: `${error.response.data.message}`,
+                        status: 'error',
+                        isClosable: true,
+                      });
+                    } else {
+                      toast({
+                        title: `수정 실패`,
+                        status: 'error',
+                        isClosable: true,
+                      });
+                    }
+                  } finally {
+                    actions.setSubmitting(false);
+                  }
                 }}
               >
                 {(props) => (
@@ -204,12 +234,18 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
             ) : (
               <>
                 <Box h="30%" p={4}>
-                  <Heading as="h2" size="xl">
-                    {nickname}
-                  </Heading>
+                  {nickname ? (
+                    <Heading as="h2" size="xl">
+                      {nickname}
+                    </Heading>
+                  ) : (
+                    <Heading as="h2" size="xl">
+                      닉네임을 입력해주세요.
+                    </Heading>
+                  )}
                 </Box>
                 <Box h="50%" p={4}>
-                  {introduction}
+                  {introduction ? introduction : '자기소개를 입력해주세요.'}
                 </Box>
                 <Button
                   colorScheme="blue"
@@ -357,6 +393,15 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
         {/*  </Flex>*/}
         {/*  <Box>경고: 탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.</Box>*/}
         {/*</Box>*/}
+        {!(nickname && sebureUri) && (
+          <Alert status="error">
+            <AlertIcon />
+            <AlertTitle>주의!</AlertTitle>
+            <AlertDescription>
+              닉네임과 블로그 URL이 없으면 글을 공개 할 수 없습니다.
+            </AlertDescription>
+          </Alert>
+        )}
       </VStack>
     </Center>
   );

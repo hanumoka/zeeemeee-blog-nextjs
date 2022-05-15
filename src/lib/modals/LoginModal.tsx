@@ -61,9 +61,10 @@ const LoginModal = ({ isOpen, onClose }: signupProps) => {
 
               if (!values.password) {
                 errors.password = '비밀번호를 입력하세요.';
-              } else if (!/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/i.test(values.password)) {
-                errors.password = '8 ~ 16자 영문, 숫자 조합의 비밀번호를 입력해주세요.';
               }
+              // else if (!/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/i.test(values.password)) {
+              //   errors.password = '8 ~ 16자 영문, 숫자 조합의 비밀번호를 입력해주세요.';
+              // }
               // 벨리데이션에서 빈 객체를 리턴할 경우 submit을 허용한다.
               return errors;
             }}
