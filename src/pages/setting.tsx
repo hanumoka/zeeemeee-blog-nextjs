@@ -295,11 +295,32 @@ const Setting = ({ loginInfo }: { loginInfo: { username: string; nickname: strin
                 initialValues={{ sebureUri: sebureUri }}
                 onSubmit={async (values, actions) => {
                   const { sebureUri } = values;
-                  const data = await updateSebureUri(sebureUri);
-                  console.log('블로그 URL 수정 후');
-                  console.log(JSON.stringify(data));
-                  actions.setSubmitting(false);
-                  setIsModSebureUri(false);
+                  try {
+                    await updateSebureUri(sebureUri);
+                    setIsModSebureUri(false);
+                    toast({
+                      title: `성공`,
+                      status: 'success',
+                      isClosable: true,
+                      duration: 2000,
+                    });
+                  } catch (error) {
+                    if (error.response && error.response.data) {
+                      toast({
+                        title: `${error.response.data.message}`,
+                        status: 'error',
+                        isClosable: true,
+                      });
+                    } else {
+                      toast({
+                        title: `수정 실패`,
+                        status: 'error',
+                        isClosable: true,
+                      });
+                    }
+                  } finally {
+                    actions.setSubmitting(false);
+                  }
                 }}
               >
                 {(props) => (

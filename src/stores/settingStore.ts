@@ -119,7 +119,8 @@ const initStore = (set: SetState<SettingState>, get: GetState<SettingState>) => 
       set(() => ({ sebureUri }), false, 'updateSebureUri/success');
       return response.data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      throw error;
     }
   },
 });
