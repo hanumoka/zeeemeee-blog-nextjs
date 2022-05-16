@@ -14,19 +14,23 @@ import {
   Spacer,
   Stack,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react';
 import Send from '../../../utils/Send';
 import { withAuthPostServer } from '../../../hoc/withAuthPostServer';
 import Moment from 'react-moment';
 
 import MarkdownView2 from '../../../lib/components/Editor/MarkdownView2';
+import { useMutation } from 'react-query';
 
 const PostPage = ({ loginInfo, pageProps }) => {
-  console.log('postPage start...');
+  const toast = useToast();
 
+  const { sebureUri } = loginInfo;
   const router = useRouter();
 
   const {
+    postId,
     title,
     content,
     tags,
@@ -47,6 +51,57 @@ const PostPage = ({ loginInfo, pageProps }) => {
 
   const goWriterPage = useCallback(() => {
     alert('작성자 페이지 이동');
+  }, []);
+
+  const deletePost = useMutation(
+    (param: any) =>
+      Send({
+        url: '/post',
+        method: 'delete',
+        params: {
+          postId: param.postId,
+        },
+      }),
+    {
+      onMutate: (variable) => {
+        console.log('deletePost onMutate', variable);
+      },
+      onError: (error, variable, context) => {
+        console.error('deletePost error');
+        // error
+        console.error(error);
+        toast({
+          title: `삭제실패`,
+          status: 'success',
+          isClosable: true,
+          duration: 2000,
+        });
+      },
+      onSuccess: async (data, variables, context) => {
+        // console.log('deletePost success', data, variables, context);
+        // queryClient.invalidateQueries('infiniteDrafts'); // queryKey 유효성 제거
+        toast({
+          title: `삭제성공`,
+          status: 'success',
+          isClosable: true,
+          duration: 2000,
+        });
+        await router.push('/blog' + '/' + sebureUri);
+      },
+      onSettled: () => {
+        console.log('deletePost end');
+      },
+    }
+  );
+
+  const removeMyPost = useCallback(() => {
+    deletePost.mutate({
+      postId: postId,
+    });
+  }, [deletePost, postId]);
+
+  const updateMyPost = useCallback(() => {
+    alert("updateMyPost:' + postId");
   }, []);
 
   return (
@@ -75,18 +130,18 @@ const PostPage = ({ loginInfo, pageProps }) => {
         <Spacer />
         {isMine && (
           <HStack p={5}>
+            {/*<Box>*/}
+            {/*  <Button colorScheme="teal" variant="link">*/}
+            {/*    통계*/}
+            {/*  </Button>*/}
+            {/*</Box>*/}
             <Box>
-              <Button colorScheme="teal" variant="link">
-                통계
-              </Button>
-            </Box>
-            <Box>
-              <Button colorScheme="blue" variant="link">
+              <Button colorScheme="blue" variant="link" onClick={updateMyPost}>
                 수정
               </Button>
             </Box>
             <Box>
-              <Button colorScheme="red" variant="link">
+              <Button colorScheme="red" variant="link" onClick={removeMyPost}>
                 삭제
               </Button>
             </Box>
@@ -104,7 +159,7 @@ const PostPage = ({ loginInfo, pageProps }) => {
       <MarkdownView2 markdownStr={content} />
       <Center>
         <HStack mt="10" mb="5">
-          <Avatar size="xl" name="hanumoka" src={writerProfileImageUri} />
+          <Avatar size="xl" name="No Nickname" src={writerProfileImageUri} />
           <FormControl>
             <Box>
               <Button variant="link" onClick={goWriterPage}>
@@ -127,9 +182,9 @@ const PostPage = ({ loginInfo, pageProps }) => {
 export const getServerSideProps = withAuthPostServer(async (context: any) => {
   console.log('PostViewPage getServerSideProps ...');
 
-  // TODO: 이곳에서 서버사이드 리퀘스트를 한다.
-  // TODO: 글이 Pivate인 경우, 요청자와 글의 소유자를 체크해야 한다. => 통계, 수정, 삭제 가능해야 한다.
-  // TODO: public인 경우 누구나 볼수 있어야 한다.
+  // 이곳에서 서버사이드 리퀘스트를 한다.
+  // 글이 Pivate인 경우, 요청자와 글의 소유자를 체크해야 한다. => 통계, 수정, 삭제 가능해야 한다.
+  // public인 경우 누구나 볼수 있어야 한다.
 
   const cookie = context.req ? context.req.headers.cookie : '';
   const res = context.res;
@@ -152,6 +207,7 @@ export const getServerSideProps = withAuthPostServer(async (context: any) => {
   if (response.data && response.data.data) {
     console.log('렌더링할 데이터 있음');
     const {
+      postId,
       title,
       content,
       tags,
@@ -166,6 +222,7 @@ export const getServerSideProps = withAuthPostServer(async (context: any) => {
 
     return {
       props: {
+        postId: postId,
         title: title,
         content: content,
         tags: tags,

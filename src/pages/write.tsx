@@ -273,7 +273,7 @@ const Write = ({ loginInfo, pageProps }) => {
         postStatus: postStatus,
       });
     },
-    [markdownStr, postId, postStatus, postUri, router, savePost, sebureUri, summary, tags, title]
+    [markdownStr, postId, postStatus, postUri, savePost, summary, tags, title]
   );
 
   const removePostImage = async (cb) => {

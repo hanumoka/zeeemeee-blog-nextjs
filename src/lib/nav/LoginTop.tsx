@@ -12,12 +12,12 @@ import {
   MenuList,
   Text,
   useColorModeValue,
-  useToast,
   VStack,
 } from '@chakra-ui/react';
 import ThemeToggle from '../components/layout/ThemeToggle';
 import { FiChevronDown, BsPencilSquare } from 'react-icons/all';
 import { useRouter } from 'next/router';
+import { useToast } from '@chakra-ui/react';
 
 type Props = {
   nickname: string;
