@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -17,9 +17,14 @@ import PostListItem from './PostListItem';
 import { useInfiniteQuery } from 'react-query';
 import Send from '../../../utils/Send';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useRouter } from 'next/router';
 
 const BlogPostTab = () => {
   const categoryColor = useColorModeValue('black', 'gray.500');
+
+  const [privatePostCount, setPrivatePostCount] = useState(0);
+  const [publicPostCount, setPublicPostCount] = useState(0);
+  const [totalPostCount, setTotalPostCount] = useState(0);
 
   const { data, status, fetchNextPage, hasNextPage } = useInfiniteQuery(
     ['infinitePosts'],
@@ -55,6 +60,32 @@ const BlogPostTab = () => {
     }
   );
 
+  const router = useRouter();
+  const { id } = router.query;
+
+  const fetchPostCount = useCallback(async () => {
+    console.log('fetchPostCount');
+    console.log(`Blog id : ${id}`);
+    try {
+      const response = await Send({
+        url: `/blog/${id}/postcounts`,
+        method: 'get',
+      });
+
+      const { privatePostCount, publicPostCount, totalPostCount } = response.data.data;
+
+      setPrivatePostCount(privatePostCount);
+      setPublicPostCount(publicPostCount);
+      setTotalPostCount(totalPostCount);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchPostCount();
+  }, [fetchPostCount]);
+
   return (
     <div>
       <Box>
@@ -68,13 +99,13 @@ const BlogPostTab = () => {
             <Divider mt="3" />
             <VStack align="baseline">
               <Button mt="3" variant="link">
-                전체 ({data?.pages[0]?.totalElements})
+                전체 ({totalPostCount})
               </Button>
               <Button mt="3" variant="link">
-                공개 (카운트)
+                공개 ({publicPostCount})
               </Button>
               <Button mt="3" variant="link">
-                비공개 (카운트)
+                비공개 ({privatePostCount})
               </Button>
             </VStack>
           </Box>

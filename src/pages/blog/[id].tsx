@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { withAuthServer } from '../../hoc/withAuthServer';
 import {
   Avatar,
@@ -19,6 +19,8 @@ import {
 import BlogDraftTab from '../../lib/pages/blog/BlogDraftTab';
 import BlogPostTab from '../../lib/pages/blog/BlogPostTab';
 import loginStore from '../../stores/loginStore';
+import { useRouter } from 'next/router';
+import Send from '../../utils/Send';
 
 const Blog = ({ loginInfo, pageProps }) => {
   const { nickname, profileImageUri, introduction } = loginStore((state) => state);
