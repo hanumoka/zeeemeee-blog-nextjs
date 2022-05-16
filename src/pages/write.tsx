@@ -27,6 +27,7 @@ import {
   Image,
   HStack,
   Spinner,
+  useToast,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import layoutStore from '../stores/layoutStore';
@@ -39,6 +40,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import Send from '../utils/Send';
 import PostApi from '../api/PostApi';
 import { BlogSettingMenu } from '../enum/BlogSettingMenu';
+import { AxiosError } from 'axios';
 
 const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   ssr: false,
@@ -46,12 +48,13 @@ const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
 }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
 
 const Write = ({ loginInfo, pageProps }) => {
+  const toast = useToast();
+  const { sebureUri } = loginInfo;
   const [postId, setPostId] = useState(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [postImageUri, setPostImageUri] = useState('');
   const [summary, setSummary] = useState('');
-  const [sebureUri, setSebureUri] = useState(loginInfo.sebureUri);
   const [postUri, setPostUri] = useState('');
   const [postStatus, setPostStatus] = useState(BlogSettingMenu.PRIVATE);
 
@@ -114,7 +117,8 @@ const Write = ({ loginInfo, pageProps }) => {
     // TODO: 조회된 포스트 저보가 에디터에 출력 안됨 => setTimeout으로 처리, 서버사이드를 하든 다른 방법을 쓰는게 좋아 보인다.
     const timeout = setTimeout(() => setReadyEditor(true), 1000);
     return () => clearTimeout(timeout);
-  }, [pageProps, postStatus, postUri]);
+    //  주의!, deps는 pageProps 한개로 유지할것,
+  }, [pageProps]);
 
   // state
   const [htmlStr, setHtmlStr] = React.useState<string>('');
@@ -175,11 +179,23 @@ const Write = ({ loginInfo, pageProps }) => {
       onError: (error, variable, context) => {
         // error
         console.error(error);
+        toast({
+          title: `임시저장 실패`,
+          status: 'error',
+          isClosable: true,
+          duration: 2000,
+        });
       },
       onSuccess: (data, variables, context) => {
         console.log('success', data, variables, context);
         setPostId(data.data.data.postId);
         setTags([...data.data.data.tags]);
+        toast({
+          title: `임시저장 성공`,
+          status: 'success',
+          isClosable: true,
+          duration: 2000,
+        });
       },
       onSettled: () => {
         console.log('end');
@@ -209,16 +225,36 @@ const Write = ({ loginInfo, pageProps }) => {
       onMutate: (variable) => {
         console.log('onMutate', variable);
       },
-      onError: (error, variable, context) => {
+      onError: async (error: AxiosError, variable, context) => {
         // error
         console.error(error);
+        if (error.response && error.response.data) {
+          toast({
+            title: `출간실패 [${error.response.data.message}]`,
+            status: 'error',
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: `출간실패`,
+            status: 'error',
+            isClosable: true,
+          });
+        }
       },
-      onSuccess: (data, variables, context) => {
+      onSuccess: async (data, variables, context) => {
         console.log('success', data, variables, context);
-        queryClient.invalidateQueries('infiniteDrafts'); // queryKey 유효성 제거
+        toast({
+          title: `출간 성공`,
+          status: 'success',
+          isClosable: true,
+          duration: 2000,
+        });
+        await queryClient.invalidateQueries('infiniteDrafts'); // queryKey 유효성 제거
+        await router.push('/blog' + '/' + sebureUri);
       },
       onSettled: () => {
-        console.log('end');
+        console.log('추간 저장 end');
       },
     }
   );
@@ -236,7 +272,6 @@ const Write = ({ loginInfo, pageProps }) => {
         postUri: postUri,
         postStatus: postStatus,
       });
-      await router.push('/blog' + '/' + sebureUri);
     },
     [markdownStr, postId, postStatus, postUri, router, savePost, sebureUri, summary, tags, title]
   );
@@ -347,12 +382,12 @@ const Write = ({ loginInfo, pageProps }) => {
           <DrawerHeader borderBottomWidth="1px">포스트 출간준비</DrawerHeader>
 
           <DrawerBody>
-            <Stack spacing="24px">
+            <Stack>
               <Box>
                 <FormLabel htmlFor="username">포스트 썸네일</FormLabel>
                 <ImageUploading value={images} onChange={onChangeUploadPostImage} maxNumber={1}>
                   {({ imageList, onImageUpload, onImageRemoveAll }) => (
-                    <Box>
+                    <div>
                       <HStack>
                         <Button
                           colorScheme="blue"
@@ -373,7 +408,7 @@ const Write = ({ loginInfo, pageProps }) => {
                           이미지 제거
                         </Button>
                       </HStack>
-                      <Box boxSize="xs" mt="5">
+                      <Box mt="5">
                         {postImageUri && (
                           <Image
                             src={postImageUri}
@@ -393,11 +428,11 @@ const Write = ({ loginInfo, pageProps }) => {
                             />
                           ))}
 
-                        {!postImageUri && (!imageList || (imageList && imageList.length === 0)) && (
-                          <Image fallbackSrc="https://via.placeholder.com/300" />
-                        )}
+                        {/*{!postImageUri && (!imageList || (imageList && imageList.length === 0)) && (*/}
+                        {/*  <Image fallbackSrc="https://via.placeholder.com/300" />*/}
+                        {/*)}*/}
                       </Box>
-                    </Box>
+                    </div>
                   )}
                 </ImageUploading>
               </Box>

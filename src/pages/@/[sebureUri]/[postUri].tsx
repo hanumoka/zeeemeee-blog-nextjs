@@ -180,7 +180,6 @@ export const getServerSideProps = withAuthPostServer(async (context: any) => {
       },
     };
   } else {
-    console.log('렌더링할 데이터 없음=========================');
     // 보여줄 데이터가 없는 경우 404 페이지 오류 발생시킨다.
     res.statusCode = 404; // 404 응답값을 리턴하지만, 페이지 리다이렉팅은 안된다.
 

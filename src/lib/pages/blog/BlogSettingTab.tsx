@@ -54,9 +54,6 @@ const BlogSettingTab = () => {
     }
   );
 
-  console.log('=======================');
-  console.log(JSON.stringify(data));
-
   return (
     <>
       <HStack spacing="100px">
