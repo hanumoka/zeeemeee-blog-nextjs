@@ -1,6 +1,15 @@
 import React, { useCallback } from 'react';
 import Moment from 'react-moment';
-import { Box, Heading, Text, Stack, useColorModeValue, Button, Badge } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Text,
+  Stack,
+  useColorModeValue,
+  Button,
+  Badge,
+  Divider,
+} from '@chakra-ui/react';
 
 // import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -11,7 +20,7 @@ import { useMutation, useQueryClient } from 'react-query';
 //   ssr: false,
 // });
 
-const Draft = ({ data }) => {
+const DraftListItem = ({ data }) => {
   const queryClient = useQueryClient(); // 등록된 quieryClient 가져오기
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
@@ -101,10 +110,9 @@ const Draft = ({ data }) => {
         </Heading>
         {/*<MarkdownView markdownStr={content} theme={colorMode} />*/}
       </Stack>
-      <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
+      <Stack mt="2" direction={'row'} spacing={4} align={'center'}>
         <Stack direction={'column'} spacing={0} fontSize={'sm'}>
-          {/*<Text fontWeight={600}>Hanumoka</Text>*/}
-          <Text color={'gray.500'}>
+          <Text fontSize="13" color={'gray.500'}>
             작성일: <Moment format="YYYY-MM-DD HH:mm:ss">{createdAt}</Moment> / 수정일 :{' '}
             <Moment format="YYYY-MM-DD HH:mm:ss">{updatedAt}</Moment>
           </Text>
@@ -120,11 +128,11 @@ const Draft = ({ data }) => {
             handleDeleteDraft();
           }}
         >
-          삭제하기
+          삭제
         </Button>
       </Stack>
     </Box>
   );
 };
 
-export default Draft;
+export default DraftListItem;

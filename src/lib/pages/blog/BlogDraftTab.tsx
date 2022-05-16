@@ -10,13 +10,13 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-import Draft from './Draft';
+import DraftListItem from './DraftListItem';
 import { useInfiniteQuery } from 'react-query';
 import Send from '../../../utils/Send';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { BlogSettingMenu } from '../../../enum/BlogSettingMenu';
 
-const BlogSettingTab = () => {
+const BlogDraftTab = () => {
   const categoryColor = useColorModeValue('black', 'gray.500');
   const [menuFocus, setMenuFocus] = useState<BlogSettingMenu>(BlogSettingMenu.DRAFT);
 
@@ -89,7 +89,7 @@ const BlogSettingTab = () => {
               <VStack>
                 {data?.pages.map((pageData) => {
                   return pageData?.data.map((draftData) => {
-                    return <Draft data={draftData} />;
+                    return <DraftListItem data={draftData} />;
                   });
                 })}
               </VStack>
@@ -101,4 +101,4 @@ const BlogSettingTab = () => {
   );
 };
 
-export default BlogSettingTab;
+export default BlogDraftTab;

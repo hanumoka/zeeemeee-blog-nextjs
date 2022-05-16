@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-import Post from './Post';
+import PostListItem from './PostListItem';
 import { useInfiniteQuery } from 'react-query';
 import Send from '../../../utils/Send';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -70,12 +70,12 @@ const BlogPostTab = () => {
               <Button mt="3" variant="link">
                 전체 ({data?.pages[0]?.totalElements})
               </Button>
-              {/*<Button mt="3" variant="link">*/}
-              {/*  공개 (카운트)*/}
-              {/*</Button>*/}
-              {/*<Button mt="3" variant="link">*/}
-              {/*  비공개 (카운트)*/}
-              {/*</Button>*/}
+              <Button mt="3" variant="link">
+                공개 (카운트)
+              </Button>
+              <Button mt="3" variant="link">
+                비공개 (카운트)
+              </Button>
             </VStack>
           </Box>
           <Box w="80%" h="lg">
@@ -95,7 +95,7 @@ const BlogPostTab = () => {
                 <VStack mt={5} spacing={4} align="stretch">
                   {data?.pages.map((pageData) => {
                     return pageData?.data.map((postData) => {
-                      return <Post data={postData} />;
+                      return <PostListItem data={postData} />;
                     });
                   })}
                 </VStack>

@@ -16,7 +16,7 @@ import {
   Tabs,
   VStack,
 } from '@chakra-ui/react';
-import BlogSettingTab from '../../lib/pages/blog/BlogSettingTab';
+import BlogDraftTab from '../../lib/pages/blog/BlogDraftTab';
 import BlogPostTab from '../../lib/pages/blog/BlogPostTab';
 import loginStore from '../../stores/loginStore';
 
@@ -71,7 +71,7 @@ const Blog = ({ loginInfo, pageProps }) => {
               <Tab>
                 {/* TODO: 블로그 관리 탭은 주인만 볼수 있어야 한다.*/}
                 <Heading as="h5" size="sm">
-                  관리
+                  임시글
                 </Heading>
               </Tab>
             </TabList>
@@ -86,7 +86,7 @@ const Blog = ({ loginInfo, pageProps }) => {
               {/*</TabPanel>*/}
               <TabPanel>
                 <Box h="lg">
-                  <BlogSettingTab />
+                  <BlogDraftTab />
                 </Box>
               </TabPanel>
             </TabPanels>

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Badge,
   Box,
+  Button,
   Center,
   Divider,
   Heading,
@@ -13,9 +14,18 @@ import {
 import Moment from 'react-moment';
 import { useRouter } from 'next/router';
 
-const Post = ({ data }) => {
+const PostListItem = ({ data }) => {
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
+
+  // const handleDeletePost = useCallback(() => {
+  //   alert('포스트 삭제');
+  // }, []);
+  //
+  // const handleMovePostUpdate = useCallback(() => {
+  //   alert('포스트 수정');
+  // }, []);
+
   return (
     <Box
       maxW={'800px'}
@@ -93,11 +103,35 @@ const Post = ({ data }) => {
               <Moment format="YYYY-MM-DD HH:mm:ss">{data.updatedAt}</Moment>
             </Text>
           </Stack>
-          {/*  TODO:  댓글수 맅크, 좧아요 아이콘이 필요 하다.*/}
         </Stack>
+        {/*<Stack mt="5" direction={{ base: 'column', md: 'row' }}>*/}
+        {/*  <Button*/}
+        {/*    type="button"*/}
+        {/*    variant="outline"*/}
+        {/*    colorScheme="blue"*/}
+        {/*    onClick={(e) => {*/}
+        {/*      e.stopPropagation();*/}
+        {/*      handleMovePostUpdate();*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    수정*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    type="button"*/}
+        {/*    variant="outline"*/}
+        {/*    colorScheme="red"*/}
+        {/*    onClick={(e) => {*/}
+        {/*      e.stopPropagation();*/}
+        {/*      handleDeletePost();*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    삭제*/}
+        {/*  </Button>*/}
+        {/*</Stack>*/}
+        {/*  TODO:  댓글수 맅크, 좧아요 아이콘이 필요 하다.*/}
       </Box>
     </Box>
   );
 };
 
-export default Post;
+export default PostListItem;
