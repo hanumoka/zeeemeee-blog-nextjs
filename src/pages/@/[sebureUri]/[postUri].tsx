@@ -100,9 +100,12 @@ const PostPage = ({ loginInfo, pageProps }) => {
     });
   }, [deletePost, postId]);
 
-  const updateMyPost = useCallback(() => {
-    alert("updateMyPost:' + postId");
-  }, []);
+  const updateMyPost = useCallback(async () => {
+    await router.push({
+      pathname: '/write',
+      query: { postId: postId },
+    });
+  }, [postId, router]);
 
   return (
     <>
