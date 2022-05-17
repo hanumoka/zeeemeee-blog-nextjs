@@ -56,7 +56,7 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
           // const res = await axios.post('http://localhost:8080/api/uploadImage', formData, {
           //   withCredentials: true,
           // });
-          const res = await ImageApi.uploadPostImage(formData);
+          const res = await ImageApi.uploadImage(formData);
           callback(res.data, 'input alt text');
         })();
 
