@@ -13,15 +13,13 @@ import {
 import Moment from 'react-moment';
 import { useRouter } from 'next/router';
 
-const Post = ({ data }) => {
+const PostItem = ({ data }) => {
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
   return (
+    // TODO: 포스트 선택과, 포스트 작성자 클릭 포커스 분리 필요
     <Box
-      maxW={'sm'}
-      w={'full'}
-      // h={'25em'}
       bg={useColorModeValue('white', 'gray.900')}
       rounded={'md'}
       overflow={'hidden'}
@@ -38,12 +36,11 @@ const Post = ({ data }) => {
     >
       {data.postImageUri && (
         <Box p="2">
-          {/* TODO: 이미지를 사이즈에 맞게 컨버팅이 필요하다. */}
           <Image
             h={'10em'}
             w={'20em'}
-            // boxSize="150px"
             objectFit="cover"
+            // objectFit="contain"
             src={data.postImageUri}
             alt="포스트 썸네일"
             borderRadius={'lg'}
@@ -71,12 +68,12 @@ const Post = ({ data }) => {
           </Stack>
         </Box>
         <Box>
-          <Box mt="1" fontWeight="semibold" lineHeight="tight" isTruncated>
+          <Box mt="1" fontWeight="semibold" lineHeight="tight">
             <Heading
               color={useColorModeValue('gray.700', 'white')}
               fontSize={'md'}
               fontFamily={'body'}
-              isTruncated={true}
+              noOfLines={[1, 2, 3]}
             >
               {data.title}
             </Heading>
@@ -105,7 +102,6 @@ const Post = ({ data }) => {
               작성일: <Moment format="YYYY-MM-DD HH:mm:ss">{data.createdAt}</Moment>
             </Text>
 
-            {/*  TODO: 작성자 */}
             {/*  TODO:  댓글수 맅크, 좧아요 아이콘이 필요 하다.*/}
           </Stack>
         </Box>
@@ -120,4 +116,4 @@ const Post = ({ data }) => {
   );
 };
 
-export default Post;
+export default PostItem;

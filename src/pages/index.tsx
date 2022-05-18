@@ -5,7 +5,7 @@ import { Box, SimpleGrid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakr
 import { useInfiniteQuery } from 'react-query';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Send from '../utils/Send';
-import Post from '../lib/pages/index/Post';
+import PostItem from '../lib/pages/index/PostItem';
 
 const Home = ({ loginInfo, pageProps }) => {
   const { data, status, fetchNextPage, hasNextPage } = useInfiniteQuery(
@@ -61,10 +61,10 @@ const Home = ({ loginInfo, pageProps }) => {
                   hasMore={hasNextPage}
                   loader={<h4>Loading...</h4>}
                 >
-                  <SimpleGrid columns={[1, 2, 3, 4, 5]} spacing={3}>
+                  <SimpleGrid columns={[1, 2, 3, 4]} spacing={3}>
                     {data?.pages.map((pageData) => {
                       return pageData?.data.map((postData, index) => {
-                        return <Post key={index} data={postData} />;
+                        return <PostItem key={index} data={postData} />;
                       });
                     })}
                   </SimpleGrid>
