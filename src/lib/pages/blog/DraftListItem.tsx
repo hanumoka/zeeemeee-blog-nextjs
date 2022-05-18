@@ -8,7 +8,7 @@ import {
   useColorModeValue,
   Button,
   Badge,
-  Divider,
+  useToast,
 } from '@chakra-ui/react';
 
 // import dynamic from 'next/dynamic';
@@ -21,6 +21,8 @@ import { useMutation, useQueryClient } from 'react-query';
 // });
 
 const DraftListItem = ({ data }) => {
+  const toast = useToast();
+
   const queryClient = useQueryClient(); // 등록된 quieryClient 가져오기
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
@@ -42,9 +44,22 @@ const DraftListItem = ({ data }) => {
       },
       onError: (error, variable, context) => {
         // error
+        toast({
+          title: `삭제 실패`,
+          status: 'error',
+          isClosable: true,
+          duration: 2000,
+        });
         console.error(error);
       },
       onSuccess: (data, variables, context) => {
+        toast({
+          title: `삭제 성공`,
+          status: 'success',
+          isClosable: true,
+          duration: 2000,
+        });
+
         console.log('success', data, variables, context);
         queryClient.invalidateQueries('infiniteDrafts'); // queryKey 유효성 제거
       },

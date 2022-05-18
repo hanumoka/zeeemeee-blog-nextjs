@@ -51,12 +51,12 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
       editorRef.current.getInstance().addHook('addImageBlobHook', (blob, callback) => {
         (async () => {
           const formData = new FormData();
-          formData.append('files', blob);
+          formData.append('image', blob);
 
           // const res = await axios.post('http://localhost:8080/api/uploadImage', formData, {
           //   withCredentials: true,
           // });
-          const res = await ImageApi.uploadImage(formData);
+          const res = await ImageApi.uploadPostImage(formData);
           callback(res.data, 'input alt text');
         })();
 

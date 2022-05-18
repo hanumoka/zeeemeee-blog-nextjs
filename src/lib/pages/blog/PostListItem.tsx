@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   Badge,
   Box,
-  Button,
   Center,
   Divider,
   Heading,
