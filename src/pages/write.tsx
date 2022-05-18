@@ -38,9 +38,9 @@ import { withAuthServer } from '../hoc/withAuthServer';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { useMutation, useQueryClient } from 'react-query';
 import Send from '../utils/Send';
-import PostApi from '../api/PostApi';
 import { BlogSettingMenu } from '../enum/BlogSettingMenu';
 import { AxiosError } from 'axios';
+import ImageApi from '../api/ImageApi';
 
 const Editor = dynamic(() => import('../lib/components/Editor/Editor'), {
   ssr: false,
@@ -140,14 +140,14 @@ const Write = ({ loginInfo, pageProps }) => {
 
   const uploadPostImage = useCallback(async (formData) => {
     try {
-      const response = await PostApi.uploadPostImage(formData);
+      const response = await ImageApi.uploadPostMainImage(formData);
       return response.data.postImageUri;
     } catch (error) {
       console.log(error);
     }
   }, []);
 
-  const onChangeUploadPostImage = useCallback(
+  const onUploadPostMainImage = useCallback(
     // TODO: 업로드시 파일 타입 및 맥스 사이즈 해상도 검사 필요, 라이브러리에 내장되어 있다.
     async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
       if (addUpdateIndex) {
@@ -287,7 +287,7 @@ const Write = ({ loginInfo, pageProps }) => {
 
   const deletePostImage = async () => {
     try {
-      await PostApi.deletePostImage(postId);
+      await ImageApi.deletePostMainImage(postId);
       setPostImageUri('');
     } catch (error) {
       console.log(error);
@@ -385,7 +385,7 @@ const Write = ({ loginInfo, pageProps }) => {
             <Stack>
               <Box>
                 <FormLabel htmlFor="username">포스트 썸네일</FormLabel>
-                <ImageUploading value={images} onChange={onChangeUploadPostImage} maxNumber={1}>
+                <ImageUploading value={images} onChange={onUploadPostMainImage} maxNumber={1}>
                   {({ imageList, onImageUpload, onImageRemoveAll }) => (
                     <div>
                       <HStack>

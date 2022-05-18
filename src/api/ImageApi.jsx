@@ -9,12 +9,29 @@ export default {
       // headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
-  uploadImage(formData) {
+  uploadPostMainImage(formData) {
     return Send({
-      url: '/aws/post/image',
+      url: '/aws/post-main/image',
       method: 'post',
       data: formData,
-      // headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+  deletePostMainImage(postId) {
+    return Send({
+      url: '/aws/post-main/image',
+      method: 'delete',
+      params: {
+        postId: postId,
+      },
+    });
+  },
+  // uploadImage(formData) {
+  //   return Send({
+  //     url: '/aws/post/image',
+  //     method: 'post',
+  //     data: formData,
+  //     // headers: { 'Content-Type': 'multipart/form-data' },
+  //   });
+  // },
 };
