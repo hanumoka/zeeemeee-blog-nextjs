@@ -47,7 +47,8 @@ const MarkdownView2 = ({ markdownStr }) => {
             // marginY="10%"
             overflow="hidden"
           >
-            <Toc content={markdownStr || ''} />
+            {/* TODO: TOC 추가 개발을 해야한다.*/}
+            {/*<Toc content={markdownStr || ''} />*/}
           </Box>
         </Box>
       </Flex>
