@@ -9,7 +9,7 @@ export default {
   },
   uploadProfileImage(formData) {
     return Send({
-      url: '/user/setting/profileimage',
+      url: '/aws/user/profile-image',
       method: 'post',
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -17,7 +17,7 @@ export default {
   },
   deleteProfileImage() {
     return Send({
-      url: '/user/setting/profileimage',
+      url: '/aws/user/profile-image',
       method: 'delete',
     });
   },
