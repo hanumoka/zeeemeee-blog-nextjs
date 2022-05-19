@@ -2,7 +2,7 @@ import React from 'react';
 import { withAuthServer } from '../hoc/withAuthServer';
 
 const About = () => {
-  return <div>About 페이지</div>;
+  return <div>준비중...</div>;
 };
 
 export const getServerSideProps = withAuthServer((context) => {

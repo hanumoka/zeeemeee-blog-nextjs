@@ -20,7 +20,7 @@ const MarkdownView2 = ({ markdownStr }) => {
   return (
     <>
       <Flex>
-        <Box p="4" w="90%">
+        <Box p="4" w="100%">
           {colorMode === 'dark' ? (
             <ReactMarkdown
               className="markdown-body markdown-dark"
@@ -37,20 +37,20 @@ const MarkdownView2 = ({ markdownStr }) => {
             />
           )}
         </Box>
-        <Box w="10%">
-          <Box
-            position="fixed"
-            // backgroundColor="rgba(255,255,255,0.8)"
-            // backdropFilter="saturate(180%) blur(5px)"
-            w={{ base: '0%', md: '10%', lg: '15%' }}
-            h="30%"
-            // marginY="10%"
-            overflow="hidden"
-          >
-            {/* TODO: TOC 추가 개발을 해야한다.*/}
-            {/*<Toc content={markdownStr || ''} />*/}
-          </Box>
-        </Box>
+        {/*<Box w="10%">*/}
+        {/*  <Box*/}
+        {/*    position="fixed"*/}
+        {/*    // backgroundColor="rgba(255,255,255,0.8)"*/}
+        {/*    // backdropFilter="saturate(180%) blur(5px)"*/}
+        {/*    w={{ base: '0%', md: '10%', lg: '15%' }}*/}
+        {/*    h="30%"*/}
+        {/*    // marginY="10%"*/}
+        {/*    overflow="hidden"*/}
+        {/*  >*/}
+        {/*    /!* TODO: TOC 추가 개발을 해야한다.*!/*/}
+        {/*    /!*<Toc content={markdownStr || ''} />*!/*/}
+        {/*  </Box>*/}
+        {/*</Box>*/}
       </Flex>
     </>
   );
