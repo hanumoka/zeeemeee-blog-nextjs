@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import axios from 'axios';
 import { NextPage } from 'next';
 
 import Prism from 'prismjs';
@@ -52,9 +51,6 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
           const formData = new FormData();
           formData.append('image', blob);
 
-          // const res = await axios.post('http://localhost:8080/api/uploadImage', formData, {
-          //   withCredentials: true,
-          // });
           const res = await ImageApi.uploadPostImage(formData);
           callback(res.data, 'input alt text');
         })();

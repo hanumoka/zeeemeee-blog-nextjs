@@ -82,7 +82,6 @@ const Write = ({ loginInfo, pageProps }) => {
     const { postId } = pageProps;
 
     if (postId) {
-      // TODO : 나중에 리팩토링 할것 이런부분도 react-query를 사용할 필요가 있는가?
       const tmpFetch = async () => {
         const response = await Send({
           url: '/post',
@@ -108,7 +107,7 @@ const Write = ({ loginInfo, pageProps }) => {
             setPostStatus(BlogSettingMenu.PRIVATE);
           } //if
         } //if
-      };
+      }; // tmpFetch();
 
       tmpFetch();
     } // if
