@@ -82,6 +82,7 @@ const Write = ({ loginInfo, pageProps }) => {
     const { postId } = pageProps;
 
     if (postId) {
+      // TODO: 리팩토링 필요
       const tmpFetch = async () => {
         const response = await Send({
           url: '/post',
