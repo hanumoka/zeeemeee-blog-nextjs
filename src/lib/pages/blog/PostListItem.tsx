@@ -60,7 +60,7 @@ const PostListItem = ({ data }) => {
       <Box p="6">
         <Box display="flex">
           <Badge borderRadius="full" px="2" colorScheme="teal" mr="3">
-            {data.postStatus}
+            {data.postStatusCd}
           </Badge>
           <Stack direction={'row'}>
             <Text
