@@ -5,6 +5,7 @@
   "author": "sozonome",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspct --max_old_space_size=4096' next dev",
+    "devmac": "NODE_OPTIONS='--inspect --max_old_space_size=4096' next dev",
     "build": "cross-env ANALYZE=true NODE_ENV=producntion next build",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "start": "cross-env NODE_ENV=producntion next start",
