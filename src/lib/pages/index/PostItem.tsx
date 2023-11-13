@@ -17,6 +17,8 @@ const PostItem = ({ data }) => {
   const router = useRouter();
   const badgeColor = useColorModeValue('gray.50', 'gray.800');
 
+  console.log('aaa:' + data.postImageUri);
+
   return (
     // TODO: 포스트 선택과, 포스트 작성자 클릭 포커스 분리 필요
     <Box
