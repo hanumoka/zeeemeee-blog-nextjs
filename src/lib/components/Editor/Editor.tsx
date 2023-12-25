@@ -48,6 +48,7 @@ const Editor: NextPage<IEditor> = ({ htmlStr, setHtmlStr, markdownStr, setMarkdo
       // 이미지 서버로 데이터를 전달하는 기능 추가
       editorRef.current.getInstance().addHook('addImageBlobHook', (blob, callback) => {
         (async () => {
+          console.log('test...');
           const formData = new FormData();
           formData.append('image', blob);
 
