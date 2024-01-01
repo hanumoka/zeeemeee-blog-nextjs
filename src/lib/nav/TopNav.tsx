@@ -24,6 +24,7 @@ export default function TopNav() {
   const { username, nickname, sebureUri, profileImageUri, logoutFetch } = loginStore(
     (state) => state
   );
+
   // 최소창 메뉴 토글
   const { isOpen, onToggle } = useDisclosure();
 
@@ -70,7 +71,6 @@ export default function TopNav() {
             <DesktopNav />
           </Flex>
         </Flex>
-
         {!username ? (
           <NoneLoginTop loginOnOpen={loginOnOpen} signupOnOpen={signupOnOpen} />
         ) : (
@@ -81,6 +81,7 @@ export default function TopNav() {
             logoutFetch={logoutFetch}
           />
         )}
+        username: {username}
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>

@@ -11,8 +11,12 @@ export function withAuthPostServer(gssp) {
 
     try {
       // 서버사이드 렌더링으로 로그인 체크요청
+      console.log('서버사이드 cookie:', cookie);
       const response = await UserApi.checkLoginForServerStore(cookie);
       const temp = await response?.data;
+
+      console.log('서버사이드 response:');
+      console.log(JSON.stringify(response));
 
       const { username, nickname, profileImageUri, sebureUri } = await response?.data;
       console.log('로그인 체크 성공');

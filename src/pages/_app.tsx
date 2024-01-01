@@ -19,6 +19,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     const { loginInfo } = pageProps;
 
+    console.log('MyApp.tsx');
+    console.log(JSON.stringify(loginInfo));
+
     if (loginInfo) {
       loginStore
         .getState()

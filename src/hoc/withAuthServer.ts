@@ -8,9 +8,9 @@ export function withAuthServer(gssp) {
     const cookie = context.req ? context.req.headers.cookie : '';
     const url = context.resolvedUrl;
 
-    // console.log('withAuthServer start...');
-    // console.log('cookie:', cookie);
-    // console.log('url:', url);
+    console.log('withAuthServer start...');
+    console.log('cookie:', cookie);
+    console.log('url:', url);
 
     try {
       // 서버사이드 렌더링으로 로그인 체크요청
@@ -32,7 +32,7 @@ export function withAuthServer(gssp) {
       };
     } catch (error) {
       console.log('로그인 체크 실패 url:', url);
-      // console.error(error);
+      console.error(error);
       // 로그인 필요한 URL 검사 후 redirect 처리
       for (const index in AUTH_URL) {
         if (url.startsWith(AUTH_URL[index])) {
